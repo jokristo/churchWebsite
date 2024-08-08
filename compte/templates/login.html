@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}connexion{% endblock title %}
+{% block content %}
+    <style>
+        form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+        input{
+    display: block;
+    padding: .75rem;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    min-width: 600px;
+    font-family: poppins;
+}
+
+
+@media(max-width:600px){
+    input, textarea{
+    display: block;
+    padding: .200rem;
+    font-size: 0.8rem;
+    border: 1px solid #ced4da;
+    min-width: 200px;
+    font-family: poppins;
+}
+}
+    </style>
+    <form method="POST" class="formlogin">
+        {% csrf_token %}
+        <div class="imglogin">
+            <span class="bloc1">
+                <p><h3 style="color: #838CFC;">Bienvenue</h3></p>
+            </span>
+            <p>Pas encore Membre?</p>
+            <p>Cliquez ici</p>
+            <button type="button" class="btn btn-danger"> <a href="{% url 'Sign' %}" style="text-decoration: none; color: aliceblue; font-family: poppins;">S'inscrire</a> </button>
+        </div>
+        <div class="stylelogin">
+            <p><h3 style="color: #838CFC;">Se connecter</h3></p>
+            <p>
+                <input type="text" name="username" id="username" placeholder="Nom">
+            </p>
+            <p>
+                <input type="email" name="email" id="email" placeholder="Email">
+                
+            </p>
+            <p>
+                <input type="password" name="password" id="password" placeholder="Mot de passe">
+            </p>
+            <p>
+                <input type="submit" value="Valider" id="boutonvalid">
+            </p>
+        </div>
+
+    </form>
+    <!--<i class="bi-envelope-fill"></i>-->
+{% endblock content %}

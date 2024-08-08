@@ -1,0 +1,308 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    {% endcompress %}
+    <link rel="stylesheet" href="{% static 'css/styleend.css' %}">
+</head>
+
+<body class="bg-green-100" style="font-family: poppins;">
+    <nav class="bg-blue-400 border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800">
+        <div class="container flex flex-wrap items-center justify-between mx-auto">
+            <a href="{{ .Site.Params.homepage }}/" class="flex items-center">
+                <img src="{% static 'css/logo24.png' %}" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
+                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">WMB tab</span>
+            </a>
+            <button data-collapse-toggle="mobile-menu" type="button"
+                class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                aria-controls="mobile-menu" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
+                <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+                    <li>
+                        <a href=" / "
+                            class="block py-2 pl-3 pr-4 text-white bg-green-700 rounded md:bg-transparent md:text-green-700 md:p-0 dark:text-white"
+                            aria-current="page">Accueil</a>
+                    </li>
+                    <li>
+                        <a href="/sermons/"
+                            class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Sermons</a>
+                    </li>
+                    <li>
+                        <a href=""
+                            class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Evenement</a>
+                    </li>
+                    <li>
+                        <a href="/ministre/"
+                            class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Ministres</a>
+                    </li>
+                    <li>
+                        <a href="/offi/"
+                            class="block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Officiels</a>
+                    </li>
+                    <li>
+                        <a href="/temoignage/"
+                            class="block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Temoignages</a>
+                    </li>
+                    <li>
+                        <a href="/chantre/"
+                            class="block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Chantre</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="h-screen bg-cover object-cover" style="background-image: url('static/css/church3m.png'); height: 80vh; width: auto; background-size: cover;"
+        id="banner">
+        <section class="h-screen" style="height: 60vh;">
+            <div class="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-50">
+                <h1 class="mb-4 text-3xl font-extrabold tracking-tight leading-none text-white md:text-5xl lg:text-6xl">
+                    Jésus-Christ est le meme Hier, Aujourd'hui et Eternellement </h1>
+                <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Dieu vous appelle</p>
+                <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
+                    <a href="https://www.youtube.com/@pasteurrbob"
+                        class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+                        Suivez-nous
+                        <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M1 5h12m0 0L9 1m4 4L9 9" />
+                        </svg>
+                    </a>
+                    <a href="#"
+                        class="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 sm:ms-4 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400">
+                        Biographie Pasteur
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <main>
+        <div class="font-sans text-blue-400 font-bold">
+            <h2 class="text-center  text-9xl font-extrabold " style="font-size: 35px; color: #76A9FA;">Pasteurs</h2>
+        </div>
+        <!--pasta-->
+        <div class="flex justify-end px-4 pt-4" id="pasta">
+            <div
+                class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex justify-end px-4 pt-4">
+                    <button id="dropdownButton" data-dropdown-toggle="dropdown"
+                        class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
+                        type="button">
+                        <span class="sr-only">Open dropdown</span>
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 16 3">
+                            <path
+                                d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex flex-col items-center pb-10">
+                    <img class="w-24 sm:w-16 md:w-5 pt-4 lg:w-8 h-24 mb-3 rounded-full shadow-lg"
+                        src="static/css/pastb.JPG"  id="pastaimg" alt="Bonnie image"
+                         />
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white" id="pastabob" >BOB MUNANGA MATEKYA</h5>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Pasteur Titulaire</span>
+                </div>
+            </div>
+
+
+
+            <div
+                class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex justify-end px-4 pt-4">
+                    <button id="dropdownButton" data-dropdown-toggle="dropdown"
+                        class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
+                        type="button">
+                        <span class="sr-only">Open dropdown</span>
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 16 3">
+                            <path
+                                d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+                        </svg>
+                    </button>
+
+                </div>
+                <div class="flex flex-col items-center pb-10">
+                    <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="static/css/pastl.JPG" alt="Bonnie image"
+                    id="pastaimg" />
+                    <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white" id="pasta2">JOSEPH TSHOLE LUZOLO</h5>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Pasteur Associé</span>
+                </div>
+            </div>
+
+        </div>
+        <!--Chantres-->
+        <div>
+            <h2 class=" text-center text-3xl font-extrabold text-gray-900 dark:text-white mb-6" style="color: #76A9FA;">
+                Chantres
+            </h2>
+            <div id="stylechantre">
+                <div style="display: flex; justify-content: center;"><img src="static/css/church3m.png" alt=""  id="chantre" class="chantre"> </div>
+                <div style="display: flex; justify-content: center;"><img src="static/css/church3m.png" alt=""  id="chantre" class="chantre"> </div>
+            </div>
+            <p class="bouton"><a href="">Afficher Tout</a></p>
+        </div>
+    </main>
+    <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4" id="footHead">
+            <div class="sociaux">
+                <div>Suivez-nous sur: </div>
+                <div class="imgreseau">
+                    <a href=""><img src="/static/css/facebook.png" alt=""></a>
+                    <a href=""><img src="/static/css/youtube.png" alt=""></a>
+                    <a href=""><img src="/static/css/whatsapp.png" alt=""></a>
+                </div>
+            </div>
+            <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8" >
+                <div  class="flex-footer">
+                    <div class="flex-lex">
+                        <a href=" / " class="footA1" >
+                            <img src="/static/css/logo24.png"  alt="Flowbite Logo"/>
+                            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">William Marrion Branham Tab de Mont-Ngafula</span>
+                        </a>
+    
+                        <div class="reseau">
+                            <a href="" class="facebook"><img src="/static/css/facebook.png" alt=""><h6>William Marrion Branham Tab de Mont-Ngafula</h6></a>
+                            <a href="https://www.youtube.com/@pasteurrbob" class="facebook"><img src="/static/css/youtube.png" alt=""><p>Julien-Bob MUNANGA</p></a>
+                            <a href=""class="facebook"><img src="/static/css/whatsapp.png" alt="" ><p>00243 999 956 607</p></a>
+                        </div>
+                    </div>
+
+                    <div class="adresse">
+                        <h3>Adresse</h3>
+                        <p>Avenue Les Adorateurs N°41</p>
+                        <p>Commune de Mont-Ngafula</p>
+                        <p>Reference Triangle Campus</p>
+                        <p>Arret Revolution</p>
+                    </div>
+                    <div class="menu">
+                        <h3>Menu</h3>
+                        <div class="me">
+                            <div>
+                                <li class="footli1">
+                                    <a href=" / " class="hover:underline me-4 md:me-6">Accueil</a>
+                                </li>
+                                <li class="footli1">
+                                    <a href="/sermons/" class="hover:underline me-4 md:me-6">Sermons</a>
+                                </li>
+                                <li class="footli2">
+                                    <a href="/ministre/" class="hover:underline">Ministres</a>
+                                </li>
+                            </div>
+                            <div>
+                                <li class="footli2">
+                                    <a href="/offi/" class="hover:underline">Officiels</a>
+                                </li>
+                                <li>
+                                    <a href="/temoignage/" class="hover:underline">Temoignages</a>
+                                </li>
+                                <li>
+                                    <a href="/chantre/" class="hover:underline">Chantres</a>
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+                <span class="bas" >© 2024 <a
+                        href=" / " class="hover:underline"> William Marrion Branham Tab de Mont-Ngafula</a>. Tous Droit Reservé.</span>
+            </div>
+    </footer>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <!--<script src="{% static 'node_modules/flowbite/dist/flowbite.min.js' %}"></script>-->
+    <script>
+        const tabimage =
+            [
+                'static/css/church3m.png',
+                'static/css/church2.png',
+                'static/css/church.jpg'
+            ]
+
+        let i = 0
+        const banner = document.getElementById('banner')
+
+        function changeImage() {
+
+            i = (i + 1) % tabimage.length
+            banner.style.backgroundImage = `url(${tabimage[i]})`;
+        }
+
+        setInterval(changeImage, 3000);
+
+        changeImage()
+    </script>
+    
+    <script>
+        const images =
+            [
+                'static/css/church3m.png',
+                'static/css/church2.png',
+                'static/css/pastb.JPG'
+            ]
+
+        var currentIndex = 0;
+        function changeImage() {
+            const chantre = document.getElementsByClassName('chantre');
+            chantre[0].src = images[currentIndex];
+            //chantre[1].src = images[currentIndex];
+            currentIndex = (currentIndex + 1) % images.length;
+        }
+
+        setInterval(changeImage, 3000);
+
+        changeImage()
+    </script>
+    
+    <script>
+        const image =
+            [
+                'static/css/church2.png',
+                'static/css/church3m.png',
+                'static/css/pastb.JPG',
+                
+                
+            ]
+
+        var currentIndex = 0;
+        function changeImage() {
+            const chantre = document.getElementsByClassName('chantre');
+            //chantre[0].src = images[currentIndex];
+            chantre[1].src = images[currentIndex];
+            currentIndex = (currentIndex + 1) % image.length;
+        }
+
+        setInterval(changeImage, 3000);
+
+        changeImage()
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    </body>
+    
+    </html>

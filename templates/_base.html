@@ -1,0 +1,154 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} {% endblock title %}</title>
+  {% compress css %}
+  <link rel="stylesheet" href="{% static 'src/output.css' %}">
+  {% endcompress %}
+  <link rel="stylesheet" href="{% static 'css/styleend.css' %}">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/sermonsstyle.css' %}">
+
+</head>
+
+<body class="bg-green-50">
+  <nav class="bg-blue-400 border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800">
+    <div class="container flex flex-wrap items-center justify-between mx-auto">
+        <a href="{{ .Site.Params.homepage }}/" class="flex items-center">
+            <img src="{% static 'css/logo24.png' %}" class="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
+            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">WMB tab</span>
+        </a>
+        <button data-collapse-toggle="mobile-menu" type="button"
+            class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-controls="mobile-menu" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd"></path>
+            </svg>
+            <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"></path>
+            </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto" id="mobile-menu">
+            <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+                <li>
+                    <a href=" / "
+                        class="block py-2 pl-3 pr-4 text-white bg-green-700 rounded md:bg-transparent md:text-green-700 md:p-0 dark:text-white"
+                        aria-current="page">Accueil</a>
+                </li>
+                <li>
+                    <a href="/sermons/"
+                        class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Sermons</a>
+                </li>
+                <li>
+                    <a href="/event/"
+                        class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Evenement</a>
+                </li>
+                <li>
+                    <a href="/ministre/"
+                        class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Ministres</a>
+                </li>
+                <li>
+                    <a href="/offi/"
+                        class="block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Officiels</a>
+                </li>
+                <li>
+                    <a href="/temoignage/"
+                        class="block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Temoignages</a>
+                </li>
+                <li>
+                    <a href="/chantre/"
+                        class="block py-2 pl-3 pr-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Chantre</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+  <main>
+    <div class="container mx-auto mt-4">
+      {% block content %}
+      {% endblock content %}
+    </div>
+  </main>
+  <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4" id="footHead">
+    <div class="sociaux">
+        <div>Suivez-nous sur: </div>
+        <div class="imgreseau">
+            <a href=""><img src="/static/css/facebook.png" alt=""></a>
+            <a href=""><img src="/static/css/youtube.png" alt=""></a>
+            <a href=""><img src="/static/css/whatsapp.png" alt=""></a>
+        </div>
+    </div>
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8" >
+        <div  class="flex-footer">
+            <div class="flex-lex">
+                <a href=" / " class="footA1" >
+                    <img src="/static/css/logo24.png"  alt="Flowbite Logo"/>
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">William Marrion Branham Tab de Mont-Ngafula</span>
+                </a>
+
+                <div class="reseau">
+                    <a href="" class="facebook"><img src="/static/css/facebook.png" alt=""><h6>William Marrion Branham Tab de Mont-Ngafula</h6></a>
+                    <a href="https://www.youtube.com/@pasteurrbob" class="facebook"><img src="/static/css/youtube.png" alt=""><p>Julien-Bob MUNANGA</p></a>
+                    <a href=""class="facebook"><img src="/static/css/whatsapp.png" alt="" ><p>00243 999 956 607</p></a>
+                </div>
+            </div>
+
+            <div class="adresse">
+                <h3>Adresse</h3>
+                <p>Avenue Les Adorateurs N°41</p>
+                <p>Commune de Mont-Ngafula</p>
+                <p>Reference Triangle Campus</p>
+                <p>Arret Revolution</p>
+            </div>
+            <div class="menu">
+                <h3>Menu</h3>
+                <div class="me">
+                    <div>
+                        <li class="footli1">
+                            <a href=" / " class="hover:underline me-4 md:me-6">Accueil</a>
+                        </li>
+                        <li class="footli1">
+                            <a href="/sermons/" class="hover:underline me-4 md:me-6">Sermons</a>
+                        </li>
+                        <li class="footli2">
+                            <a href="/ministre/" class="hover:underline">Ministres</a>
+                        </li>
+                    </div>
+                    <div>
+                        <li class="footli2">
+                            <a href="/offi/" class="hover:underline">Officiels</a>
+                        </li>
+                        <li>
+                            <a href="/temoignage/" class="hover:underline">Temoignages</a>
+                        </li>
+                        <li>
+                            <a href="/chantre/" class="hover:underline">Chantres</a>
+                        </li>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <span class="bas" >© 2024 <a
+                href=" / " class="hover:underline"> William Marrion Branham Tab de Mont-Ngafula</a>. Tous Droit Reservé.</span>
+    </div>
+</footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+</body>
+
+</html>

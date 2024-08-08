@@ -1,0 +1,327 @@
+.bouton{
+display: flex;
+justify-content: center;
+color : #1A56DB;
+text-decoration: underline;
+}
+
+#stylechantre{
+    display: flex;
+    justify-content: center;
+    
+}
+#chantre{
+    width: 40em; 
+    height: 30em;
+}
+
+
+#pastaimg{
+    padding-top: 4px; 
+    border-radius: 500px; 
+    height: 30em; 
+    width: 30em;
+}
+
+/*footer*/
+#footHead{
+    background-color: #76A9FA;
+    background-size: cover;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.flex-footer{
+    display: flex;
+    justify-content: space-between;
+    font-family: poppins;
+    /*background-color: red;*/
+    padding: 10px 5px;
+    gap: 20px;
+}
+
+
+.flex-footer .footA1 {
+    display: flex;
+    justify-content: center;
+}
+.flex-footer .footA1 span {
+/*padding-bottom: 80px;*/
+color: #082006;
+}
+
+.flex-footer a img{
+    height: 80px;
+    width: 80px;
+}
+.flex-footer .adresse{
+    display: flex;
+    flex-direction: column;
+}
+.flex-footer .adresse h3{
+display: flex;
+justify-content: center;
+font-weight: 500;
+color: whitesmoke;
+}
+.flex-footer .adresse p{
+    text-align: center;
+    padding: 7px 0px;
+    color: #082006;
+}
+
+.flex-footer .menu h3 {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    color: whitesmoke;
+}
+.flex-footer .menu li{
+    list-style: none;
+    text-align: center;
+    /*color: #082006;*/
+    color: rgb(255, 196, 0);
+}
+
+.flex-footer .reseau a img{
+    height: 25px;
+    width: 25px;
+    
+}
+.flex-footer .reseau{
+    padding-top: 20px;
+    /*background-color: red;*/
+}
+
+.flex-footer .reseau a img{
+padding-bottom: 5px;
+}
+.flex-footer .reseau .facebook{
+    display: flex;
+    color: whitesmoke;
+}
+
+.sociaux{
+    display: none;
+    justify-content: center;
+    font-family: poppins;
+    color: #fff;
+}
+
+.bas{
+    display: flex;
+    justify-content: center;
+    font-size: x-small;
+}
+
+/*sermons style*/
+.flex-card{
+    display: flex;
+    width: 400px;
+    height: auto;
+}
+.flex-card div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 20px;
+    font-family: poppins;
+}
+
+/*ministre style*/
+.row{
+    display: flex;
+
+}
+
+.row-min .card-body{
+    display: flex;
+    flex-direction: column;
+    font-family: poppins;
+    color: #082006;
+    box-shadow: 5px 1px 50px #76A9FA;
+    align-items: center;
+    padding-top: 10px;
+    height: ;
+}
+.img{
+    width: 300px;
+    height: 300px;
+}
+
+
+@media only screen and (max-width: 700px) {
+
+    /*body {
+      background-color: rgb(148, 235, 9);
+    }*/
+    #pasta {
+        justify-content: center;
+        padding: 0px;
+        margin: 0px;
+        /*width: 380px;
+        height: 680px;*/
+    }
+
+    #pastaimg {
+        width: 100px;
+        height: 100px;
+    }
+
+    #pastabob {
+        font-family: poppins;
+        text-align: center;
+    }
+
+    #pasta2 {
+        font-family: poppins;
+        text-align: center;
+    }
+
+    #chantre {
+        width: 25em;
+        height: 10em;
+    }
+
+    #banner {
+        height: 50vh;
+        width: auto;
+    }
+
+    /*footer*/
+    #footer {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: auto;
+
+    }
+
+    .flex-footer {
+        display: block;
+        align-items: center;
+    }
+
+    .footA1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: x-small;
+    }
+
+    .flex-footer .reseau {
+        display: none;
+        padding-top: 20px;
+        /*background-color: red;*/
+    }
+
+    .flex-footer .menu .me {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        /*background-color: rgb(44, 17, 163);*/
+    }
+
+    .footUl {
+        display: flex;
+        justify-content: space-between;
+        font-size: x-small;
+    }
+
+    .footUl li {
+
+        justify-content: space-around;
+
+    }
+
+    .footli1 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #footHead span {
+        display: flex;
+        justify-content: center;
+        font-size: xx-small;
+    }
+
+    .flex-footer a img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .flex-footer .flex-lex {
+        display: block;
+
+    }
+
+    /*sociaux*/
+    .sociaux {
+        display: flex;
+        justify-content: center;
+        font-family: poppins;
+        color: #fff;
+    }
+
+    .sociaux div {
+        display: flex;
+        justify-content: center;
+        padding: 1px 10px;
+    }
+
+    .sociaux div a img {
+        width: 20px;
+        height: 20px;
+    }
+
+    /*sermons style*/
+    .flex-card {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 300px;
+        height: auto;
+
+
+    }
+
+    .flex-card div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 20px;
+        font-family: poppins;
+
+    }
+/*ministre style*/
+.row{
+    display: block;
+
+}
+
+.row-min .card-body{
+    display: flex;
+    flex-direction: column;
+    font-family: poppins;
+    color: #082006;
+    box-shadow: 5px 1px 50px #76A9FA;
+    align-items: center;
+    padding-top: 10px;
+    height: ;
+}
+
+.row-min .col-md-4 img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 2%;
+    width: 400px;
+    height: 400px;
+
+}
+
+
+}

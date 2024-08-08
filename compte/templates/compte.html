@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>inscription</title>
+</head>
+<style>
+    form{
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+input{
+display: block;
+padding: .75rem;
+font-size: 1rem;
+border: 1px solid #ced4da;
+min-width: 600px;
+font-family: poppins;
+}
+label {
+display: inline-block;
+box-sizing: border-box;
+margin: 1rem 0;
+}
+.p{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    font-family: poppins;
+}
+.p>a{
+    text-decoration: none;
+    font-family: poppins;
+}
+
+@media(max-width:600px){
+input, textarea{
+display: block;
+padding: .200rem;
+font-size: 0.8rem;
+border: 1px solid #ced4da;
+min-width: 200px;
+font-family: poppins;
+}
+}
+</style>
+<body>
+    <p class="p"><h1 class="p" style="color: #838CFC;">Inscription</h1></p>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label for="username">Nom</label>
+            <input type="text" name="username" id="username">
+        </p>
+        <p>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </p>
+        <p>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+        </p>
+        <p>
+            <input type="submit" value="S'inscrire">
+        </p>
+
+    </form>
+<p class="p"> <a href="{% url 'login' %}">Se connecter</a> </p>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!-- chat.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  #chat-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(247, 247, 247);
+    font-family: poppins;
+  }
+
+  #chat-messages{
+  border: 2px solid #dedede;
+  width: 500PX;
+  height: 450PX;
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 15px;
+  }
+  .mes {
+    border-color: #ccc ;
+    background-color: #ddd;
+    margin-bottom: 10px;
+    word-break:break;
+    
+    }
+    .mes p {
+        line-height: 25px;
+        margin: 5PX 0;
+    }
+  .mes{ 
+/*background-color: #838CFC;
+border-radius: 50px 50px;*/
+  }
+  #message-input {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        }
+
+  @media(max-width:600px){
+    #chat-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(247, 247, 247);
+    font-family: poppins;
+    font-size: small;
+    margin-top: 10px;
+  }
+  #chat-messages{
+  border: 2px solid #dedede;
+  width: 200PX;
+  height: 150PX;
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 15px;
+  align-items: center;
+  }
+  .mes {
+    border-color: #ccc ;
+    background-color: #ddd;
+    margin-bottom: 10px;
+    word-break:break;
+    
+    }
+    .mes p {
+        line-height: 25px;
+        margin: 5PX 0;
+    }
+}
+</style>
+
+  <div id="chat-container">
+    <div id="chat-messages">
+      {% for message in messages %}
+      <div class="mes">
+        <p class="nomuser"><strong>{{ message.user.username }}:</strong></p>
+        <p class="contentmessage" >{{ message.content }}</p>
+        <p class="datemessage"><span class="timestamp">{{ message.timestamp }}</span></p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <form id="message-form">
+      {% csrf_token %}
+      <textarea id="message-input" name="content" placeholder="Entrez votre message"></textarea>
+      <button type="submit" id="send-button">Envoyer</button>
+    </form>
+  </div>
+
+  <!-- Script Ajax pour gérer l'envoi et la réception de messages -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Configuration du jeton CSRF pour les requêtes Ajax
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+          }
+        }
+      });
+
+      // Fonction pour mettre à jour les messages du chat
+function updateChat(messages) {
+  var chatMessages = $('#chat-messages');
+
+  if (messages && messages.length > 0) {
+    messages.forEach(function(message) {
+      chatMessages.append(`<p><strong>${message.username}:</strong> ${message.content} <span class="timestamp">${message.timestamp}</span></p>`);
+    });
+
+    // Faites défiler vers le bas pour afficher les nouveaux messages
+    chatMessages.scrollTop(chatMessages[0].scrollHeight);
+  }
+}
+
+      // Fonction pour envoyer un message via Ajax
+      function sendMessage(content) {
+        console.log('Sending message:', content);
+        $.ajax({
+          type: 'POST',
+          url: '{% url "send_message" %}',
+          data: { content: content },
+          success: function(data) {
+            console.log('Message sent successfully:', data);
+            updateChat([data]);
+          },
+          error: function(error) {
+            console.error('Error sending message:', error);
+          }
+        });
+      }
+
+      // Gestion de la soumission du formulaire
+      $('#message-form').submit(function(event) {
+        event.preventDefault(); // Empêche la soumission normale du formulaire
+        var content = $('#message-input').val();
+        if (content.trim() !== '') {
+          sendMessage(content);
+          $('#message-input').val('');  // Effacer le champ d'entrée après l'envoi
+        }
+      });
+
+      // Actualisation du chat toutes les quelques secondes (facultatif)
+      setInterval(function() {
+        $.ajax({
+          type: 'GET',
+          url: '{% url "chat" %}',  // Assurez-vous que le nom correspond à votre vue Django
+          success: function(data) {
+            updateChat(data.messages);
+          },
+          error: function(error) {
+            console.error('Erreur lors de la récupération des messages:', error);
+          }
+        });
+      }, 5000);  // Actualise toutes les 5 secondes (ajustez selon vos besoins)
+    });
+  </script>
+{% endblock %}

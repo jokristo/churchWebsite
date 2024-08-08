@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}evenements{% endblock title %}
+{% block content %}
+<div class="row">
+      {% for event in events %}
+    <div class="card" style="width:300px">
+        <img class="card-img-top" src="{{ event.VisuelEvenement.url }}" alt="Card image">
+        <div class="card-body">
+          <h4 class="card-title">{{ event.NomEvenement }} </h4>
+          <p class="card-text">{{ event.Date }} </p>
+          <p class="card-text"><video src="{{ event.VideoEvenement.url }}" controls style="width: 200px;"></video></p>
+          <a href="{{ event.VideoEvenement.url }}" class="btn btn-primary" style="font-family: poppins;">Cliquer ici pour telecharger la video de l'evenement</a>
+        </div>
+      </div>
+      {% endfor %}
+</div>
+
+{% endblock content %}

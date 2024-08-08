@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}officiels{% endblock title %}
+
+{% block content %}
+<div class="row">
+    {% for officiel in offi %}
+    <div class="card mb-3" style="max-width: 540px;">
+    
+      <div class="row-min">
+        <div class="col-md-4">
+          <img src="{{officiel.photo.url}}" class="img" alt="...">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title"> {{ officiel.Nom }} </h3>
+          <h4 class="card-title"> fonction:{{ officiel.fonction }} </h4>
+          <p class="card-text">contact : {{ officiel.contact }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    </div> 
+{% endblock content %}

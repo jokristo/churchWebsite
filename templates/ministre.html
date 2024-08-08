@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Ministres{% endblock title %}
+
+{% block content %}
+<div class="row">
+{% for ministre in ministres %}
+<div class="card mb-3" style="max-width: 540px;">
+
+  <div class="row-min">
+    <div class="col-md-4">
+      <img src="{{ministre.photo.url}}" class="img" alt="...">
+    </div>
+    <div class="card-body">
+      <h5 class="card-title"> {{ ministre.Nom }} </h5>
+      <p class="card-text">contact : {{ ministre.contact }}</p>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+{% endblock content %}

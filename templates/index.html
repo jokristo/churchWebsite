@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{% static 'css/bootstrap-icons/bootstrap-icons.css' %}">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/stylesecondaire.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	<script src="{% static 'JS/bootstrap.min.js' %}"></script>
+	<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+	<title>Accueil</title>
+	<style>
+		.adresse{
+    	display: flex;
+		justify-content: space-between;
+		color: #EDEDED;
+		font-family: poppins;
+		margin-left: 20px;
+		}
+		.cli{
+			text-decoration: none;
+			font-family: poppins;
+		}
+		.back{
+			padding-top: 15px;
+		}
+	</style>
+</head>
+<body>
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+	<script>
+        AOS.init();
+    </script>
+	<!-- fond du site church1 png-->
+	<header id="fonds1" style="position: relative;">
+
+		<!-- conteneur des liens et du logo wmb--> 
+			<!--<div class="fond2">
+
+					<!--logo wmb
+					<div><img class="logo" src="{% static 'css/logo24.png' %}" alt="logo"></div>
+
+					<!--le block des liens de navigation--
+					<div class="back">
+
+						<!--les liens de navigation--
+						<p><a class="lien" href="#">Accueil</a></p>
+						<p><a class="lien" href="/sermons/">Sermons</a></p>
+						<p><a class="lien" href="#">Evenement</a></p>
+						<p><a class="lien" href="/ministre/">Ministres</a></p>
+						<p><a class="lien" href="/offi/">Officiels</a></p>
+
+					</div>--	
+
+			</div>-->
+			<nav id="nav" class="navbar navbar-expand-lg navbar-light  fond2" style="position: absolute;">
+				<div class="container-fluid">
+				  <a class="navbar-brand" href="#"><div><img class="logo" src="{% static 'css/logo24.png' %}" alt="logo"></div></a>
+				  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				  </button>
+				  <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+					  <a id="lien" class="nav-link lien" aria-current="page" href=" / ">Accueil</a>
+					  <a id="lien" class="nav-link lien" href="/sermons/" target ="_blank">Sermons</a>
+					  <a id="lien" class="nav-link lien" href="event">Evenement</a>
+					  <a id="lien" class="nav-link lien" href="/ministre/">Ministres</a>
+					  <a id="lien" class="nav-link lien" href="/offi/">Officiels</a>
+					  <a id="lien" class="nav-link lien" href="/temoignage/">Temoignages</a>
+					</div>
+				  </div>
+				</div>
+			  </nav>
+		<hr style="color: #838CFC; background-color: #838CFC;">
+
+	<!--les buts -->		
+		<p class="BUT" data-aos="fade-left">Nous existons pour</p>
+
+		<p class="BUT2" data-aos="fade-right" >
+			AIDER TOUT LE MONDE<br>
+			A TROUVER ET SUIVRE<br>
+			LE SEIGNEUR
+		</p>
+	<!--le bouton suivez nous en direct-->
+		<p class="boutton"><input class="SUB" type="submit" value="SUIVEZ-NOUS EN DIRECT CE DIMANCHE"></p>
+
+	</header>
+
+
+	<section>
+		<!--block du mot pasteur et sa bordure-->
+			<div>
+
+				<!--pateur-->
+				<h1 class="PASTA">
+
+				PASTEURS
+
+				<!--sa bordure-->
+					<div class="border-1"></div>
+
+				</h1>
+			</div>
+
+
+				<!-- conteneur de la sphere photo et du cadre de presentation-->
+				<div class="struc">
+
+					<!--conteneur de la sphere photo et des presentation-->
+					<div class="struc3" data-aos="fade-right">
+
+						<!-- la sphere photo-->
+						<div class="struc2-1">
+							
+						</div>
+
+						<!--la presentation-->
+						<p class="titre">PASTEUR TITULAIRE</p>
+						<p class="nom">BOB MUNANGA MATEKYA</p>
+
+					</div>
+
+					<!--conteneur de la sphere photo et des presentation-->
+					<div class="struc3" data-aos="fade-left">
+						
+						<!-- la sphere photo-->
+						<div class="struc2-2">
+							
+						</div>
+
+						<!--la presentation-->
+						<p class="titre">PASTEUR ASSOCIE</p>
+						<p class="nom">JOSEPH LUZOLO</p>
+
+					</div>				
+
+
+				</div>
+
+
+				<!--conteneur du bouton cliquez ici-->
+				<div class="voir2">
+
+					<!--le bouton cliquez ici-->
+					<div class="voir"><a class="cli" href="#">VOIR BIOGRAPHIE</a></div>
+
+				</div>
+
+	</section>
+	<footer style="background-color: #232F3E; padding: 20px; text-align: center;">
+		<div class="logo" style="margin-left: 50%;">
+            <!-- Remplacez "votre-logo.png" par le chemin de votre logo -->
+            <img src="{% static 'css/logo24.png' %}" alt="Logo" style="width: 60px; height: auto; margin-bottom: 20px; ">
+        </div>
+
+        <div class="footer-text" style="color:#EDEDED; display: flex; justify-content: space-around; flex-wrap: wrap; font-family: poppins; ">
+            <div ><a id="footlien" href=" / ">Accueil</a></div>
+            <div><a id="footlien" href="/sermons/">sermons</a></div>
+            <div><a id="footlien" href="/ministre/">Ministres</a></div>
+			<div><a id="footlien" href="/offi/">Officiels</a></div>
+			<div><a id="footlien" href="login/">Chantres</a></div>
+			<div><a id="footlien" href="/temoignage/">temoignages</a></div>
+			<div><a id="footlien" href="login/">Portail</a></div>
+        </div>
+		<br>
+		<div class="adresse">
+			<p>Avenue les adorateurs N°41</p>
+			<p>Commune de mont-ngafula</p>
+			<p>Reference: Triangle Campus</p>
+		</div>
+
+
+        <div class="social-icons">
+            <!-- Ajoutez vos liens de réseaux sociaux -->
+            <a href="https://web.facebook.com/wmbtabdemontngafula" target="_blank"><i class="bi bi-facebook" style="width: 30px; color: #EDEDED;",></i></a>
+            <a href="#" target="_blank"><i class="bi bi-whatsapp" style="width: 30px; color: #EDEDED;"></i></a>
+            <a href="https://www.youtube.com/@pasteurrbob" target="_blank"><i class="bi bi-youtube" style="width: 30px; color: #EDEDED;"></i></a>
+        </div>
+
+	</footer>
+</body>
+</html>

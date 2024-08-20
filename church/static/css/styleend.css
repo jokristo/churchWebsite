@@ -15,6 +15,53 @@ text-decoration: underline;
     height: 30em;
 }
 
+/*pasteur*/
+#past{
+    width: 100px;
+    height: 100px;
+}
+.pastgen{
+    display: flex;
+    justify-content: space-around;
+}
+.pastgen .bio{
+    text-align: justify;
+    width: 40%;
+    padding-top: 5%;
+    padding-right: 50px;
+}
+
+.flex-card-past .card-img-top{
+    width: 250px;
+    height: 250px;
+    padding-top: 5px;
+    border-radius: 300px;
+}
+
+#pastmob{
+    display: none;
+}
+
+.flex-card-past{
+    display: flex;
+    width: 400px;
+    height: auto;
+}
+.flex-card-past div{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 20px;
+    font-family: poppins;
+}
+
+#sermon_id{
+    width: 90%;
+    box-shadow: 1px 2px 15px #9c9b9b;
+}
 
 #pastaimg{
     padding-top: 4px; 
@@ -121,12 +168,17 @@ padding-bottom: 5px;
 }
 .flex-card div{
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     margin: 20px;
     font-family: poppins;
+}
+
+#sermon_id{
+    box-shadow: 1px 2px 15px #9c9b9b;
 }
 
 /*ministre style*/
@@ -150,12 +202,39 @@ padding-bottom: 5px;
     height: 300px;
 }
 
+/*defilement chantre style*/
+.image-container {
+    display: flex;
+    width: 100%;
+    overflow-x: hidden;
+    white-space: nowrap;
+    animation: slide 30s linear infinite;
+  }
+
+  .image-container img {
+    width: 20em; 
+    height: 20em;
+    margin: 10px;
+    box-shadow: 1px 1px 10px #76A9FA;
+  }
+
+  
+  @keyframes slide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+
 
 @media only screen and (max-width: 700px) {
 
     /*body {
       background-color: rgb(148, 235, 9);
     }*/
+
+    #pastmob{
+        display: flex;
+    }
     #pasta {
         justify-content: center;
         padding: 0px;
@@ -169,6 +248,10 @@ padding-bottom: 5px;
         height: 100px;
     }
 
+    .pastgen{
+        display: none;
+        justify-content: space-around;
+    }
     #pastabob {
         font-family: poppins;
         text-align: center;
@@ -275,6 +358,27 @@ padding-bottom: 5px;
         height: 20px;
     }
 
+    /*pasta new style*/
+    .flex-card-past{
+        display: none;
+        width: 400px;
+        height: auto;
+    }
+    .flex-card-past div{
+        display: none;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 20px;
+        font-family: poppins;
+    }
+    
+    #sermon_id{
+        box-shadow: 1px 2px 15px #9c9b9b;
+    }
+
     /*sermons style*/
     .flex-card {
         display: flex;
@@ -282,7 +386,7 @@ padding-bottom: 5px;
         flex-direction: column;
         width: 300px;
         height: auto;
-
+        margin: 0px 35px;
 
     }
 
@@ -292,10 +396,14 @@ padding-bottom: 5px;
         align-items: center;
         justify-content: center;
         text-align: center;
-        margin: 20px;
+        margin: 10px 20px;
         font-family: poppins;
 
     }
+    #sermon_id{
+        box-shadow: 1px 2px 15px #9c9b9b;
+    }
+
 /*ministre style*/
 .row{
     display: block;
@@ -322,6 +430,12 @@ padding-bottom: 5px;
     height: 400px;
 
 }
+
+/*defilement chantre style*/
+.image-container img {
+    width: 80px;
+    height: 80px;
+  }
 
 
 }

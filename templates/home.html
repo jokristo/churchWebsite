@@ -49,7 +49,7 @@
                             class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Sermons</a>
                     </li>
                     <li>
-                        <a href=""
+                        <a href="/event/"
                             class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Evenement</a>
                     </li>
                     <li>
@@ -102,10 +102,36 @@
         <div class="font-sans text-blue-400 font-bold">
             <h2 class="text-center  text-9xl font-extrabold " style="font-size: 35px; color: #76A9FA;">Pasteurs</h2>
         </div>
-        <!--pasta-->
-        <div class="flex justify-end px-4 pt-4" id="pasta">
+        <!--pasta bob-->
+        <div class="pastgen">
+            <div class="flex-card-past">
+                <div class="class=" flex-initial md:flex flex-col" id="sermon_id">
+                    <img class="card-img-top" src="static/css/pastb.JPG" alt="Card image">
+                    <div class="">
+                        <h4 class="card-title">BOB MUNANGA MATEKYA</h4>
+                        <p class="card-text">Pasteur Titulaire</p>
+                    </div>
+                </div>
+            </div>
+            <p class="bio">Minim aliquip cillum laboris amet excepteur voluptate velit consequat. Tempor sint mollit Lorem sit ipsum id Lorem pariatur ut non duis quis eiusmod mollit. Reprehenderit ad laboris cillum labore ipsum pariatur officia laboris. Do aliqua esse amet Lorem. Ad ad tempor adipisicing laborum. Proident aliqua labore occaecat ut deserunt in nisi ex in culpa veniam.</p>
+        </div>
+        <!--pasta tshole-->
+        <div class="pastgen">
+            <p class="bio">Minim aliquip cillum laboris amet excepteur voluptate velit consequat. Tempor sint mollit Lorem sit ipsum id Lorem pariatur ut non duis quis eiusmod mollit. Reprehenderit ad laboris cillum labore ipsum pariatur officia laboris. Do aliqua esse amet Lorem. Ad ad tempor adipisicing laborum. Proident aliqua labore occaecat ut deserunt in nisi ex in culpa veniam.</p>
+            <div class="flex-card-past">
+                <div class="class=" flex-initial md:flex flex-col" id="sermon_id">
+                    <img class="card-img-top" src="static/css/pastl.JPG" alt="Card image">
+                    <div class="">
+                        <h4 class="card-title">JOSEPH TSHOLE LUZOLO</h4>
+                        <p class="card-text">Pasteur Associé</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--pour mobile-->
+        <div id="pastmob" class="flex justify-end px-4 pt-4">
             <div
-                class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700" >
                 <div class="flex justify-end px-4 pt-4">
                     <button id="dropdownButton" data-dropdown-toggle="dropdown"
                         class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
@@ -158,11 +184,11 @@
             <h2 class=" text-center text-3xl font-extrabold text-gray-900 dark:text-white mb-6" style="color: #76A9FA;">
                 Chantres
             </h2>
-            <div id="stylechantre">
-                <div style="display: flex; justify-content: center;"><img src="static/css/church3m.png" alt=""  id="chantre" class="chantre"> </div>
-                <div style="display: flex; justify-content: center;"><img src="static/css/church3m.png" alt=""  id="chantre" class="chantre"> </div>
+            <div id="stylechantre" class="image-container">
+                <img src="/static/css/church2.png" alt="Image 1">
+                <img src="/static/css/church3m.png" alt="Image 2">
+                <img src="/static/css/church3.png" alt="Image 3">
             </div>
-            <p class="bouton"><a href="">Afficher Tout</a></p>
         </div>
     </main>
     <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4" id="footHead">
@@ -235,6 +261,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <!--<script src="{% static 'node_modules/flowbite/dist/flowbite.min.js' %}"></script>-->
     <script>
+        //slide pour banner
         const tabimage =
             [
                 'static/css/church3m.png',
@@ -257,6 +284,7 @@
     </script>
     
     <script>
+        // slide pour chantre
         const images =
             [
                 'static/css/church3m.png',
@@ -299,6 +327,23 @@
 
         changeImage()
     </script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    
+<script>
+    $(document).ready(function(){
+        $('h3').css('color', 'purple')
+    
+    $('img').click(function(){
+        $('p').slideUp(1000)
+    })
+
+    $('h4').click(function(){
+        $('p').slideDown(1000)
+    })
+})
+    
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "_base.html" %}
 {% load static %}
 {% block title %}Temoignages{% endblock title %}
 {% block content %}
@@ -36,9 +36,13 @@ color: #838CFC;
     font-family: poppins;
 }
 #tem{
-    color: #f30303;
-    font-weight: bold;
+    color: white;
 }
+#id_Audio{
+    padding-bottom: 20px;
+}
+
+
 
 @media(max-width:600px){
     input, textarea{
@@ -56,22 +60,26 @@ text-decoration: none;
 color: #838CFC;
 font-size: small;
 }
-
-#tem{
-    color: #f30303;
+.titretemoin a{
+    text-align: center;
+    color: white;
+    font-family: poppins;
+    font-size: small;
 }
+
+
 
 }
 
 </style>
 <div class="titretemoin">
-    <a >Placer votre Temoignage Ici</a>
-    <a href="/temoignagecontent/" id="tem">Voir tous les Temoignages</a>
+    <button type="button" class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Placer un Temoignage</button>
+    <a href="/temoignagecontent/" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Voir tous les Temoignages</a>
 </div>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formute.as_p }}
-        <input type="submit" id="bot" value="Enregistrer">
+        <input type="submit" value="Enregistrer" id="buton" class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
     </form>
 
 

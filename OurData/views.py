@@ -31,7 +31,7 @@ def temoignages(request):
 
 
 def temoin(request):
-    temoignage2 = Temoignages.objects.all()
+    temoignage2 = Temoignages.objects.filter(is_Approuve = "True")
     return render(request, "temoignage2.html", {"datatemoignages": temoignage2})
 
 

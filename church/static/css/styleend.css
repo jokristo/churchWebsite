@@ -224,7 +224,42 @@ padding-bottom: 5px;
     100% { transform: translateX(-100%); }
   }
 
+#scroll2
 
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.image-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+
+}
+
+.image-scroll {
+    display: flex;
+    animation: scroll 25s linear infinite;
+    /*animation: slide 15s linear infinite;*/
+
+    /*display: flex;
+    white-space: nowrap; /* Empêche les retours à la ligne */
+    /*will-change: transform;  /*Améliore la performance de l'animation */
+    /*transition: transform 0.5s ease; /* Animation fluide */
+}
+
+.image-scroll img {
+    width: 200px; /* Ajustez la taille selon vos besoins */
+    height: auto;
+    margin-right: 10px;
+    flex-shrink: 0; /* Empêche les images de se réduire */
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
 
 @media only screen and (max-width: 700px) {
 

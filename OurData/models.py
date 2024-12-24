@@ -5,7 +5,7 @@ from django.db import models
 class Ministre(models.Model):
     Nom = models.CharField(max_length=100, blank=False)
     photo = models.ImageField(blank=True, upload_to='ministrespictures')
-    contact = models.CharField(max_length=100, blank=True)
+    contact = models.CharField(max_length=25, blank=True)
 
     class Meta:
         verbose_name = 'Ministre'
@@ -32,6 +32,7 @@ class Temoignages(models.Model):
     Audio = models.FileField(blank=True, upload_to='audio', null=True)
     Description = models.TextField(blank=False)
     photo = models.ImageField(blank=True, upload_to='temoignagespictures', null=True)
+    is_Approuve = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Temoignage'

@@ -31,7 +31,7 @@
     <div class="class="flex-initial md:flex flex-col" id="sermon_id">
         <img class="card-img-top" src="{{ sermon.image.url }}" alt="Card image">
         <div class="">
-          <h4 class="card-title">{{ sermon.titre }} </h4>
+          <h4 class="card-title">{{ sermon.orateur }} </h4>
           <p class="card-text">Prechée le {{ sermon.date }} </p>
           <p class="card-text"><audio src="{{ sermon.audio.url }}" controls style="width: 200px;"></audio></p>
           <a href="{{ sermon.audio.url }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Cliquer ici pour telecharger l'audio</a>

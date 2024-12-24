@@ -21,6 +21,7 @@ from OurData.views import officiels, ministres, temoignages, Evenement, temoin, 
 from chat.views import chat, send_message
 from compte.views import Sign, login_user, logout_user
 from .views import index, sermons
+from sermons.views import ViewTheme
 from church import settings
 
 # checkview, chat, room, send, getMessages,
@@ -33,6 +34,7 @@ urlpatterns = [
                   path('temoignage/', temoignages, name="temoignages"),
                   path('event/', Evenement, name='event'),
                   path("temoignagecontent/", temoin, name="temoignagecontent"),
+                  path("ViewTheme/", ViewTheme, name="ViewTheme"),
                   path("chantre/", chantre, name="chantre")
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -15,10 +15,27 @@
   <link rel="stylesheet" href="{% static 'css/styleend.css' %}">
   <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="{% static 'css/sermonsstyle.css' %}">
+  <link rel="icon" href="{% static 'css/logo24.png' %}" type="image/x-icon"/>
 
+  <style>
+    /* Nouveau CSS */
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .content {
+        flex: 1; /* Permet au contenu principal de s'étirer */
+        display: flex;
+        flex-direction: column;
+    }
+    </style>
 </head>
 
 <body class="bg-green-50">
+    <div class="content">   
   <nav class="bg-blue-400 border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800">
     <div class="container flex flex-wrap items-center justify-between mx-auto">
         <a href="{{ .Site.Params.homepage }}/" class="flex items-center">
@@ -82,6 +99,8 @@
       {% endblock content %}
     </div>
   </main>
+</div>
+
   <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4" id="footHead">
     <div class="sociaux">
         <div>Suivez-nous sur: </div>

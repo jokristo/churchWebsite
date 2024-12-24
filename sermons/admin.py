@@ -1,6 +1,7 @@
 from django.contrib import admin
 from sermons.models import Sermons
 from sermons.models import Orateur
+from sermons.models import Theme
 from OurData.models import Ministre
 from OurData.models import Officiel
 
@@ -14,7 +15,8 @@ class SermonAdmin(admin.ModelAdmin):
         "orateur",
         "date",
         "lien",
-        "audio"
+        "audio",
+        "Theme"
     ]
 
     search_fields = ('titre',)
@@ -23,8 +25,23 @@ class SermonAdmin(admin.ModelAdmin):
 
 @admin.register(Orateur)
 class OrateurAdmin(admin.ModelAdmin):
-    pass
-    search_fields = ('titre',)
+    list_display = [
+        "Noms",
+        "Provenance",
+
+    ]
+
+    search_fields = ('Noms',)
+
+@admin.register(Theme)
+class ThemeAdmin(admin.ModelAdmin):
+    list_display = [
+        "NomTheme",
+        "ThemeDescription",
+
+    ]
+
+    search_fields = ('NomTheme',)
 
 @admin.register(Ministre)
 class MinistreAdmin(admin.ModelAdmin):

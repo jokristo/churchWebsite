@@ -16,11 +16,20 @@
 <div class="row">
     {% for datatemoignage in datatemoignages %}
   <div class="card" style="width:300px">
-      <img class="card-img-top" src="{{ datatemoignage.photo.url }}" alt="Card image">
+    {% if datatemoignage.photo %}
+    <img class="card-img-top" src="{{ datatemoignage.photo.url }}" alt="Card image">
+    {% else %}
+      <img class="card-img-top" src="{% static 'css/logo24.png' %}" alt="Card image">
+    {% endif %}
       <div class="card-body">
         <h4 class="card-title">{{ datatemoignage.NomDuCroyant }} </h4>
         <p class="card-text">{{ datatemoignage.Description }} </p>
+        {% if datatemoignage.Audio %}
         <p class="card-text"><audio src="{{ datatemoignage.Audio.url }}" controls style="width: 200px;"></audio></p>
+        {% else %}
+        <p class="card-text">Aucun audio disponible</p>
+        {% endif %}
+        
       </div>
     </div>
     {% endfor %}

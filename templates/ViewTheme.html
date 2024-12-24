@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}ViewTheme{% endblock title %}
+
+{% block content %}
+
+    {% for theme in themes %}
+    <div>
+       <h3> {{ theme.NomTheme }} </h3>
+       <img class="card-img-top" src="{{ theme.image.url }}" alt="Card image">
+    <div>
+    {% endfor %}
+<img class="card-img-top" src="static/css/pastl.JPG" alt="Card image">
+
+{% endblock content %}

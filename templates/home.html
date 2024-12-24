@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
     <link rel="stylesheet" href="{% static 'css/styleend.css' %}">
+    <link rel="icon" href="{% static 'css/logo24.png' %}" type="image/x-icon"/>
+
 </head>
 
 <body class="bg-green-100" style="font-family: poppins;">
@@ -80,7 +82,7 @@
                     Jésus-Christ est le meme Hier, Aujourd'hui et Eternellement </h1>
                 <p class="mb-8 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48">Dieu vous appelle</p>
                 <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
-                    <a href="https://www.youtube.com/@pasteurrbob"
+                    <a href="https://www.youtube.com/@pasteurrbob" target="_blank"
                         class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
                         Suivez-nous
                         <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
@@ -184,12 +186,24 @@
             <h2 class=" text-center text-3xl font-extrabold text-gray-900 dark:text-white mb-6" style="color: #76A9FA;">
                 Chantres
             </h2>
-            <div id="stylechantre" class="image-container">
-                <img src="/static/css/church2.png" alt="Image 1">
-                <img src="/static/css/church3m.png" alt="Image 2">
-                <img src="/static/css/church3.png" alt="Image 3">
+        </div>
+
+        <div class="image-container">
+            <div class="image-scroll" id="scroll-container">
+                <img src="/static/css/chantre1.jpg" alt="Image 1">
+                <img src="/static/css/chantre2.jpg" alt="Image 2">
+                <img src="/static/css/chantre3.jpg" alt="Image 3">
+                <img src="/static/css/chantre4.jpg" alt="Image 4">
+                <img src="/static/css/chantre5.jpg" alt="Image 5">
+                <img src="/static/css/chantre6.jpg" alt="Image 1">
+                <img src="/static/css/chantre7.jpg" alt="Image 2">
+                <img src="/static/css/chantre8.jpg" alt="Image 3">
+                <img src="/static/css/chantre9.jpg" alt="Image 4">
+                <img src="/static/css/chantre10.jpg" alt="Image 5">
+                <img src="/static/css/chantre1.jpg" alt="Image 1">
             </div>
         </div>
+
     </main>
     <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4" id="footHead">
             <div class="sociaux">
@@ -343,6 +357,32 @@
     })
 })
     
+</script>
+
+<script>
+  const scrollContainer = document.getElementById('scroll-container');
+const images = document.querySelectorAll('.image-scroll img');
+let currentIndex = 0;
+const totalImages = images.length;
+const visibleImages = 3; // Nombre d'images visibles à la fois
+const scrollSpeed = 3000; // Temps entre les défilements (en ms)
+
+function updateScroll() {
+    scrollContainer.style.transform = `translateX(-${currentIndex * (300)}px)`; // Ajustez 300 à la largeur de l'image
+    currentIndex = (currentIndex + 1) % totalImages; // Passe à l'image suivante
+}
+
+// Change d'image toutes les 3 secondes
+setInterval(updateScroll, scrollSpeed);
+
+// Pause au survol
+scrollContainer.addEventListener('mouseenter', () => {
+    clearInterval(updateScroll); // Arrête le défilement
+});
+
+scrollContainer.addEventListener('mouseleave', () => {
+    setInterval(updateScroll, scrollSpeed); // Redémarre le défilement
+});
 </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

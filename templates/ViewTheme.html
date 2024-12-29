@@ -6,10 +6,9 @@
 
     {% for theme in themes %}
     <div>
-       <h3> {{ theme.NomTheme }} </h3>
-       <img class="card-img-top" src="{{ theme.image.url }}" alt="Card image">
-    <div>
+        <img class="card-img-top" src="{{ theme.image.url }}" alt="Card image" style="width: 200px;">
+        <a href="{% url 'SermonByTheme' theme.id %}" style="color: red"> {{ theme.NomTheme }} </a>
+     <div>
     {% endfor %}
-<img class="card-img-top" src="static/css/pastl.JPG" alt="Card image">
 
 {% endblock content %}

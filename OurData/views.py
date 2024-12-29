@@ -15,7 +15,6 @@ def officiels(request):
 def ministres(request):
     ministre = Ministre.objects.all()
     # imgmin = Ministre.objects.get()
-
     return render(request, 'ministre.html', context={"ministres": ministre})
 
 

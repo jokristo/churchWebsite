@@ -18,7 +18,7 @@ class SermonAdmin(admin.ModelAdmin):
         "audio",
         "Theme"
     ]
-
+    list_filter = ('Theme',)
     search_fields = ('titre',)
 
 

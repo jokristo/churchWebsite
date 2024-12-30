@@ -20,8 +20,8 @@ def ViewTheme(request):
 
 def ThemeByMinister(request, ministre_id):
     #recuparation du ministre
-    ministre = get_object_or_404(Ministre, ministre_id)
+    ministre = get_object_or_404(Ministre, id=ministre_id)
     #recuperation des theme lier à lui
-    themes = Theme.objects.filtre(ministre=ministre)
+    themes = Theme.objects.filter(ministre=ministre)
     return render(request, 'themeByMinister.html', {'ministre': ministre, 'themes': themes})
 

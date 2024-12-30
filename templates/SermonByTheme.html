@@ -3,18 +3,25 @@
 {% block title %}Sermon by theme{% endblock title %}
 
 {% block content %}
+<div class="text-center sm:text-left"  style="color: rgb(96 165 250 / var(--tw-text-opacity, 1)); font-weight: 600;">
+    <h1>{{ theme.NomTheme }}</h1>
+    <p>{{ theme.ThemeDescription }}</p>
+    <a href="{% url 'ViewTheme' %}" style="color: rgb(96 165 250 / var(--tw-text-opacity, 1)); font-weight: 600;"> Retour Aux themes </a>
+</div>
 
-<h1>Sermon du theme {{ theme.NomTheme }}</h1>
-<p><h3>Description</h3> {{ theme.ThemeDescription }}</p>
-<ul>
-{% for sermon in sermons %}
-    <li>{{ sermon.titre}} </li>
-    <li>Prechée le {{ sermon.date }}</li>
-    <li>Par {{ sermon.orateur }}</li>
-    <li><audio src="{{ sermon.audio.url }}" controls style="width: 200px;"></audio></li>
-    <li><a href="{{ sermon.audio.url }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Cliquer ici pour telecharger l'audio</a></li>
-{% endfor %}
-</ul>
+<div class="flex-card">
+    {% for sermon in sermons %}
+  <div class="class="flex-initial md:flex flex-col" id="sermon_id">
+      <img class="card-img-top" src="{{ sermon.image.url }}" alt="Card image">
+      <div class="">
+        <h4 class="card-title">{{ sermon.titre }} </h4>
+        <h4 class="card-title">{{ sermon.orateur }} </h4>
+        <p class="card-text">Prechée le {{ sermon.date }} </p>
+        <p class="card-text"><audio src="{{ sermon.audio.url }}" controls style="width: 200px;"></audio></p>
+        <a href="{{ sermon.audio.url }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Cliquer ici pour telecharger l'audio</a>
+      </div>
+  </div>
+    {% endfor %}
+</div>
 
-<a href="{% url 'ViewTheme' %}"> Retour Aux themes </a>
 {% endblock content %}

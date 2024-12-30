@@ -14,6 +14,43 @@
     {% endcompress %}
     <link rel="stylesheet" href="{% static 'css/styleend.css' %}">
     <link rel="icon" href="{% static 'css/logo24.png' %}" type="image/x-icon"/>
+    <style>
+        /* Conteneur principal */
+        .slider {
+            display: flex; /* Utilisation de flexbox pour aligner horizontalement */
+            overflow: hidden; /* Masquer ce qui dépasse du conteneur */
+            width: 100%; /* Largeur du conteneur */
+            margin: 20px auto;
+        }
+
+        /* Conteneur des cartes */
+        .slider-container {
+            display: flex;
+            transition: transform 1s ease-in-out; /* Animation fluide */
+        }
+
+        /* Chaque carte */
+        .card {
+            width: 250px; /* Largeur d'une carte */
+            height: 350px; /* Hauteur d'une carte */
+            margin-right: 15px; /* Espacement entre les cartes */
+            background: #f3f3f3;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 330px;
+            object-fit: cover; /* Couverture de l'image */
+        }
+
+        .card-title {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 
 </head>
 
@@ -203,7 +240,36 @@
                 <img src="/static/css/chantre1.jpg" alt="Image 1">
             </div>
         </div>
+<!--
+        <div class="slider">
+            <div class="slider-container">
+    
+                <div class="card">
+                    <img src="/static/css/chantre10.jpg" alt="Image 1">
+                    <div class="card-title">Image 1</div>
+                </div>
+              
+                <div class="card">
+                    <img src="/static/css/chantre8.jpg" alt="Image 2">
+                    <div class="card-title">Image 2</div>
+                </div>
 
+                <div class="card">
+                    <img src="/static/css/chantre6.jpg" alt="Image 3">
+                    <div class="card-title">Image 3</div>
+                </div>
+               
+                <div class="card">
+                    <img src="/static/css/chantre5.jpg" alt="Image 4">
+                    <div class="card-title">Image 4</div>
+                </div>
+                <div class="card">
+                    <img src="/static/css/chantre3.jpg" alt="Image 5">
+                    <div class="card-title">Image 5</div>
+                </div>
+            </div>
+        </div>
+    -->
     </main>
     <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4" id="footHead">
             <div class="sociaux">
@@ -271,7 +337,24 @@
             </div>
     </footer>
 
+    <script>
+        // Variables
+        const sliderContainer = document.querySelector('.slider-container');
+        const cards = document.querySelectorAll('.card');
+        let index = 0;
 
+        function slide() {
+            index++;
+            if (index >= cards.length) {
+                index = 0; // Retourne à la première carte
+            }
+            // Déplace le conteneur des cartes horizontalement
+            sliderContainer.style.transform = `translateX(${-index * 320}px)`; // 320px = largeur de la carte + son espacement
+        }
+
+        // Défilement automatique toutes les 3 secondes
+        setInterval(slide, 3000);
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <!--<script src="{% static 'node_modules/flowbite/dist/flowbite.min.js' %}"></script>-->
     <script>
@@ -341,6 +424,8 @@
 
         changeImage()
     </script>
+
+    
 
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     

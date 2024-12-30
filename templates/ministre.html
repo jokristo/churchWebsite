@@ -14,6 +14,9 @@
     <div class="card-body">
       <h5 class="card-title"> {{ ministre.Nom }} </h5>
       <p class="card-text">contact : {{ ministre.contact }}</p>
+      <a href="{% url 'ThemeByMinister' ministre.id %}" style="background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1)); color: white; border-radius: 0.25rem;;">
+        Voir Sermons
+      </a>
     </div>
   </div>
 </div>

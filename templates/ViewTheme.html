@@ -1,14 +1,20 @@
 {% extends "_base.html" %}
 {% load static %}
 {% block title %}ViewTheme{% endblock title %}
-
+<link rel="stylesheet" href="{% static 'css/styleend.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap-icons/bootstrap-icons.css' %}">
+<script src="{% static 'JS/bootstrap.min.js' %}"></script>
 {% block content %}
-
-    {% for theme in themes %}
-    <div>
-        <img class="card-img-top" src="{{ theme.image.url }}" alt="Card image" style="width: 200px;">
-        <a href="{% url 'SermonByTheme' theme.id %}" style="color: red"> {{ theme.NomTheme }} </a>
-     <div>
-    {% endfor %}
-
+    <div class="flex-card">
+        {% for theme in themes %}
+      <div class="class="flex-initial md:flex flex-col" id="sermon_id">
+          <img class="card-img-top" src="{{ theme.image.url }}" alt="Card image">
+          <div class="">
+            <h4 class="card-title">{{ theme.NomTheme }} </h4>
+            <a href="{% url 'SermonByTheme' theme.id %}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">voir les sermons</a>
+          </div>
+      </div>
+        {% endfor %}
+    </div>
 {% endblock content %}

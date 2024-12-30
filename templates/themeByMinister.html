@@ -3,7 +3,28 @@
 {% block title %}theme by minister{% endblock title %}
 
 {% block content %}
+<div  class="text-center sm:text-left"  style="color: rgb(96 165 250 / var(--tw-text-opacity, 1)); font-weight: 600;">
+    <h1 >Predication par theme de {{ ministre.Nom }}</h1>
+    <a href="{% url 'ministres' %}" style="	color: rgb(2 6 23 / var(--tw-text-opacity, 1));">Retour à la liste des Ministres</a>
+</div>
 
-<h1>theme de hello</h1>
+<ul>
+    {% if themes %}
+    <div class="flex-card">
+        {% for theme in themes %}
+      <div class="class="flex-initial md:flex flex-col" id="sermon_id">
+          <img class="card-img-top" src="{{ ministre.photo.url }}" alt="Card image">
+          <div class="">
+            <a href="{% url 'SermonByTheme' theme.id %}"  style="color: rgb(96 165 250 / var(--tw-text-opacity, 1)); font-weight: 600;">{{ theme.NomTheme }}</a>
+          </div>
+      </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>Aucun thème trouvé.</p>
+    {% endif %}
+</ul>
+
+
 
 {% endblock content %}

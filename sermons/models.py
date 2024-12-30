@@ -15,7 +15,7 @@ class Theme(models.Model):
     NomTheme = models.CharField(max_length=100, blank = False)
     ThemeDescription = models.TextField(blank=True, null=True)
     image = models.ImageField(blank=True, upload_to='sermons')
-    ministre = models.ForeignKey(Ministre, on_delete=models.CASCADE)
+    ministre = models.ForeignKey(Ministre, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.NomTheme

@@ -14,7 +14,7 @@ class TemoignageAdmin(admin.ModelAdmin):
     ]
     search_fields = ('NomDuCroyant',)
 
-
+3
 @admin.register(Evenements)
 class EvenementAdmin(admin.ModelAdmin):
     list_display = [

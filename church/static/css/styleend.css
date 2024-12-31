@@ -184,6 +184,7 @@ padding-bottom: 5px;
 /*ministre style*/
 .row{
     display: flex;
+    flex-wrap: wrap;
 
 }
 
@@ -263,9 +264,10 @@ body {
 
 @media only screen and (max-width: 700px) {
 
-    /*body {
-      background-color: rgb(148, 235, 9);
-    }*/
+    body {
+      margin: 0%;
+      padding: 0%;
+    }
 
     #pastmob{
         display: flex;
@@ -453,7 +455,8 @@ body {
     box-shadow: 5px 1px 50px #76A9FA;
     align-items: center;
     padding-top: 10px;
-    height: ;
+    width: 100%;
+
 }
 
 .row-min .col-md-4 img{
@@ -461,6 +464,7 @@ body {
     align-items: center;
     justify-content: center;
     padding-left: 2%;
+    padding-right: 2.2%;
     width: 400px;
     height: 400px;
 

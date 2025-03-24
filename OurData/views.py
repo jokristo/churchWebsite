@@ -1,15 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 # from OurData.forms import TemoignageForm
 from OurData.forms import TemoignageForm
-from OurData.models import Officiel, Ministre, Evenements, Temoignages, Chantre
+from OurData.models import  Ministre, Evenements, Temoignages, Chantre, CategorieOfficiel, Officiel
 
 
-def officiels(request):
-    officiel = Officiel.objects.all()
 
-    return render(request, "officiel.html", context={"offi": officiel})
+
+def categorieOfficiel(request):
+    categories = CategorieOfficiel.objects.all()
+    
+    return render(request, 'categorieofficiel.html', {"categories":categories})
+
+
+def officiels(request, categorie_id):
+     #recuperation de la categorie en fonction de l'id
+    categorieOfficiel = get_object_or_404(CategorieOfficiel, id=categorie_id)
+    #liason des officiels aux categories
+    officiels = Officiel.objects.filter(categorieOfficiel=categorieOfficiel)
+
+    return render(request, "officiel.html", context={"offi": officiels, "categories":categorieOfficiel})
 
 
 def ministres(request):

@@ -1,8 +1,9 @@
 from django.contrib import admin
-from OurData.models import Temoignages, Evenements, Chantre
+from OurData.models import Temoignages, Evenements, Chantre, CategorieOfficiel
 
 # Register your models here.
-#admin.site.register(Temoignages)
+admin.site.register(CategorieOfficiel)
+
 @admin.register(Temoignages)
 class TemoignageAdmin(admin.ModelAdmin):
     list_display = [

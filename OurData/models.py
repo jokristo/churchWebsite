@@ -14,11 +14,20 @@ class Ministre(models.Model):
         return self.Nom
 
 
+
+class CategorieOfficiel(models.Model):
+    Nom = models.CharField(max_length=100, blank= False)
+
+    def __str__(self):
+        return self.Nom
+
+
 class Officiel(models.Model):
     Nom = models.CharField(max_length=100, blank=False)
     fonction = models.CharField(max_length=50, blank=False)
     contact = models.CharField(max_length=20, blank=False)
     photo = models.ImageField(blank=True, upload_to='officielpictures')
+    categorieOfficiel = models.ForeignKey(CategorieOfficiel, on_delete=models.SET_NULL, null=True )
 
     class Meta:
         verbose_name = 'Officiel'

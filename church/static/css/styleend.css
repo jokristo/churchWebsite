@@ -180,12 +180,70 @@ padding-bottom: 5px;
 #sermon_id{
     box-shadow: 1px 2px 15px #9c9b9b;
 }
+/* categorie officiel*/
+.row-cate{
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body-cate{
+    display: flex;
+    background-color: #d1d5db;
+    width: 100%;
+    justify-content: space-between;
+    font-family: poppins;
+    font-weight: bold;
+    height: 80px;
+    border-radius: 10px;
+    box-shadow: 5px 1px 20px #76a9fa4b;
+}
+
+.card-body-cate > a{
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+.card-body-cate > h5{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: rgb(42, 44, 50);
+    padding-left: 2%;
+}
+
 
 /*ministre style*/
 .row{
     display: flex;
     flex-wrap: wrap;
 
+}
+.card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: poppins;
+    background-color: #e4e7ed;
+    padding: auto;
+    margin: auto;
+}
+.card-title {
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+    color: rgb(42, 44, 50);
+
+}
+.card-text {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    color: rgb(42, 44, 50);
+
+}
+.card {
+    padding-left: 5px;
+    width: 30%;
 }
 
 .row-min .card-body{
@@ -196,11 +254,10 @@ padding-bottom: 5px;
     box-shadow: 5px 1px 50px #76A9FA;
     align-items: center;
     padding-top: 10px;
-    height: ;
 }
 .img{
-    width: 300px;
-    height: 300px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 /*defilement chantre style*/
@@ -442,6 +499,7 @@ body {
     }
 
 /*ministre style*/
+/*
 .row{
     display: block;
 
@@ -469,6 +527,57 @@ body {
     height: 400px;
 
 }
+*/
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+}
+
+.card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: poppins;
+    background-color: #e4e7ed;
+    padding: auto;
+    margin: auto;
+}
+.card-title {
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+    color: rgb(42, 44, 50);
+
+}
+.card-text {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    color: rgb(42, 44, 50);
+
+}
+.card {
+    margin: 2% 2%;
+    padding: 2% 2%;
+    width: 90%;
+}
+
+.row-min .card-body{
+    display: flex;
+    flex-direction: column;
+    font-family: poppins;
+    color: #082006;
+    box-shadow: 5px 1px 50px #76A9FA;
+    align-items: center;
+    padding-top: 10px;
+}
+.img{
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+}
+
 
 /*defilement chantre style*/
 .image-container img {

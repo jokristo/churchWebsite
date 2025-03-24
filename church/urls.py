@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from OurData.views import officiels, ministres, temoignages, Evenement, temoin, chantre
+from OurData.views import ministres, temoignages, Evenement, temoin, chantre, categorieOfficiel, officiels
 from chat.views import chat, send_message
 from compte.views import Sign, login_user, logout_user
 from .views import index, sermons
@@ -29,7 +29,7 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('', index, name="home"),
                   path('sermons/', sermons, name="sermons"),
-                  path('offi/', officiels, name="officiels"),
+                  path('offi/<int:categorie_id>/', officiels, name="officiels"),
                   path('ministre/', ministres, name="ministres"),
                   path('temoignage/', temoignages, name="temoignages"),
                   path('event/', Evenement, name='event'),
@@ -40,6 +40,8 @@ urlpatterns = [
                   path("SermonByTheme/<int:theme_id>/", SermonByTheme, name="SermonByTheme"),
                   #vue pour voir les sermons en fonction du ministre
                   path("themeByMinister/<int:ministre_id>/", ThemeByMinister, name="ThemeByMinister"),
+                  #categories des officiels
+                  path("cateOffi/", categorieOfficiel, name='categorieOfficiel'),
                   #vue pour voir tous le chantres
                   path("chantre/", chantre, name="chantre")
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

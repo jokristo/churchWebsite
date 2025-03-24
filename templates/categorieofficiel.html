@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}categories officiels {% endblock title %}
+
+{% block content %}
+<div class="row-cate">
+{% for categorie in categories %}
+<div class="mb-3" style="padding-left: 2%;">
+  <div class="card-body-cate">
+    <h5 class="text-blue-400"> {{ categorie.Nom }} </h5>
+    <a href="{% url 'officiels' categorie.id %}"
+      style="background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1)); color: white; border-radius: 0.25rem;;">
+      Consulter
+    </a>
+  </div>
+</div>
+{% endfor %}
+</div>
+
+{% endblock content %}

@@ -23,6 +23,7 @@ from compte.views import Sign, login_user, logout_user
 from .views import index, sermons
 from sermons.views import ViewTheme, SermonByTheme, ThemeByMinister
 from church import settings
+from django.conf import settings
 
 # checkview, chat, room, send, getMessages,
 urlpatterns = [
@@ -43,6 +44,7 @@ urlpatterns = [
                   #categories des officiels
                   path("cateOffi/", categorieOfficiel, name='categorieOfficiel'),
                   #vue pour voir tous le chantres
-                  path("chantre/", chantre, name="chantre")
+                  path("chantre/", chantre, name="chantre"),
+                  #path("__reload__/", include("django_browser_reload.urls"))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

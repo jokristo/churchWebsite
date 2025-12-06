@@ -1,86 +1,91 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}Temoignages{% endblock title %}
+
+{% block title %}Témoignages{% endblock title %}
+
 {% block content %}
+<section class="bg-church-light min-h-screen py-10 font-poppins">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <h2 class="text-3xl font-bold text-church-primary tracking-tight">
+                Témoignages
+            </h2>
+            <div class="flex gap-3">
+                <a href="/temoignagecontent/" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors duration-200">
+                    Voir les témoignages
+                </a>
+                <button type="button" class="text-white bg-church-primary hover:bg-opacity-90 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 shadow-lg shadow-blue-500/30 transition-all duration-200">
+                    Nouveau témoignage
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            <div class="p-8 md:p-10">
+                <div class="text-center mb-8">
+                    <h3 class="text-xl font-semibold text-gray-800">Partagez votre expérience</h3>
+                    <p class="text-gray-500 mt-2 text-sm">Votre témoignage peut encourager la foi de quelqu'un aujourd'hui.</p>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <div class="grid gap-6 mb-6 md:grid-cols-1 form-group-style">
+                        {# On applique un style global aux enfants du formulaire via CSS utility si besoin, #}
+                        {# mais idéalement, ajoutez des classes widgets dans votre forms.py #}
+                        {{ formute.as_p }}
+                    </div>
+
+                    <div class="flex justify-center pt-4">
+                        <button type="submit" id="buton" class="w-full md:w-auto text-white bg-church-primary hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-3 text-center transition-all duration-200 shadow-md">
+                            Enregistrer mon témoignage
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
 <style>
-form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-input, textarea{
-    display: block;
-    padding: .75rem;
-    font-size: 1rem;
-    border: 1px solid #ced4da;
-    min-width: 600px;
-    font-family: poppins;
-}
-label {
-    display: inline-block;
-    box-sizing: border-box;
-    margin: 1rem 0;
-}
-.titretemoin{
-display: flex;
-justify-content: space-between;
-text-decoration: none;
-color: #838CFC;
-}
-#bot{
-    background-color: #838CFC;
-    color: #ffffff;
-}
-.titretemoin>a{
-    text-decoration: none;
-    font-family: poppins;
-}
-#tem{
-    color: white;
-}
-#id_Audio{
-    padding-bottom: 20px;
-}
-
-
-
-@media(max-width:600px){
-    input, textarea{
-    display: block;
-    padding: .200rem;
-    font-size: 0.8rem;
-    border: 1px solid #ced4da;
-    min-width: 200px;
-    font-family: poppins;
-}
-.titretemoin{
-display: flex;
-justify-content: space-between;
-text-decoration: none;
-color: #838CFC;
-font-size: small;
-}
-.titretemoin a{
-    text-align: center;
-    color: white;
-    font-family: poppins;
-    font-size: small;
-}
-
-
-
-}
-
+    /* Ce style force l'apparence des inputs Django standard pour ressembler à Flowbite */
+    .form-group-style p {
+        margin-bottom: 1.5rem;
+    }
+    .form-group-style label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #111827;
+    }
+    .form-group-style input[type="text"],
+    .form-group-style input[type="email"],
+    .form-group-style textarea,
+    .form-group-style select {
+        background-color: #F9FAFB;
+        border: 1px solid #D1D5DB;
+        color: #111827;
+        font-size: 0.875rem;
+        border-radius: 0.5rem;
+        display: block;
+        width: 100%;
+        padding: 0.625rem;
+        font-family: 'Poppins', sans-serif;
+    }
+    .form-group-style input:focus, 
+    .form-group-style textarea:focus {
+        border-color: #838CFC;
+        ring: 2px solid #838CFC;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(131, 140, 252, 0.3);
+    }
+    /* Style pour le champ fichier */
+    .form-group-style input[type="file"] {
+        background: white;
+        padding: 0;
+        border: none;
+    }
 </style>
-<div class="titretemoin">
-    <button type="button" class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Placer un Temoignage</button>
-    <a href="/temoignagecontent/" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Voir tous les Temoignages</a>
-</div>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ formute.as_p }}
-        <input type="submit" value="Enregistrer" id="buton" class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-    </form>
-
-
 {% endblock content %}

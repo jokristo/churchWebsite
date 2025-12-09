@@ -3,20 +3,43 @@
 {% block title %}Ministres{% endblock title %}
 
 {% block content %}
-<div class="row">
-  {% for ministre in ministres %}
-  <div class="card mb-3" style="max-width: 540px;">
-    <div class="col-md-4">
-      <img src="{{ministre.photo.url}}" class="img" alt="...">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
+    
+    <h1 class="text-4xl font-extrabold text-center mb-12 text-slate-800 tracking-tight relative">
+        Nos Ministres de la Parole
+        <span class="block w-20 h-1 bg-indigo-600 mx-auto mt-2 rounded-full"></span>
+    </h1>
+
+    {# Contenu en Grille Responsive #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        
+        {% for ministre in ministres %}
+        
+        {# Carte du Ministre #}
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden text-center p-6 
+                    transform hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 border border-gray-200">
+            
+            {# Photo du Ministre - Design Circulaire #}
+            <div class="w-40 h-40 mx-auto mb-4 overflow-hidden rounded-full ring-4 ring-indigo-200 hover:ring-indigo-600 transition-colors duration-300">
+                <img src="{{ ministre.photo.url }}" alt="Photo de {{ ministre.Nom }}" class="w-full h-full object-cover">
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ ministre.Nom }}</h3>
+            
+            {# Affichage du Contact (optionnel, mieux caché dans la bio si disponible, mais nous le gardons) #}
+            <p class="text-sm text-gray-500 mb-4">Contact: {{ ministre.contact }}</p>
+            
+            {# Bouton CTA Sermons #}
+            <a href="{% url 'ThemeByMinister' ministre.id %}" 
+                class="inline-flex justify-center items-center py-2 px-6 text-sm font-medium text-center text-white rounded-full 
+                       bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-colors shadow-md">
+                Voir Sermons Par Thème
+            </a>
+            
+        </div>
+        
+        {% endfor %}
+        
     </div>
-    <div class="card-body">
-      <h5 class="card-title"> {{ ministre.Nom }} </h5>
-      <p class="card-text">contact : {{ ministre.contact }}</p>
-      <a href="{% url 'ThemeByMinister' ministre.id %}" class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-        Voir Sermons
-      </a>
-    </div>
-  </div>
-  {% endfor %}
 </div>
-{% endblock content %} <div class="row-min">
+{% endblock content %}

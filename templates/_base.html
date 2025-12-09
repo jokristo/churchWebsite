@@ -9,17 +9,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}WMB Tab{% endblock title %}</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     {% tailwind_css %}
-
     <link rel="icon" href="{% static 'logo24.png' %}" type="image/x-icon" />
-
-    {# Tailwind output (generated) #}
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
 </head>
 
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen antialiased">
+<body class="bg-gray-50 text-gray-800 font-poppins flex flex-col min-h-screen antialiased">
 
-    <nav class="fixed w-full z-50 top-0 start-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm transition-all duration-300">
+    <nav class="fixed w-full z-50 top-0 start-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-lg transition-all duration-300">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             
             <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse group">
@@ -35,100 +36,144 @@
             </button>
 
             <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-                <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white">
-                    <li>
-                        <a href="/" class="block py-2 px-3 text-white bg-indigo-600 rounded md:bg-transparent md:text-indigo-600 md:p-0 transition-colors" aria-current="page">Accueil</a>
+                <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white/0">
+                    
+                    {# Définir l'URL actuelle une seule fois pour la lisibilité #}
+                    {% with request.path as current_path %}
+                    
+                    {# 1. Accueil #}
+                    <li class="group">
+                        <a href="/" class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Accueil</a>
+                        {% if current_path == '/' %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300"></div>{% else %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300"></div>{% endif %}
                     </li>
-                    <li>
-                        <a href="/sermons/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-600 md:p-0 transition-colors">Sermons</a>
+                    
+                    {# 2. Sermons #}
+                    <li class="group">
+                        <a href="/sermons/" class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/sermons/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Sermons</a>
+                        {% if current_path == '/sermons/' %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300"></div>{% else %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300"></div>{% endif %}
                     </li>
-                    <li>
-                        <a href="/event/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-600 md:p-0 transition-colors">Événements</a>
+                    
+                    {# 3. Événements #}
+                    <li class="group">
+                        <a href="/event/" class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/event/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Événements</a>
+                        {% if current_path == '/event/' %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300"></div>{% else %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300"></div>{% endif %}
                     </li>
-                    <li>
-                        <a href="/ministre/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-600 md:p-0 transition-colors">Ministres</a>
+
+                    {# 4. Ministres #}
+                    <li class="group">
+                        <a href="/ministre/" class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/ministre/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Ministres</a>
+                        {% if current_path == '/ministre/' %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300"></div>{% else %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300"></div>{% endif %}
                     </li>
-                    <li>
-                        <a href="/cateOffi/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-600 md:p-0 transition-colors">Officiels</a>
+
+                    {# 5. Officiels #}
+                    <li class="group">
+                        <a href="/cateOffi/" class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/cateOffi/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Officiels</a>
+                        {% if current_path == '/cateOffi/' %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300"></div>{% else %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300"></div>{% endif %}
                     </li>
-                    <li>
-                        <a href="/temoignage/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-600 md:p-0 transition-colors">Témoignages</a>
+                    
+                    {# 6. Témoignages #}
+                    <li class="group">
+                        <a href="/temoignage/" class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/temoignage/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Témoignages</a>
+                        {% if current_path == '/temoignage/' %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300"></div>{% else %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300"></div>{% endif %}
                     </li>
-                    <li>
-                        <a href="/chantre/" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-indigo-600 md:p-0 transition-colors">Chantre</a>
+
+                    {# 7. Chantre #}
+                    <li class="group">
+                        <a href="/chantre/" class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/chantre/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Chantre</a>
+                        {% if current_path == '/chantre/' %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300"></div>{% else %}<div class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300"></div>{% endif %}
                     </li>
+
+                    {% endwith %}
+
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow pt-24 pb-10 px-4 w-full max-w-7xl mx-auto">
+    <main class="flex-grow pt-20">
         {% block content %}
         {% endblock content %}
     </main>
 
     <footer class="bg-slate-900 text-slate-300">
         <div class="mx-auto w-full max-w-screen-xl p-6 lg:py-10">
-            <div class="md:flex md:justify-between gap-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:justify-between">
                 
-                <div class="mb-6 md:mb-0 max-w-sm">
+                <div class="mb-6 md:mb-0 col-span-2 md:col-span-1">
                     <a href="/" class="flex items-center space-x-3 mb-4">
                         <img src="{% static 'logo24.png' %}" class="h-12 bg-white rounded-full p-1" alt="WMB Logo" />
-                        <span class="self-center text-xl font-semibold whitespace-nowrap text-white">WMB Tab</span>
+                        <span class="self-center text-2xl font-bold whitespace-nowrap text-white">WMB Tab</span>
                     </a>
-                    <p class="text-sm text-slate-400 mb-4">
+                    <p class="text-sm text-slate-400 mb-4 max-w-xs">
                         William Marrion Branham Tabernacle de Mont-Ngafula. Un lieu de prière, de foi et de communion.
                     </p>
                     
                     <div class="flex space-x-4 mt-4">
-                        <a href="https://web.facebook.com/wmbtabdemontngafula/" class="text-white hover:text-blue-500 transition-colors" target="_blank">
+                        <a href="https://web.facebook.com/wmbtabdemontngafula/" class="text-slate-400 hover:text-blue-500 transition-colors" target="_blank">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
                         </a>
-                        <a href="https://www.youtube.com/@pasteurrbob" class="text-white hover:text-red-600 transition-colors" target="_blank">
+                        <a href="https://www.youtube.com/@pasteurrbob" class="text-slate-400 hover:text-red-600 transition-colors" target="_blank">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.254.418-4.813a2.503 2.503 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418zM15.194 12 10 15V9l5.194 3z" clip-rule="evenodd" /></svg>
                         </a>
-                        <a href="https://wa.me/243999956607" class="text-white hover:text-green-500 transition-colors" target="_blank">
+                        <a href="https://wa.me/243999956607" class="text-slate-400 hover:text-green-500 transition-colors" target="_blank">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM16.64 16.64C16.05 17.23 15.14 17.56 14.12 17.5C11.3 17.33 9.07 15.17 8.83 12.35C8.75 11.33 9.08 10.42 9.66 9.83C10.25 9.24 11.16 8.91 12.18 8.97C15 9.14 17.23 11.3 17.47 14.12C17.55 15.14 17.22 16.05 16.64 16.64Z" clip-rule="evenodd"/></svg>
                         </a>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-2">
+                <div class="col-span-2 grid grid-cols-2 gap-8 md:gap-6">
                     <div>
                         <h2 class="mb-4 text-sm font-semibold text-white uppercase tracking-wider border-b border-indigo-500 inline-block pb-1">Église</h2>
                         <ul class="text-slate-400 font-medium space-y-2">
-                            <li><a href="/" class="hover:text-white hover:translate-x-1 transition-all inline-block">Accueil</a></li>
-                            <li><a href="/sermons/" class="hover:text-white hover:translate-x-1 transition-all inline-block">Sermons</a></li>
-                            <li><a href="/ministre/" class="hover:text-white hover:translate-x-1 transition-all inline-block">Ministres</a></li>
-                            <li><a href="/event/" class="hover:text-white hover:translate-x-1 transition-all inline-block">Événements</a></li>
+                            <li><a href="/" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Accueil</a></li>
+                            <li><a href="/sermons/" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Sermons</a></li>
+                            <li><a href="/ministre/" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Ministres</a></li>
+                            <li><a href="/event/" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Événements</a></li>
                         </ul>
                     </div>
                     <div>
                         <h2 class="mb-4 text-sm font-semibold text-white uppercase tracking-wider border-b border-indigo-500 inline-block pb-1">Communauté</h2>
                         <ul class="text-slate-400 font-medium space-y-2">
-                            <li><a href="/temoignage/" class="hover:text-white hover:translate-x-1 transition-all inline-block">Témoignages</a></li>
-                            <li><a href="/chantre/" class="hover:text-white hover:translate-x-1 transition-all inline-block">Chantres</a></li>
-                            <li><a href="/cateOffi/" class="hover:text-white hover:translate-x-1 transition-all inline-block">Officiels</a></li>
+                            <li><a href="/temoignage/" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Témoignages</a></li>
+                            <li><a href="/chantre/" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Chantres</a></li>
+                            <li><a href="/cateOffi/" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Officiels</a></li>
                         </ul>
                     </div>
                 </div>
+
+                <div class="col-span-2 md:col-span-1">
+                    <h2 class="mb-4 text-sm font-semibold text-white uppercase tracking-wider border-b border-indigo-500 inline-block pb-1">Contact & Adresse</h2>
+                    <ul class="text-slate-400 font-medium space-y-2">
+                        <li><a href="tel:+243999956607" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Tel: +243 999 956 607</a></li>
+                        <li class="mt-4">
+                            <span class="text-white font-semibold block">Adresse:</span>
+                            Av. Les Adorateurs N°41,<br>Mont-Ngafula
+                        </li>
+                        <li>
+                            <span class="text-xs text-slate-500">Réf: Triangle Campus, Arrêt Révolution</span>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
 
             <hr class="my-6 border-slate-700 sm:mx-auto lg:my-8" />
             
-            <div class="sm:flex sm:items-center sm:justify-between text-sm text-slate-500">
-                <div class="flex flex-col mb-4 sm:mb-0">
-                    <span class="text-slate-300 font-semibold mb-1">Adresse:</span>
-                    <span>Av. Les Adorateurs N°41, Mont-Ngafula</span>
-                    <span>Réf: Triangle Campus, Arrêt Révolution</span>
-                </div>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-slate-500">
                 <span class="text-center sm:text-right">
                     © 2024 <a href="/" class="hover:underline text-white">WMB Tab Mont-Ngafula</a>. Tous droits réservés.
                 </span>
             </div>
         </div>
     </footer>
-
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+    // Initialisation d'AOS
+    AOS.init({
+        duration: 800, // Durée de l'animation en ms
+        once: true     // Les animations ne se déclenchent qu'une seule fois
+    });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const btn = document.getElementById('mobile-menu-btn');
@@ -137,6 +182,12 @@
             if (btn && menu) {
                 btn.addEventListener('click', () => {
                     menu.classList.toggle('hidden');
+                    // Ajout d'une classe pour les écrans mobiles pour donner un effet de survol
+                    if (!menu.classList.contains('hidden')) {
+                        menu.classList.add('absolute', 'top-full', 'left-0', 'w-full', 'shadow-xl', 'bg-white', 'border-t', 'border-gray-100');
+                    } else {
+                        menu.classList.remove('absolute', 'top-full', 'left-0', 'w-full', 'shadow-xl', 'bg-white', 'border-t', 'border-gray-100');
+                    }
                 });
             }
         });

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 # from OurData.forms import TemoignageForm
@@ -34,11 +34,11 @@ def temoignages(request):
         formtemoin = TemoignageForm(request.POST, request.FILES)
         if formtemoin.is_valid():
             formtemoin.save()
+            return redirect('temoignagecontent') 
     else:
         formtemoin = TemoignageForm()
 
-    return render(request, "temoignage.html", {"formute": formtemoin})
-
+    return render(request, "temoignage.html", {"form": formtemoin})
 
 def temoin(request):
     temoignage2 = Temoignages.objects.filter(is_Approuve = "True")

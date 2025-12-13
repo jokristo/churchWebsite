@@ -53,3 +53,28 @@ def Evenement(request):
 def chantre(request):
     chantres = Chantre.objects.all()
     return render(request, "chantre.html", {"chantres": chantres})
+
+# Dans views.py
+
+from django.shortcuts import render
+
+
+def media_presse(request):
+    """
+    Affiche la page de l'équipe média et presse.
+    Le contenu sera stylisé en Tailwind/JS dans le template.
+    """
+    context = {
+        'page_title': "Équipe Média & Presse",
+    }
+    return render(request, 'media_presse.html', context)
+
+
+def biographie_pasteur(request):
+    """
+    Affiche la page de biographie statique d'un pasteur.
+    """
+    context = {
+        'page_title': "Biographie du Pasteur Principal",
+    }
+    return render(request, 'biographie_pasteur.html', context)

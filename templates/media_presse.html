@@ -1,0 +1,36 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+
+{% block content %}
+<section class="py-16 bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl font-extrabold text-indigo-700 mb-4">{{ page_title }}</h1>
+        <p class="text-lg text-gray-600 mb-12">
+            La voix et l'image de l'église. Découvrez les artisans derrière notre communication.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="mediaTeamContainer">
+            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                <img class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" src="{% static 'images/placeholder-media.png' %}" alt="Membre Média">
+                <h3 class="text-xl font-semibold text-gray-900">Nom du Responsable</h3>
+                <p class="text-indigo-600 font-medium">Chef de la communication</p>
+                <p class="text-sm text-gray-500 mt-2">Gère la diffusion en direct et les réseaux sociaux.</p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                <img class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" src="{% static 'images/placeholder-media.png' %}" alt="Membre Média">
+                <h3 class="text-xl font-semibold text-gray-900">Nom du Technicien</h3>
+                <p class="text-indigo-600 font-medium">Opérateur Caméra/Son</p>
+                <p class="text-sm text-gray-500 mt-2">S'assure de la qualité audio et vidéo des sermons.</p>
+            </div>
+            
+            </div>
+    </div>
+</section>
+
+<script>
+    // Ajoutez ici votre code JavaScript si vous souhaitez gérer la liste des membres dynamiquement.
+</script>
+{% endblock content %}

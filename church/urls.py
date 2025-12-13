@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from OurData.views import ministres, temoignages, Evenement, temoin, chantre, categorieOfficiel, officiels
+from OurData.views import ministres, temoignages, Evenement, temoin, chantre, categorieOfficiel, officiels, biographie_pasteur, media_presse
 from chat.views import chat, send_message
 from compte.views import Sign, login_user, logout_user
 from .views import index, sermons
@@ -45,6 +45,8 @@ urlpatterns = [
                   path("cateOffi/", categorieOfficiel, name='categorieOfficiel'),
                   #vue pour voir tous le chantres
                   path("chantre/", chantre, name="chantre"),
-                  #path("__reload__/", include("django_browser_reload.urls"))
+                  #path("__reload__/", include("django_browser_reload.urls")),
+                  path('media/', media_presse, name='media_presse'),
+                  path('biographie/', biographie_pasteur, name='biographie_pasteur'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

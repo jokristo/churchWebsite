@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-l@2f0zus1upu$73u)anjfk0@*n5aur0#x2xn&ba+@twn-wn^wi
 DEBUG = True
 
 
-ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", '.onrender.com','wmbtab.onrender.com']
 
 # Application definition
 

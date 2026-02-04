@@ -1,5 +1,5 @@
 from django.contrib import admin
-from OurData.models import Temoignages, Evenements, Chantre, CategorieOfficiel
+from OurData.models import ClasseEcodim, Croyant, Moniteur, Temoignages, Evenements, Chantre, CategorieOfficiel, PhotoSouvenir
 
 # Register your models here.
 admin.site.register(CategorieOfficiel)
@@ -27,3 +27,35 @@ class EvenementAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Chantre)
+
+
+class PhotoSouvenirInline(admin.TabularInline):
+    model = PhotoSouvenir
+    extra = 1 # Affiche 1 ligne vide par défaut pour ajouter une photo
+
+class CroyantAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'date_conversion', 'adresse', 'date_publication')
+    inlines = [PhotoSouvenirInline] # On attache l'album ici
+
+admin.site.register(Croyant, CroyantAdmin)
+
+@admin.register(ClasseEcodim)
+class ClasseEcodimAdmin(admin.ModelAdmin):
+    list_display = [
+        "nom",
+        "tranche_age",
+        "description",
+        "image"
+    ]
+
+    search_fields = ('nom',)
+
+@admin.register(Moniteur)
+class MoniteurAdmin(admin.ModelAdmin):
+    list_display = [
+        "nom",
+        "role",
+        "photo"
+    ]
+
+    search_fields = ('nom','role')

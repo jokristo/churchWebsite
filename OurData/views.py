@@ -1,9 +1,8 @@
-from django.shortcuts import render, get_object_or_404, redirect
-
+from django.shortcuts import render, get_object_or_404, redirect, Http404
 # Create your views here.
 # from OurData.forms import TemoignageForm
 from OurData.forms import TemoignageForm
-from OurData.models import  Ministre, Evenements, Temoignages, Chantre, CategorieOfficiel, Officiel
+from OurData.models import  Ministre, Evenements, Temoignages, Chantre, CategorieOfficiel, Officiel, Croyant, ClasseEcodim, Moniteur
 
 
 
@@ -78,3 +77,24 @@ def biographie_pasteur(request):
         'page_title': "Biographie du Pasteur Principal",
     }
     return render(request, 'biographie_pasteur.html', context)
+
+
+
+def connaissons_nous_liste(request):
+    croyants = Croyant.objects.all()
+    return render(request, "connaissons_nous_liste.html", {"croyants": croyants})
+
+# --- VUE 2 : LE DÉTAIL ---
+def connaissons_nous_detail(request, id_croyant):
+
+    fidele = get_object_or_404(Croyant.objects.prefetch_related('album'), pk=id_croyant)
+    
+    return render(request, "connaissons_nous_detail.html", {"fidele": fidele})
+
+def ecodim_view(request):
+    classes = ClasseEcodim.objects.all()
+    moniteurs = Moniteur.objects.all()
+    return render(request, 'ecodim.html', {
+        'classes': classes,
+        'moniteurs': moniteurs
+    })

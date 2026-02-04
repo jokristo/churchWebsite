@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'compte',
     'compressor',
     'tailwind',
-    'theme'
+    'theme',
+    'contribution'
 
 ]
 

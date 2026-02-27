@@ -1,0 +1,137 @@
+<!-- {% extends "_base.html" %}
+{% load static %}
+
+{% block content %}
+<script 
+  src="https://www.paypal.com/sdk/js?client-id=BAAUsEOO7dBHMUFNH5kJlMac_zeQW3R3hqPHBSjwl0_y4M9GNq2Qno47FUlFJLoKyUu5e2pbxXhvS4y-So&components=hosted-buttons&disable-funding=venmo&currency=USD">
+</script>
+
+<section class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-extrabold text-gray-900">Bâtissons Ensemble</h1>
+            <p class="mt-4 text-lg text-gray-600">Suivez l'évolution des travaux et apportez votre pierre à l'édifice.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-wrap gap-4 items-center justify-between sticky top-4 z-10">
+                    <h3 class="font-bold text-gray-700">Filtrer l'évolution :</h3>
+                    <div class="flex gap-2">
+                        <select id="filter-year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5">
+                            <option value="all">Toutes les années</option>
+                            {% for date in annees %}
+                                <option value="{{ date|date:'Y' }}">{{ date|date:'Y' }}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="filter-month" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5">
+                            <option value="all">Tous les mois</option>
+                            <option value="1">Janvier</option><option value="2">Février</option><option value="3">Mars</option>
+                            <option value="4">Avril</option><option value="5">Mai</option><option value="6">Juin</option>
+                            <option value="7">Juillet</option><option value="8">Août</option><option value="9">Septembre</option>
+                            <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">Décembre</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="gallery-container">
+                    {% for photo in photos %}
+                    <div class="photo-item group relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all"
+                         data-year="{{ photo.date_travaux|date:'Y' }}"
+                         data-month="{{ photo.date_travaux|date:'n' }}">
+                        <div class="h-64 overflow-hidden">
+                            <img src="{{ photo.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ photo.titre }}">
+                        </div>
+                        <div class="p-4">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-0.5 rounded">{{ photo.date_travaux|date:"F Y" }}</span>
+                            <h3 class="font-bold text-gray-900 mt-2">{{ photo.titre }}</h3>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="sticky top-8 space-y-6">
+                    <div class="bg-indigo-600 rounded-2xl shadow-xl p-6 text-center text-white">
+                        <h2 class="text-2xl font-bold mb-2">Contribuer au projet</h2>
+                        <p class="text-indigo-100 mb-6 text-sm">Votre générosité permet à l'œuvre d'avancer.</p>
+                        <button onclick="openDonationModal()" class="w-full bg-white text-indigo-600 hover:bg-indigo-50 font-bold py-3 px-6 rounded-xl flex items-center justify-center transition-all shadow-lg transform hover:-translate-y-1">
+                            Faire un don
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div class="p-4 border-b border-gray-100 bg-gray-50 text-gray-900 font-bold">Derniers Donateurs</div>
+                        <div class="max-h-[400px] overflow-y-auto p-4 space-y-4">
+                            {% for don in dons %}
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">{% if don.nom_donateur %}{{ don.nom_donateur }}{% else %}Anonyme{% endif %}</span>
+                                <span class="font-bold text-green-600">+{{ don.montant }}$</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="donation-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75" onclick="closeModal()"></div>
+    
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Soutenir le projet</h3>
+            <p class="text-sm text-gray-500 mb-6">Effectuez votre don via le bouton PayPal sécurisé ci-dessous.</p>
+
+            <div class="w-full min-h-[150px] flex items-center justify-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+                <div id="paypal-container-6KSXMQYQLNAPL" class="w-full" style="min-width: 100%;"></div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-6 py-4 flex justify-end">
+            <button onclick="closeModal()" class="text-sm font-semibold text-gray-600 hover:text-gray-900">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isPaypalButtonRendered = false;
+
+    function openDonationModal() {
+        document.getElementById('donation-modal').classList.remove('hidden');
+        // Force le rendu du bouton seulement s'il n'existe pas encore
+        if (!isPaypalButtonRendered) {
+            paypal.HostedButtons({
+                hostedButtonId: "6KSXMQYQLNAPL",
+            }).render("#paypal-container-6KSXMQYQLNAPL").then(() => {
+                isPaypalButtonRendered = true;
+            });
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('donation-modal').classList.add('hidden');
+    }
+
+    // Gestion des filtres
+    const yearSelect = document.getElementById('filter-year');
+    const monthSelect = document.getElementById('filter-month');
+    const items = document.querySelectorAll('.photo-item');
+
+    function filterGallery() {
+        const y = yearSelect.value;
+        const m = monthSelect.value;
+        items.forEach(item => {
+            const matchY = (y === 'all' || item.dataset.year === y);
+            const matchM = (m === 'all' || item.dataset.month === m);
+            item.classList.toggle('hidden', !(matchY && matchM));
+        });
+    }
+
+    yearSelect.addEventListener('change', filterGallery);
+    monthSelect.addEventListener('change', filterGallery);
+</script>
+{% endblock %} -->

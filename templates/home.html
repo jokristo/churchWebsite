@@ -5,118 +5,125 @@
 
 {% block content %}
 {# ================================================================= #}
-{# 1. HERO BANNER - Moderne, Full-Width, Effet Parallax Subtil #}
-<section class="relative min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed transition-all duration-1000"
+{# 1. HERO BANNER #}
+<section
+    class="relative min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed transition-all duration-1000"
     id="banner-hero">
-    
-    {# Overlay semi-transparent avec flou d'arrière-plan #}
+
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-    
+
     <div class="relative px-4 mx-auto max-w-screen-xl text-center z-10 py-10">
-        
-        {# Titre Principal - Taille augmentée pour l'impact sur grand écran #}
-        <h1 class="mb-4 text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-none text-white drop-shadow-2xl">
+
+        <h1
+            class="mb-4 text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-none text-white drop-shadow-2xl">
             Jésus-Christ est le même Hier, Aujourd'hui et Éternellement
         </h1>
-        
+
         <p class="mb-8 text-lg font-light text-gray-200 lg:text-xl sm:px-16 lg:px-48 drop-shadow-lg">
             Dieu vous appelle à faire partie de cette œuvre glorieuse.
         </p>
-        
+
         <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-6">
-            
-            {# Bouton Principal - Effet de lift et d'ombre amélioré #}
+
             <a href="https://www.youtube.com/@pasteurrbob" target="_blank"
                 class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all duration-300 shadow-xl shadow-indigo-500/50 hover:shadow-2xl hover:scale-[1.02] transform">
                 Suivez-nous sur YouTube
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
             </a>
-            
-            {# Bouton Secondaire - Effet de lift #}
+
             <a href="/ministre/"
                 class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full border-2 border-white hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-gray-400 transition-all duration-300 hover:scale-[1.02] transform">
                 Biographie Pasteur
+            </a>
+            <a href="/contribution/"
+                class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full border-2 border-white hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-gray-400 transition-all duration-300 hover:scale-[1.02] transform">
+                Contribuer à l'œuvre
             </a>
         </div>
     </div>
 </section>
 
 {# ================================================================= #}
-{# 2. SECTION PASTEURS - Cartes améliorées avec effet de lift #}
+{# 2. SECTION PASTEURS - Mise à jour avec les bios réelles #}
 <section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-4">
-        
+
         <h2 class="text-4xl font-extrabold text-center mb-16 text-slate-800 tracking-tight relative">
             Nos Pasteurs
-            {# Ligne de séparation moderne #}
             <span class="block w-20 h-1 bg-indigo-600 mx-auto mt-2 rounded-full"></span>
         </h2>
 
         {# Card 1: Pasteur Titulaire (Bob) #}
-        <div class="flex flex-col md:flex-row items-center gap-12 mb-16 p-6 md:p-10 bg-gray-50 rounded-2xl shadow-xl ring-1 ring-gray-200 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
+        <div
+            class="flex flex-col md:flex-row items-center gap-12 mb-16 p-6 md:p-10 bg-gray-50 rounded-2xl shadow-xl ring-1 ring-gray-200 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
             <div class="md:w-1/2 order-2 md:order-1">
                 <h3 class="text-3xl font-bold text-gray-900 mb-2">BOB MUNANGA MATEKYA</h3>
                 <p class="text-indigo-600 font-semibold mb-4 text-xl">Pasteur Titulaire</p>
                 <p class="text-gray-600 text-justify leading-relaxed">
-                    Minim aliquip cillum laboris amet excepteur voluptate velit consequat. Tempor sint mollit Lorem sit ipsum id Lorem pariatur ut non duis quis eiusmod mollit. Reprehenderit ad laboris cillum labore ipsum pariatur officia laboris. Do aliqua esse amet Lorem. Ad ad tempor adipisicing laborum. Proident aliqua labore occaecat ut deserunt in nisi ex in culpa veniam.
+                    Au service du Seigneur depuis 1986, le Pasteur Bob a débuté son œuvre évangélique très jeune avec le groupe "Discovery of Jesus". Après une mission de 5 ans au Nigéria, il revient en RDC pour être consacré Pasteur en 1999. Homme de foi inébranlable, il enseigne que le Saint-Esprit est le guide suprême qui conduit infailliblement vers le Message de l'heure.
                 </p>
-                <a href="/ministre/" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors group">
-                    Lire la biographie complète 
+                <a href="/biographie/"
+                    class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors group">
+                    Lire la biographie complète
                     <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
                 </a>
             </div>
             <div class="md:w-1/2 flex justify-center order-1 md:order-2">
-                <img src="{% static 'pastb.JPG' %}" alt="Pasteur Bob Munanga" class="w-64 h-64 object-cover rounded-full shadow-2xl border-4 border-indigo-200 hover:border-indigo-600 transition-all duration-500">
+                <img src="{% static 'pastb.JPG' %}" alt="Pasteur Bob Munanga"
+                    class="w-64 h-64 object-cover rounded-full shadow-2xl border-4 border-indigo-200 hover:border-indigo-600 transition-all duration-500">
             </div>
         </div>
 
         {# Card 2: Pasteur Associé (Joseph) #}
-        <div class="flex flex-col md:flex-row items-center gap-12 p-6 md:p-10 bg-white rounded-2xl shadow-xl ring-1 ring-gray-200 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
+        <div
+            class="flex flex-col md:flex-row items-center gap-12 p-6 md:p-10 bg-white rounded-2xl shadow-xl ring-1 ring-gray-200 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
             <div class="md:w-1/2 flex justify-center order-1">
-                <img src="{% static 'pastl.JPG' %}" alt="Pasteur Joseph Tshole" class="w-64 h-64 object-cover rounded-full shadow-2xl border-4 border-indigo-200 hover:border-indigo-600 transition-all duration-500">
+                <img src="{% static 'pastl.JPG' %}" alt="Pasteur Joseph Tshole"
+                    class="w-64 h-64 object-cover rounded-full shadow-2xl border-4 border-indigo-200 hover:border-indigo-600 transition-all duration-500">
             </div>
             <div class="md:w-1/2 order-2">
                 <h3 class="text-3xl font-bold text-gray-900 mb-2">JOSEPH TSHOLE LUZOLO</h3>
                 <p class="text-indigo-600 font-semibold mb-4 text-xl">Pasteur Associé</p>
                 <p class="text-gray-600 text-justify leading-relaxed">
-                    Minim aliquip cillum laboris amet excepteur voluptate velit consequat. Tempor sint mollit Lorem sit ipsum id Lorem pariatur ut non duis quis eiusmod mollit. Reprehenderit ad laboris cillum labore ipsum pariatur officia laboris. Do aliqua esse amet Lorem. Ad ad tempor adipisicing laborum. Proident aliqua labore occaecat ut deserunt in nisi ex in culpa veniam.
+                    Issu du catholicisme, le Pasteur Joseph a embrassé le Message en 1989 après une quête sincère de la vérité. Son ministère s'est confirmé de manière miraculeuse lorsqu'il fut envoyé prier pour les malades dans les hôpitaux. Prédicateur fidèle depuis plus de 20 ans, il œuvre aujourd'hui comme Pasteur Associé, bras droit dévoué du ministère.
                 </p>
-                <a href="/ministre/" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors group">
-                    Lire la biographie complète 
+                <!-- <a href="/ministre/"
+                    class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors group">
+                    Lire la biographie complète
                     <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </a>
+                </a> -->
             </div>
         </div>
     </div>
 </section>
 
 {# ================================================================= #}
-{# 3. CHANTRE SECTION - Carrousel horizontal amélioré et AUTO-SCROLL #}
+{# 3. CHANTRE SECTION #}
 <section class="py-16 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4">
-        
+
         <h2 class="text-4xl font-extrabold text-center mb-16 text-slate-800 tracking-tight relative">
             Notre Corps des Chantres
             <span class="block w-20 h-1 bg-indigo-600 mx-auto mt-2 rounded-full"></span>
         </h2>
 
-        {# Scroller Container - REMOVED snap-x and snap-mandatory #}
         <div id="chantre-scroller" class="flex space-x-6 pb-8 overflow-x-auto scrollbar-hide">
-            
-            {# Cards - Coins arrondis plus prononcés, effet de zoom et opacité au survol #}
             {% for _ in "1234567890AB" %}
-            <div class="flex-shrink-0 w-72 h-96 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white bg-white transform hover:scale-[1.03] transition-all duration-300 cursor-pointer group">
-                {# L'image prend l'effet de transition d'opacité #}
-                <img src="{% static 'chantre' %}{{ forloop.counter }}.jpg" alt="Chantre {{ forloop.counter }}" class="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300">
+            <div
+                class="flex-shrink-0 w-72 h-96 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white bg-white transform hover:scale-[1.03] transition-all duration-300 cursor-pointer group">
+                <img src="{% static 'chantre' %}{{ forloop.counter }}.jpg" alt="Chantre {{ forloop.counter }}"
+                    class="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300">
             </div>
             {% endfor %}
-            
         </div>
 
         <div class="text-center mt-8">
-            <a href="/chantre/" class="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-full text-lg px-8 py-3 shadow-xl shadow-indigo-500/50 transition-all duration-300 hover:scale-105 transform">
+            <a href="/chantre/"
+                class="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-full text-lg px-8 py-3 shadow-xl shadow-indigo-500/50 transition-all duration-300 hover:scale-105 transform">
                 Découvrir l'équipe complète
             </a>
         </div>
@@ -126,10 +133,10 @@
 {# ================================================================= #}
 {# 4. JAVASCRIPT & CUSTOM STYLES #}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const banner = document.getElementById('banner-hero');
         const scroller = document.getElementById('chantre-scroller');
-        
+
         // --- 1. Gestion de la Bannière Hero ---
         const images = [
             '{% static "church3m.png" %}',
@@ -143,59 +150,48 @@
             banner.style.backgroundImage = `url(${images[i]})`;
         }
         changeBannerImage();
-        setInterval(changeBannerImage, 5000); 
+        setInterval(changeBannerImage, 5000);
 
 
-        // --- 2. Gestion du Défilement Automatique (Vitesse ajustée) ---
+        // --- 2. Gestion du Défilement Automatique ---
         if (scroller) {
-            
-            // Vitesse de défilement (ajustée à 1 pour être plus visible)
-            const scrollSpeed = 1; 
-            let scrollDirection = 1; 
+            const scrollSpeed = 1;
+            let scrollDirection = 1;
             let animationFrameId;
 
             function autoScrollChantres() {
-                // Défilement actuel
                 scroller.scrollLeft += scrollSpeed * scrollDirection;
 
-                // Si le scroller atteint l'extrémité droite
-                // Note: La condition vérifie si l'on est très proche de la fin
                 if (scroller.scrollLeft >= (scroller.scrollWidth - scroller.clientWidth - 5)) {
-                    // Mettre une courte pause avant de repartir
                     cancelAnimationFrame(animationFrameId);
                     setTimeout(() => {
-                        scrollDirection = -1; 
+                        scrollDirection = -1;
                         autoScrollChantres();
-                    }, 2000); // 2 secondes de pause à la fin
+                    }, 2000); 
                     return;
 
-                } 
-                // Si le scroller atteint le début (gauche)
+                }
                 else if (scroller.scrollLeft <= 5) {
-                    // Mettre une courte pause avant de repartir
                     cancelAnimationFrame(animationFrameId);
                     setTimeout(() => {
-                        scrollDirection = 1; 
+                        scrollDirection = 1;
                         autoScrollChantres();
-                    }, 2000); // 2 secondes de pause au début
+                    }, 2000);
                     return;
                 }
-                
+
                 animationFrameId = requestAnimationFrame(autoScrollChantres);
             }
 
-            // Démarrer l'animation uniquement si le contenu déborde
             if (scroller.scrollWidth > scroller.clientWidth) {
-                 autoScrollChantres();
+                autoScrollChantres();
             }
 
-            // Mettre en pause le défilement au survol pour permettre l'inspection
             scroller.addEventListener('mouseover', () => {
                 cancelAnimationFrame(animationFrameId);
             });
 
             scroller.addEventListener('mouseout', () => {
-                // Reprendre le défilement si le contenu déborde
                 if (scroller.scrollWidth > scroller.clientWidth) {
                     animationFrameId = requestAnimationFrame(autoScrollChantres);
                 }
@@ -205,17 +201,14 @@
 </script>
 
 <style>
-    /* Cacher la barre de défilement pour Chrome, Safari et Opera */
     #chantre-scroller::-webkit-scrollbar {
         display: none;
     }
-    /* Cacher la barre de défilement pour IE, Edge et Firefox */
     #chantre-scroller {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
         touch-action: pan-y;
     }
-    
     #banner-hero {
         transition: background-image 1s ease-in-out;
     }

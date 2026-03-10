@@ -26,6 +26,12 @@ from sermons.views import ViewTheme, SermonByTheme, ThemeByMinister
 from contribution.views import page_contribution, enregistrer_don
 from church import settings
 from django.conf import settings
+from church.views import custom_404, custom_500, custom_403, custom_400, test_404
+
+handler404 = custom_404
+handler500 = custom_500
+handler403 = custom_403
+handler400 = custom_400
 
 # checkview, chat, room, send, getMessages,
 urlpatterns = [
@@ -55,5 +61,7 @@ urlpatterns = [
                   path('connaissons-nous/<int:id_croyant>/', connaissons_nous_detail, name='connaissons_nous_detail'),
                   path('ecodim/', ecodim_view, name='ecodim'),
                   path('contribution/', page_contribution, name='contribution'),
+                  # Test des pages d'erreur (visiter /erreur-404/ pour voir la page 404)
+                  path('erreur-404/', test_404),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

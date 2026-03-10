@@ -26,7 +26,8 @@
                     <h3 class="text-2xl font-bold text-gray-900 mb-2">Dîmes</h3>
                     <p class="text-gray-500 mb-8">Pour soutenir le fonctionnement spirituel et matériel de l'église.</p>
                 </div>
-                <div id="paypal-container-RKE794N822TH4"></div>
+                 <div id="paypal-container-RKE794N822TH4"></div>
+                
             </div>
 
             <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center flex flex-col justify-between transform md:scale-105 ring-4 ring-indigo-500/10">
@@ -35,7 +36,7 @@
                     <h3 class="text-2xl font-bold text-gray-900 mb-2">Offrandes</h3>
                     <p class="text-gray-500 mb-8">Un don volontaire pour exprimer votre reconnaissance au Seigneur.</p>
                 </div>
-                <div id="paypal-container-A7UTUV2VDWN64"></div>
+                <div id="paypal-container-9LMD5ZTE4YY7Q"></div>
             </div>
 
             <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center flex flex-col justify-between">
@@ -44,7 +45,7 @@
                     <h3 class="text-2xl font-bold text-gray-900 mb-2">Construction</h3>
                     <p class="text-gray-500 mb-8">Pour les travaux de construction du temple du seigneur.</p>
                 </div>
-                <div id="paypal-container-9LMD5ZTE4YY7Q"></div>
+                <div id="paypal-container-A7UTUV2VDWN64"></div>
             </div>
 
         </div>
@@ -58,22 +59,22 @@
                 <div class="space-y-4">
                     <div class="flex justify-between items-center p-4 bg-orange-50 rounded-xl border border-orange-200">
                         <span class="font-bold text-orange-700">Orange Money</span>
-                        <span class="font-mono text-lg">+243 00 00 00 000</span>
+                        <span class="font-mono text-lg">+243 89 77 79 439</span>
                     </div>
                     <div class="flex justify-between items-center p-4 bg-red-50 rounded-xl border border-red-200">
                         <span class="font-bold text-red-700">Airtel Money</span>
-                        <span class="font-mono text-lg">+243 00 00 00 000</span>
+                        <span class="font-mono text-lg">+243 99 99 56 607</span>
                     </div>
                     <div class="flex justify-between items-center p-4 bg-blue-50 rounded-xl border border-blue-200">
                         <span class="font-bold text-blue-700">M-Pesa</span>
-                        <span class="font-mono text-lg">+243 00 00 00 000</span>
+                        <span class="font-mono text-lg">+243 82 23 81 056</span>
                     </div>
                 </div>
             </div>
 
             <div class="bg-indigo-900 p-8 rounded-3xl shadow-xl text-white">
                 <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                     Dernières Contributions
+                    Dernières Contributions
                 </h3>
                 <div class="overflow-hidden">
                     <table class="w-full text-left text-sm">
@@ -84,15 +85,16 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-indigo-800">
-                            {# Ici tu pourras boucler sur tes données Django plus tard #}
+                            {% for don in dons %}
                             <tr>
-                                <td class="py-4 font-medium">Frère Anonyme</td>
-                                <td class="py-4 text-right font-bold text-green-400">50.00 $</td>
+                                <td class="py-4 font-medium">{{ don.nom_donateur|default:"Anonyme" }}</td>
+                                <td class="py-4 text-right font-bold text-green-400">{{ don.montant }} $</td>
                             </tr>
+                            {% empty %}
                             <tr>
-                                <td class="py-4 font-medium">Sœur Déborah</td>
-                                <td class="py-4 text-right font-bold text-green-400">100.00 $</td>
+                                <td colspan="2" class="py-8 text-center text-indigo-300 italic">Aucune contribution pour le moment.</td>
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

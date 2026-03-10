@@ -52,10 +52,13 @@ class ClasseEcodimAdmin(admin.ModelAdmin):
 
 @admin.register(Moniteur)
 class MoniteurAdmin(admin.ModelAdmin):
-    list_display = [
-        "nom",
-        "role",
-        "photo"
-    ]
+    list_display = ["nom", "role", "ordre", "photo"]
+    list_editable = ["ordre"]
+    search_fields = ('nom', 'role')
 
-    search_fields = ('nom','role')
+
+@admin.register(MembreMedia)
+class MembreMediaAdmin(admin.ModelAdmin):
+    list_display = ["nom", "role", "ordre", "photo"]
+    list_editable = ["ordre"]
+    search_fields = ('nom', 'role')

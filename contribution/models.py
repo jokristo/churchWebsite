@@ -16,7 +16,7 @@ class EvolutionConstruction(models.Model):
 class Contribution(models.Model):
     nom_donateur = models.CharField("Nom (Laisser vide pour Anonyme)", max_length=100, blank=True, null=True)
     montant = models.DecimalField(max_digits=10, decimal_places=2) # Ex: 100.00 $
-    transaction_id = models.CharField("ID Transaction PayPal", max_length=100, unique=True)
+    transaction_id = models.CharField("ID Transaction PayPal (vide si ajout manuel)", max_length=100, unique=True, blank=True, null=True)
     date_don = models.DateTimeField(auto_now_add=True)
     
     # Optionnel: Message d'encouragement

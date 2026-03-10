@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, Http404
 # Create your views here.
 # from OurData.forms import TemoignageForm
 from OurData.forms import TemoignageForm
-from OurData.models import  Ministre, Evenements, Temoignages, Chantre, CategorieOfficiel, Officiel, Croyant, ClasseEcodim, Moniteur
+from OurData.models import Ministre, Evenements, Temoignages, Chantre, CategorieOfficiel, Officiel, Croyant, ClasseEcodim, Moniteur, MembreMedia
 
 
 
@@ -61,12 +61,13 @@ from django.shortcuts import render
 def media_presse(request):
     """
     Affiche la page de l'équipe média et presse.
-    Le contenu sera stylisé en Tailwind/JS dans le template.
+    Les membres sont gérés depuis l'admin Django.
     """
-    context = {
+    membres = MembreMedia.objects.all()
+    return render(request, 'media_presse.html', {
         'page_title': "Équipe Média & Presse",
-    }
-    return render(request, 'media_presse.html', context)
+        'membres': membres,
+    })
 
 
 def biographie_pasteur(request):

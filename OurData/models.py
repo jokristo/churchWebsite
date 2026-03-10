@@ -122,6 +122,29 @@ class Moniteur(models.Model):
     nom = models.CharField(max_length=100)
     role = models.CharField(max_length=100, default="Moniteur / Monitrice")
     photo = models.ImageField(upload_to='ecodim/moniteurs/')
+    ordre = models.PositiveIntegerField("Ordre d'affichage", default=0)
+
+    class Meta:
+        verbose_name = "Encadreur Écodim"
+        verbose_name_plural = "Encadreurs Écodim"
+        ordering = ['ordre', 'nom']
 
     def __str__(self):
         return self.nom
+
+
+class MembreMedia(models.Model):
+    """Membre de l'équipe Média & Presse."""
+    nom = models.CharField("Nom complet", max_length=100)
+    role = models.CharField("Rôle / Titre", max_length=100)  # Ex: Chef de la communication
+    description = models.TextField("Description", blank=True)
+    photo = models.ImageField("Photo", upload_to='media_presse/', blank=True, null=True)
+    ordre = models.PositiveIntegerField("Ordre d'affichage", default=0)
+
+    class Meta:
+        verbose_name = "Membre Média & Presse"
+        verbose_name_plural = "Membres Média & Presse"
+        ordering = ['ordre', 'nom']
+
+    def __str__(self):
+        return f"{self.nom} - {self.role}"

@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv non installé, on utilise os.environ uniquement
+
 #import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,11 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l@2f0zus1upu$73u)anjfk0@*n5aur0#x2xn&ba+@twn-wn^wi'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-dev-key-change-me-in-production'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 
 ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", '.onrender.com','wmbtab.onrender.com']
@@ -85,12 +94,21 @@ WSGI_APPLICATION = 'church.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+import dj_database_url
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# En production (Render) : utilise PostgreSQL via DATABASE_URL
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -141,7 +159,9 @@ TAILWIND_APP_NAME = 'theme'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# En production (Render) : utilise le Persistent Disk monté (ex: /data)
+# En local : utilise le dossier media/ du projet
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT') or str(BASE_DIR / 'media')
 AUTH_USER_MODEL = "compte.Utilisateur"
 
 COMPRESS_ROOT = BASE_DIR / 'church/static'
@@ -154,6 +174,7 @@ STATICFILES_FINDERS = [
     'compressor.finders.CompressorFinder',
 ]
 
-NPM_BIN_PATH = "/home/josue-kristo/.nvm/versions/node/v22.14.0/bin/npm"
+# Chemin npm (local dev) - optionnel en prod
+NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
 #django_heroku.settings(locals()) 
 

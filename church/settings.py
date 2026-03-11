@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 
-ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", '.onrender.com','wmbtab.onrender.com']
+ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", '.onrender.com','wmbtab.onrender.com', 'www.wmbranhamtabernacle.org']
 
 # Application definition
 

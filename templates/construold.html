@@ -40,8 +40,14 @@
                     <div class="photo-item group relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all"
                          data-year="{{ photo.date_travaux|date:'Y' }}"
                          data-month="{{ photo.date_travaux|date:'n' }}">
-                        <div class="h-64 overflow-hidden">
+                        <div class="h-64 overflow-hidden bg-gray-100">
+                            {% if photo.image %}
                             <img src="{{ photo.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ photo.titre }}">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14"/></svg>
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="p-4">
                             <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-0.5 rounded">{{ photo.date_travaux|date:"F Y" }}</span>

@@ -20,9 +20,13 @@
                     transform hover:shadow-2xl hover:bg-gray-50 transition-all duration-300 border border-gray-200">
             
             {# Image (col-md-4) #}
-            <div class="w-full md:w-48 flex-shrink-0">
+            <div class="w-full md:w-48 flex-shrink-0 bg-indigo-100">
+                {% if officiel.photo %}
                 <img src="{{ officiel.photo.url }}" alt="Photo de {{ officiel.Nom }}" 
                      class="w-full h-48 md:h-full object-cover rounded-t-xl md:rounded-l-xl md:rounded-t-none">
+                {% else %}
+                <div class="w-full h-48 md:h-full flex items-center justify-center text-indigo-600 text-4xl font-bold rounded-t-xl md:rounded-l-xl md:rounded-t-none">{{ officiel.Nom|slice:":1" }}</div>
+                {% endif %}
             </div>
             
             {# Corps de la carte #}

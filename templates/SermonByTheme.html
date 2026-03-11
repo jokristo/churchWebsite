@@ -25,8 +25,16 @@
         <div class="bg-white rounded-xl shadow-xl overflow-hidden transform hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border border-gray-100">
             
             {# Image #}
-            <div class="h-48 overflow-hidden">
+            <div class="h-48 overflow-hidden bg-indigo-100">
+                {% if sermon.image %}
                 <img class="w-full h-full object-cover" src="{{ sermon.image.url }}" alt="Image du sermon">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center text-indigo-400">
+                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                    </svg>
+                </div>
+                {% endif %}
             </div>
             
             {# Corps de la carte #}
@@ -38,15 +46,17 @@
                 </div>
 
                 {# Lecteur Audio #}
+                {% if sermon.audio %}
                 <p class="mb-4">
                     <audio src="{{ sermon.audio.url }}" controls class="w-full" style="height: 40px;"></audio>
                 </p>
-                
-                {# Bouton Télécharger #}
                 <a href="{{ sermon.audio.url }}" download 
                    class="inline-flex justify-center items-center py-2 px-4 text-sm font-medium text-center text-white rounded-full bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-colors">
                     Télécharger
                 </a>
+                {% else %}
+                <p class="mb-4 text-sm text-gray-500 italic">Pas d'audio disponible</p>
+                {% endif %}
             </div>
         </div>
         

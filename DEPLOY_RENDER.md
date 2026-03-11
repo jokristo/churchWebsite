@@ -31,7 +31,7 @@ Ce guide te permet de déployer WMB Tab sur Render avec **PostgreSQL** et **Pers
 | **Region** | Même que la base |
 | **Branch** | `main` (ou ta branche) |
 | **Runtime** | Python 3 |
-| **Build Command** | `./build.sh` |
+| **Build Command** | `pip install -r requirements.txt && npm install && npm run build:css || true && python manage.py collectstatic --noinput && python manage.py migrate --noinput` |
 | **Start Command** | `gunicorn church.wsgi:application` |
 
 ---

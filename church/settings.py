@@ -41,6 +41,7 @@ ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", '.onrender.com','wmbt
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -177,4 +178,102 @@ STATICFILES_FINDERS = [
 # Chemin npm (local dev) - optionnel en prod
 NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
 #django_heroku.settings(locals()) 
+
+# ─── Jazzmin Admin Theme ────────────────────────────────────────────────────────
+JAZZMIN_SETTINGS = {
+    "site_title": "WMB Tabernacle",
+    "site_header": "WMB Tabernacle",
+    "site_brand": "WMB Tab",
+    "site_logo": "logo24.png",
+    "login_logo": "logo24.png",
+    "site_logo_classes": "img-circle",
+    "site_icon": "logo24.png",
+    "welcome_sign": "Bienvenue sur l'administration WMB Tabernacle de mont-ngafula",
+    "copyright": "WMB Tabernacle de mont-ngafula",
+
+    "search_model": ["sermons.Sermons", "OurData.Temoignages"],
+
+    "topmenu_links": [
+        {"name": "Accueil site", "url": "/", "new_window": True},
+        {"app": "sermons"},
+        {"app": "OurData"},
+    ],
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "compte.Utilisateur": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "sermons.Sermons": "fas fa-bible",
+        "sermons.Theme": "fas fa-tags",
+        "sermons.Orateur": "fas fa-microphone",
+        "OurData.Ministre": "fas fa-praying-hands",
+        "OurData.Officiel": "fas fa-user-tie",
+        "OurData.Temoignages": "fas fa-hands",
+        "OurData.Evenements": "fas fa-calendar-alt",
+        "OurData.Chantre": "fas fa-music",
+        "OurData.CategorieOfficiel": "fas fa-layer-group",
+        "OurData.Croyant": "fas fa-church",
+        "OurData.ClasseEcodim": "fas fa-chalkboard-teacher",
+        "OurData.Moniteur": "fas fa-user-graduate",
+        "OurData.MembreMedia": "fas fa-video",
+        "contribution.EvolutionConstruction": "fas fa-hard-hat",
+        "contribution.Contribution": "fas fa-hand-holding-usd",
+    },
+    "default_icon_parents": "fas fa-folder",
+    "default_icon_children": "fas fa-circle",
+
+    "related_modal_active": True,
+
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+    "custom_css": "css/admin_custom.css",
+
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "auth.user": "collapsible",
+    },
+
+    "order_with_respect_to": [
+        "sermons",
+        "OurData",
+        "contribution",
+        "compte",
+        "auth",
+    ],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "cosmo",
+    "dark_mode_theme": "darkly",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
 

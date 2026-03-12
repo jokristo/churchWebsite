@@ -63,5 +63,8 @@ urlpatterns = [
                   path('contribution/', page_contribution, name='contribution'),
                   # Test des pages d'erreur (visiter /erreur-404/ pour voir la page 404)
                   path('erreur-404/', test_404),
+                  path('inscription/', Sign, name='Sign'),
+                  path('connexion/', login_user, name='login'),
+                  path('deconnexion/', logout_user, name='logout'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

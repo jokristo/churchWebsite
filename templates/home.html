@@ -35,11 +35,11 @@
                 </svg>
             </a>
 
-            <a href="/ministre/"
+            <a href="{% url 'biographie_pasteur' %}"
                 class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full border-2 border-white hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-gray-400 transition-all duration-300 hover:scale-[1.02] transform">
                 Biographie Pasteur
             </a>
-            <a href="/contribution/"
+            <a href="{% url 'contribution' %}"
                 class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full border-2 border-white hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-gray-400 transition-all duration-300 hover:scale-[1.02] transform">
                 Contribuer à l'œuvre
             </a>
@@ -66,7 +66,7 @@
                 <p class="text-gray-600 text-justify leading-relaxed">
                     Au service du Seigneur depuis 1986, le Pasteur Bob a débuté son œuvre évangélique très jeune avec le groupe "Discovery of Jesus". Après une mission de 5 ans au Nigéria, il revient en RDC pour être consacré Pasteur en 1999. Homme de foi inébranlable, il enseigne que le Saint-Esprit est le guide suprême qui conduit infailliblement vers le Message de l'heure.
                 </p>
-                <a href="/biographie/"
+                <a href="{% url 'biographie_pasteur' %}"
                     class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors group">
                     Lire la biographie complète
                     <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
@@ -122,7 +122,7 @@
         </div>
 
         <div class="text-center mt-8">
-            <a href="/chantre/"
+            <a href="{% url 'chantre' %}"
                 class="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-full text-lg px-8 py-3 shadow-xl shadow-indigo-500/50 transition-all duration-300 hover:scale-105 transform">
                 Découvrir l'équipe complète
             </a>

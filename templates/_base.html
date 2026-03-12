@@ -30,7 +30,7 @@
         class="fixed w-full z-50 top-0 start-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-lg transition-all duration-300">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
-            <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse group">
+            <a href="{% url 'home' %}" class="flex items-center space-x-3 rtl:space-x-reverse group">
                 <img src="{% static 'logo24.png' %}"
                     class="h-10 w-auto transform transition-transform group-hover:scale-105" alt="WMB Logo" />
                 <span class="self-center text-xl font-bold whitespace-nowrap text-indigo-600 tracking-tight">WMB
@@ -55,7 +55,7 @@
 
                     {# 1. Accueil #}
                     <li class="group">
-                        <a href="/"
+                        <a href="{% url 'home' %}"
                             class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Accueil</a>
                         {% if current_path == '/' %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300">
@@ -66,7 +66,7 @@
 
                     {# 2. Sermons #}
                     <li class="group">
-                        <a href="/sermons/"
+                        <a href="{% url 'sermons' %}"
                             class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/sermons/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Sermons</a>
                         {% if current_path == '/sermons/' %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300">
@@ -77,7 +77,7 @@
 
                     {# 3. Événements #}
                     <li class="group">
-                        <a href="/event/"
+                        <a href="{% url 'event' %}"
                             class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/event/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Événements</a>
                         {% if current_path == '/event/' %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300">
@@ -88,7 +88,7 @@
 
                     {# 4. Ministres #}
                     <li class="group">
-                        <a href="/ministre/"
+                        <a href="{% url 'ministres' %}"
                             class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/ministre/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Ministres</a>
                         {% if current_path == '/ministre/' %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300">
@@ -99,7 +99,7 @@
 
                     {# 5. Officiels #}
                     <li class="group">
-                        <a href="/cateOffi/"
+                        <a href="{% url 'categorieOfficiel' %}"
                             class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/cateOffi/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Officiels</a>
                         {% if current_path == '/cateOffi/' %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300">
@@ -110,7 +110,7 @@
 
                     {# 6. Témoignages #}
                     <li class="group">
-                        <a href="/temoignage/"
+                        <a href="{% url 'temoignages' %}"
                             class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/temoignage/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Témoignages</a>
                         {% if current_path == '/temoignage/' %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300">
@@ -188,7 +188,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="/ecodim/"
+                                        <a href="{% url 'ecodim' %}"
                                             class="flex items-center px-4 py-3 hover:bg-indigo-50 group/item transition-colors">
                                             <div
                                                 class="p-2 bg-amber-100 rounded-lg mr-3 text-amber-600 group-hover/item:bg-amber-600 group-hover/item:text-white transition-colors">
@@ -204,7 +204,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="/connaissons-nous/"
+                                        <a href="{% url 'connaissons_nous_liste' %}"
                                             class="flex items-center px-4 py-3 hover:bg-indigo-50 group/item transition-colors">
                                             <div
                                                 class="p-2 bg-emerald-100 rounded-lg mr-3 text-emerald-600 group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors">
@@ -239,7 +239,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:justify-between">
 
                 <div class="mb-6 md:mb-0 col-span-2 md:col-span-1">
-                    <a href="/" class="flex items-center space-x-3 mb-4">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-3 mb-4">
                         <img src="{% static 'logo24.png' %}" class="h-12 bg-white rounded-full p-1" alt="WMB Logo" />
                         <span class="self-center text-2xl font-bold whitespace-nowrap text-white">WMB Tab</span>
                     </a>
@@ -279,16 +279,16 @@
                             class="mb-4 text-sm font-semibold text-white uppercase tracking-wider border-b border-indigo-500 inline-block pb-1">
                             Église</h2>
                         <ul class="text-slate-400 font-medium space-y-2">
-                            <li><a href="/"
+                            <li><a href="{% url 'home' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Accueil</a>
                             </li>
-                            <li><a href="/sermons/"
+                            <li><a href="{% url 'sermons' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Sermons</a>
                             </li>
-                            <li><a href="/ministre/"
+                            <li><a href="{% url 'ministres' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Ministres</a>
                             </li>
-                            <li><a href="/event/"
+                            <li><a href="{% url 'event' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Événements</a>
                             </li>
                         </ul>
@@ -298,13 +298,13 @@
                             class="mb-4 text-sm font-semibold text-white uppercase tracking-wider border-b border-indigo-500 inline-block pb-1">
                             Communauté</h2>
                         <ul class="text-slate-400 font-medium space-y-2">
-                            <li><a href="/temoignage/"
+                            <li><a href="{% url 'temoignages' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Témoignages</a>
                             </li>
-                            <li><a href="/chantre/"
+                            <li><a href="{% url 'chantre' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Chantres</a>
                             </li>
-                            <li><a href="/cateOffi/"
+                            <li><a href="{% url 'categorieOfficiel' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Officiels</a>
                             </li>
                         </ul>
@@ -335,7 +335,7 @@
 
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-slate-500">
                 <span class="text-center sm:text-right">
-                    © 2024 <a href="/" class="hover:underline text-white">WMB Tab Mont-Ngafula</a>. Tous droits
+                    © 2024 <a href="{% url 'home' %}" class="hover:underline text-white">WMB Tab Mont-Ngafula</a>. Tous droits
                     réservés.
                 </span>
             </div>

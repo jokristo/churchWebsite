@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'compressor',
     'tailwind',
     'theme',
-    'contribution'
+    'contribution',
+    'actualites'
 
 ]
 
@@ -221,6 +222,8 @@ JAZZMIN_SETTINGS = {
         "OurData.MembreMedia": "fas fa-video",
         "contribution.EvolutionConstruction": "fas fa-hard-hat",
         "contribution.Contribution": "fas fa-hand-holding-usd",
+        "actualites.Article": "fas fa-newspaper",
+        "actualites.Categorie": "fas fa-bookmark",
     },
     "default_icon_parents": "fas fa-folder",
     "default_icon_children": "fas fa-circle",

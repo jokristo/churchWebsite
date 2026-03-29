@@ -1,5 +1,5 @@
 from django.contrib import admin
-from OurData.models import ClasseEcodim, Croyant, Moniteur, Temoignages, Evenements, Chantre, CategorieOfficiel, PhotoSouvenir, MembreMedia
+from OurData.models import ClasseEcodim, Croyant, Moniteur, Temoignages, Chantre, CategorieOfficiel, PhotoSouvenir, MembreMedia
 
 # Register your models here.
 admin.site.register(CategorieOfficiel)
@@ -15,15 +15,6 @@ class TemoignageAdmin(admin.ModelAdmin):
     ]
     search_fields = ('NomDuCroyant',)
 
-
-@admin.register(Evenements)
-class EvenementAdmin(admin.ModelAdmin):
-    list_display = [
-        "NomEvenement",
-        "Date"
-    ]
-
-    search_fields = ('NomEvenement',)
 
 
 admin.site.register(Chantre)

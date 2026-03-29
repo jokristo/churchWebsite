@@ -50,18 +50,6 @@ class Temoignages(models.Model):
         return self.NomDuCroyant
 
 
-class Evenements(models.Model):
-    NomEvenement = models.CharField(max_length=200, blank=False)
-    Date = models.DateField(blank=False)
-    VideoEvenement = models.FileField(blank=True, upload_to='VideoEvenement')
-    VisuelEvenement = models.ImageField(blank=True, upload_to='EvenementVisuel')
-
-    class Meta:
-        verbose_name = 'Evenement'
-
-    def __str__(self):
-        return self.NomEvenement
-
 
 class Chantre(models.Model):
     Nom = models.CharField(max_length=100, blank=False)

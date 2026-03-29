@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}WMB Tab{% endblock title %}</title>
-    <meta name="description" content="{% block meta_description %}WMB Tabernacle de Mont-Ngafula — Église, prédications, témoignages, événements et vie communautaire à Kinshasa.{% endblock meta_description %}">
+    <meta name="description" content="{% block meta_description %}William Marrion Branham Tabernacle de Mont-Ngafula — Église, prédications, témoignages, événements et vie communautaire à Kinshasa.{% endblock meta_description %}">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -76,11 +76,11 @@
                         </div>{% endif %}
                     </li>
 
-                    {# 3. Événements #}
+                    {# 3. Blog #}
                     <li class="group">
-                        <a href="{% url 'event' %}"
-                            class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if current_path == '/event/' %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Événements</a>
-                        {% if current_path == '/event/' %}<div
+                        <a href="{% url 'blog' %}"
+                            class="block py-2 px-3 rounded md:bg-transparent md:p-0 transition-colors {% if '/blog' in current_path %}text-indigo-600 font-semibold{% else %}text-gray-900 hover:text-indigo-600{% endif %}">Blog</a>
+                        {% if '/blog' in current_path %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-100 transition-transform duration-300">
                         </div>{% else %}<div
                             class="hidden md:block h-0.5 bg-indigo-600 transform scale-x-0 group-hover:scale-x-75 transition-transform duration-300">
@@ -289,8 +289,8 @@
                             <li><a href="{% url 'ministres' %}"
                                     class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Ministres</a>
                             </li>
-                            <li><a href="{% url 'event' %}"
-                                    class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Événements</a>
+                            <li><a href="{% url 'blog' %}"
+                                    class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Blog</a>
                             </li>
                         </ul>
                     </div>

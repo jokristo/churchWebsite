@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, Http404
 # Create your views here.
 # from OurData.forms import TemoignageForm
 from OurData.forms import TemoignageForm
-from OurData.models import Ministre, Evenements, Temoignages, Chantre, CategorieOfficiel, Officiel, Croyant, ClasseEcodim, Moniteur, MembreMedia
+from OurData.models import Ministre, Temoignages, Chantre, CategorieOfficiel, Officiel, Croyant, ClasseEcodim, Moniteur, MembreMedia
 
 
 
@@ -43,10 +43,6 @@ def temoin(request):
     temoignage2 = Temoignages.objects.filter(is_Approuve = "True")
     return render(request, "temoignage2.html", {"datatemoignages": temoignage2})
 
-
-def Evenement(request):
-    dataEvent = Evenements.objects.all()
-    return render(request, "Evenement.html", {"events": dataEvent})
 
 
 def chantre(request):

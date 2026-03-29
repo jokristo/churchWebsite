@@ -1,0 +1,120 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Blog — WMB Tabernacle{% endblock title %}
+{% block meta_description %}Actualités, enseignements et annonces du WMB Tabernacle de Mont-Ngafula de kinshasa. Restez connectés à la vie de notre église.{% endblock meta_description %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    {# ── En-tête ── #}
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight mb-3">
+            Actualités & Articles
+        </h1>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+            Restez connectés aux informations de l'église — annonces, réflexions spirituelles et événements à venir.
+        </p>
+    </div>
+
+    {# ── Filtres par catégorie ── #}
+    {% if categories %}
+    <div class="flex flex-wrap justify-center gap-3 mb-12">
+        <a href="{% url 'blog' %}"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-colors {% if not categorie_active %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600{% endif %}">
+            Tout voir
+        </a>
+        {% for cat in categories %}
+        <a href="{% url 'blog' %}?categorie={{ cat.slug }}"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-colors {% if categorie_active.slug == cat.slug %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600{% endif %}">
+            {{ cat.nom }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# ── Articles en vedette ── #}
+    {% if articles_vedette %}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-14">
+        {% for article in articles_vedette %}
+        <a href="{% url 'blog_detail' article.slug %}" class="group block">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden ring-1 ring-gray-100 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+                {% if article.image_couverture %}
+                <div class="h-56 overflow-hidden">
+                    <img src="{{ article.image_couverture.url }}" alt="{{ article.titre }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                {% else %}
+                <div class="h-56 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                    </svg>
+                </div>
+                {% endif %}
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide">En vedette</span>
+                        {% if article.categorie %}
+                        <span class="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">{{ article.categorie.nom }}</span>
+                        {% endif %}
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">{{ article.titre }}</h2>
+                    <p class="text-gray-500 text-sm mb-4 flex-grow line-clamp-3">{{ article.resume }}</p>
+                    <div class="flex items-center justify-between text-xs text-gray-400 mt-auto">
+                        <span>{{ article.date_publication|date:"d F Y" }}</span>
+                        {% if article.auteur %}
+                        <span>par {{ article.auteur.get_full_name|default:article.auteur.username }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {# ── Liste des articles ── #}
+    {% if articles %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for article in articles %}
+        <a href="{% url 'blog_detail' article.slug %}" class="group block">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden ring-1 ring-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
+                {% if article.image_couverture %}
+                <div class="h-44 overflow-hidden">
+                    <img src="{{ article.image_couverture.url }}" alt="{{ article.titre }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                {% else %}
+                <div class="h-44 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                    </svg>
+                </div>
+                {% endif %}
+                <div class="p-5 flex flex-col flex-grow">
+                    {% if article.categorie %}
+                    <span class="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-0.5 rounded-full inline-block mb-2 w-fit">{{ article.categorie.nom }}</span>
+                    {% endif %}
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">{{ article.titre }}</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-grow line-clamp-3">{{ article.resume }}</p>
+                    <div class="flex items-center justify-between text-xs text-gray-400 mt-auto pt-3 border-t border-gray-50">
+                        <span>{{ article.date_publication|date:"d F Y" }}</span>
+                        <span class="text-indigo-600 font-semibold group-hover:underline">Lire →</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 text-gray-400">
+        <svg class="w-16 h-16 mx-auto mb-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+        </svg>
+        <p class="text-lg font-medium">Aucun article pour le moment.</p>
+        <p class="text-sm mt-1">Revenez bientôt !</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock content %}

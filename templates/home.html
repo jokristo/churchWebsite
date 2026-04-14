@@ -53,7 +53,123 @@
 </section>
 
 {# ================================================================= #}
-{# 2. SECTION PASTEURS - Mise à jour avec les bios réelles #}
+{# 2. ARTICLES — récent + vedette (ou autre au hasard), avant les pasteurs #}
+{% if article_recent %}
+<section class="py-14 sm:py-16 bg-slate-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10 sm:mb-12">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-indigo-950 tracking-tight">
+                Articles en vedette &amp; blog
+            </h2>
+            <a href="{% url 'blog' %}"
+                class="inline-block mt-4 text-indigo-600 font-semibold text-sm sm:text-base hover:text-indigo-800 transition-colors">
+                Voir tous les articles
+                <span aria-hidden="true" class="ms-1">→</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 {% if article_second %}md:grid-cols-2{% endif %} gap-4 md:gap-5">
+
+            {# ── Carte 1 : article le plus récent ── #}
+            <a href="{% url 'blog_detail' article_recent.slug %}"
+                class="article-home-card group flex flex-col md:flex-row bg-white rounded-2xl shadow-md shadow-slate-200/80 ring-1 ring-slate-100/80 hover:shadow-lg hover:shadow-slate-200 transition-shadow duration-300 overflow-hidden">
+
+                {# Zone image : hauteur fixe, image en flux normal, fallback si fichier absent #}
+                <div class="md:w-[42%] shrink-0 p-3 md:p-4 md:pr-0">
+                    <div class="article-img-wrap w-full h-48 md:h-52 lg:h-56 rounded-xl overflow-hidden bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center">
+                        {% if article_recent.image_couverture %}
+                        <img src="{{ article_recent.image_couverture.url }}"
+                            alt="{{ article_recent.titre }}"
+                            class="article-img w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500">
+                        <svg class="article-img-fallback hidden w-14 h-14 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                        {% else %}
+                        <svg class="w-14 h-14 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Zone texte : min-w-0 évite le débordement flex, break-words pour les longs mots #}
+                <div class="flex flex-col flex-1 justify-between min-w-0 p-5 md:py-6 md:pl-5 md:pr-6">
+                    <div>
+                        <p class="text-indigo-600 text-sm font-semibold tracking-wide mb-2">
+                            {% if article_recent.categorie %}{{ article_recent.categorie.nom }}{% else %}Plus récent{% endif %}
+                        </p>
+                        <h3 class="text-lg sm:text-xl font-bold text-indigo-950 leading-snug group-hover:text-indigo-700 transition-colors line-clamp-2 break-words">
+                            {{ article_recent.titre }}
+                        </h3>
+                        <div class="article-excerpt relative mt-3 overflow-hidden" style="max-height:4.5rem">
+                            <p class="text-gray-600 text-sm leading-relaxed break-words">{{ article_recent.resume }}</p>
+                            <div class="article-fade absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-indigo-600 text-sm font-semibold text-right shrink-0">
+                        Lire la suite <span class="inline-block group-hover:translate-x-0.5 transition-transform" aria-hidden="true">→</span>
+                    </p>
+                </div>
+            </a>
+
+            {# ── Carte 2 : article en vedette (ou autre au hasard) ── #}
+            {% if article_second %}
+            <a href="{% url 'blog_detail' article_second.slug %}"
+                class="article-home-card group flex flex-col md:flex-row bg-white rounded-2xl shadow-md shadow-slate-200/80 ring-1 ring-slate-100/80 hover:shadow-lg hover:shadow-slate-200 transition-shadow duration-300 overflow-hidden">
+
+                <div class="md:w-[42%] shrink-0 p-3 md:p-4 md:pr-0">
+                    <div class="article-img-wrap w-full h-48 md:h-52 lg:h-56 rounded-xl overflow-hidden bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center">
+                        {% if article_second.image_couverture %}
+                        <img src="{{ article_second.image_couverture.url }}"
+                            alt="{{ article_second.titre }}"
+                            class="article-img w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500">
+                        <svg class="article-img-fallback hidden w-14 h-14 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                        {% else %}
+                        <svg class="w-14 h-14 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="flex flex-col flex-1 justify-between min-w-0 p-5 md:py-6 md:pl-5 md:pr-6">
+                    <div>
+                        <p class="text-indigo-600 text-sm font-semibold tracking-wide mb-2">
+                            {% if article_second.categorie %}
+                            {{ article_second.categorie.nom }}
+                            {% elif second_is_vedette %}
+                            En vedette
+                            {% else %}
+                            À lire aussi
+                            {% endif %}
+                        </p>
+                        <h3 class="text-lg sm:text-xl font-bold text-indigo-950 leading-snug group-hover:text-indigo-700 transition-colors line-clamp-2 break-words">
+                            {{ article_second.titre }}
+                        </h3>
+                        <div class="article-excerpt relative mt-3 overflow-hidden" style="max-height:4.5rem">
+                            <p class="text-gray-600 text-sm leading-relaxed break-words">{{ article_second.resume }}</p>
+                            <div class="article-fade absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-indigo-600 text-sm font-semibold text-right shrink-0">
+                        Lire la suite <span class="inline-block group-hover:translate-x-0.5 transition-transform" aria-hidden="true">→</span>
+                    </p>
+                </div>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# ================================================================= #}
+{# 3. SECTION PASTEURS - Mise à jour avec les bios réelles #}
 <section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-4">
 
@@ -107,7 +223,7 @@
 </section>
 
 {# ================================================================= #}
-{# 3. CHANTRE SECTION #}
+{# 4. CHANTRE SECTION #}
 <section class="py-16 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4">
 
@@ -136,7 +252,7 @@
 </section>
 
 {# ================================================================= #}
-{# 4. JAVASCRIPT & CUSTOM STYLES #}
+{# 5. JAVASCRIPT & CUSTOM STYLES #}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const banner = document.getElementById('banner-hero');
@@ -158,7 +274,30 @@
         setInterval(changeBannerImage, 5000);
 
 
-        // --- 2. Gestion du Défilement Automatique ---
+        // --- 2. Articles : image fallback + fondu extrait ---
+        document.querySelectorAll('.article-img').forEach(function (img) {
+            function showFallback() {
+                img.style.display = 'none';
+                var fallback = img.parentElement.querySelector('.article-img-fallback');
+                if (fallback) fallback.classList.remove('hidden');
+            }
+            if (img.complete && img.naturalWidth === 0) {
+                showFallback();
+            } else {
+                img.addEventListener('error', showFallback);
+            }
+        });
+
+        document.querySelectorAll('.article-excerpt').forEach(function (wrap) {
+            var fade = wrap.querySelector('.article-fade');
+            // Si le texte tient dans le conteneur, on supprime le fondu inutile
+            if (fade && wrap.scrollHeight <= wrap.clientHeight + 2) {
+                fade.remove();
+                wrap.style.maxHeight = 'none';
+            }
+        });
+
+        // --- 3. Gestion du Défilement Automatique ---
         if (scroller) {
             const scrollSpeed = 1;
             let scrollDirection = 1;

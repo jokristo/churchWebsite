@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'OurData',
     'chat',
     'compte',
+    'imagekit',
     'compressor',
     'tailwind',
     'theme',

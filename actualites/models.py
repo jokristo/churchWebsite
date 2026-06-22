@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFit
 
 User = get_user_model()
 
@@ -41,9 +43,12 @@ class Article(models.Model):
         blank=True,
         verbose_name="Auteur"
     )
-    image_couverture = models.ImageField(
-        "Image de couverture",
+    image_couverture = ProcessedImageField(
+        verbose_name="Image de couverture",
         upload_to='blog/couvertures/',
+        processors=[ResizeToFit(800, 450)],
+        format='WEBP',
+        options={'quality': 82},
         blank=True,
         null=True
     )

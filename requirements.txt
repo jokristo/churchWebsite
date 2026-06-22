@@ -13,3 +13,5 @@ sqlparse==0.4.4
 whitenoise==6.8.2
 django-tailwind==3.6.0
 django-jazzmin==3.0.3
+django-imagekit==6.1.0
+pydub==0.25.1

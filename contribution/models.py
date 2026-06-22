@@ -1,8 +1,14 @@
 from django.db import models
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFit
 
 class EvolutionConstruction(models.Model):
     titre = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='construction/evolution/')
+    image = ProcessedImageField(
+        upload_to='construction/evolution/',
+        processors=[ResizeToFit(800, 600)],
+        format='WEBP', options={'quality': 80}
+    )
     date_travaux = models.DateField("Date des travaux")
     description = models.TextField(blank=True)
     date_publication = models.DateTimeField(auto_now_add=True)

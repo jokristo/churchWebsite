@@ -1,0 +1,67 @@
+<script>
+(function () {
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? match[2] : '';
+    }
+
+    function updateHeart(btn, liked) {
+        var heart = btn.querySelector('.like-heart');
+        btn.dataset.liked = liked ? 'true' : 'false';
+        btn.setAttribute('aria-label', liked ? 'Retirer le like' : 'Aimer cet article');
+        if (heart) {
+            heart.classList.toggle('text-[#FF385C]', liked);
+            heart.classList.toggle('fill-[#FF385C]', liked);
+            heart.classList.toggle('text-[#222222]', !liked);
+            heart.classList.toggle('fill-transparent', !liked);
+        }
+    }
+
+    function updateCount(slug, count) {
+        document.querySelectorAll('.article-like-count[data-slug="' + slug + '"] .like-count-num').forEach(function (el) {
+            el.textContent = count;
+        });
+        var detailCount = document.getElementById('detail-like-count');
+        if (detailCount && detailCount.dataset.slug === slug) {
+            detailCount.textContent = count;
+        }
+    }
+
+    document.querySelectorAll('.article-like-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var slug = btn.dataset.slug;
+            var csrftoken = getCookie('csrftoken');
+
+            fetch('/blog/' + slug + '/like/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                updateHeart(btn, data.liked);
+                updateCount(slug, data.count);
+                var detailBtn = document.getElementById('detail-like-btn');
+                if (detailBtn && detailBtn.dataset.slug === slug) {
+                    updateHeart(detailBtn, data.liked);
+                }
+            })
+            .catch(function () {
+                alert('Impossible d\'enregistrer votre like. Réessayez.');
+            });
+        });
+    });
+
+    document.querySelectorAll('.article-card-airbnb[data-href]').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+            if (e.target.closest('.article-like-btn')) return;
+            window.location.href = card.dataset.href;
+        });
+    });
+})();
+</script>

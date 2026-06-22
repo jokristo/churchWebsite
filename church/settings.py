@@ -225,6 +225,8 @@ JAZZMIN_SETTINGS = {
         "contribution.Contribution": "fas fa-hand-holding-usd",
         "actualites.Article": "fas fa-newspaper",
         "actualites.Categorie": "fas fa-bookmark",
+        "actualites.ArticleLike": "fas fa-heart",
+        "actualites.Commentaire": "fas fa-comments",
     },
     "default_icon_parents": "fas fa-folder",
     "default_icon_children": "fas fa-circle",

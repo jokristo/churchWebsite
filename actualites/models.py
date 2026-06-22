@@ -81,3 +81,88 @@ class Article(models.Model):
 
     def __str__(self):
         return self.titre
+
+
+class ArticleLike(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='likes',
+        verbose_name="Article",
+    )
+    utilisateur = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='article_likes',
+        verbose_name="Utilisateur",
+    )
+    session_key = models.CharField(
+        "Clé de session",
+        max_length=40,
+        blank=True,
+        db_index=True,
+    )
+    ip_hash = models.CharField(
+        "Empreinte IP",
+        max_length=64,
+        blank=True,
+    )
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Like d'article"
+        verbose_name_plural = "Likes d'articles"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['article', 'utilisateur'],
+                condition=models.Q(utilisateur__isnull=False),
+                name='unique_article_like_user',
+            ),
+            models.UniqueConstraint(
+                fields=['article', 'session_key'],
+                condition=models.Q(utilisateur__isnull=True),
+                name='unique_article_like_session',
+            ),
+        ]
+
+    def __str__(self):
+        who = self.utilisateur or self.session_key[:8]
+        return f"Like — {self.article.titre} ({who})"
+
+
+class Commentaire(models.Model):
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        related_name='commentaires',
+        verbose_name="Article",
+    )
+    utilisateur = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='commentaires_articles',
+        verbose_name="Utilisateur",
+    )
+    nom = models.CharField("Nom", max_length=100)
+    email = models.EmailField("E-mail", blank=True)
+    contenu = models.TextField("Commentaire", max_length=2000)
+    est_approuve = models.BooleanField("Approuvé", default=True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Commentaire"
+        verbose_name_plural = "Commentaires"
+        ordering = ['-date_creation']
+
+    def __str__(self):
+        return f"{self.nom} — {self.article.titre}"
+
+    @property
+    def auteur_affiche(self):
+        if self.utilisateur:
+            return self.utilisateur.get_full_name() or self.utilisateur.username
+        return self.nom

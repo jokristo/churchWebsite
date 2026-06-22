@@ -2,31 +2,33 @@
 {% load static %}
 
 {% block title %}Blog — WMB Tabernacle{% endblock title %}
-{% block meta_description %}Actualités, enseignements et annonces du WMB Tabernacle de Mont-Ngafula de kinshasa. Restez connectés à la vie de notre église.{% endblock meta_description %}
+{% block meta_description %}Actualités, enseignements et annonces du WMB Tabernacle de Mont-Ngafula. Restez connectés à la vie de notre église.{% endblock meta_description %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20 py-10 sm:py-14">
 
-    {# ── En-tête ── #}
-    <div class="text-center mb-12">
-        <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight mb-3">
-            Actualités & Articles
+    {# ── En-tête style Airbnb ── #}
+    <header class="mb-8 sm:mb-10">
+        <h1 class="text-[26px] sm:text-[32px] font-semibold text-[#222222] tracking-tight">
+            Actualités &amp; articles
         </h1>
-        <p class="text-lg text-gray-500 max-w-2xl mx-auto">
-            Restez connectés aux informations de l'église — annonces, réflexions spirituelles et événements à venir.
+        <p class="mt-2 text-[#717171] text-base max-w-2xl">
+            Annonces, réflexions spirituelles et événements de l'église.
         </p>
-    </div>
+    </header>
 
-    {# ── Filtres par catégorie ── #}
+    {# ── Filtres catégories (pills) ── #}
     {% if categories %}
-    <div class="flex flex-wrap justify-center gap-3 mb-12">
+    <div class="flex gap-3 overflow-x-auto pb-4 mb-8 scrollbar-hide border-b border-gray-100">
         <a href="{% url 'blog' %}"
-            class="px-4 py-2 rounded-full text-sm font-medium transition-colors {% if not categorie_active %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600{% endif %}">
+            class="shrink-0 px-4 py-2 rounded-full text-sm font-medium border transition-colors
+            {% if not categorie_active %}bg-[#222222] text-white border-[#222222]{% else %}bg-white text-[#222222] border-gray-300 hover:border-[#222222]{% endif %}">
             Tout voir
         </a>
         {% for cat in categories %}
         <a href="{% url 'blog' %}?categorie={{ cat.slug }}"
-            class="px-4 py-2 rounded-full text-sm font-medium transition-colors {% if categorie_active.slug == cat.slug %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600{% endif %}">
+            class="shrink-0 px-4 py-2 rounded-full text-sm font-medium border transition-colors
+            {% if categorie_active.slug == cat.slug %}bg-[#222222] text-white border-[#222222]{% else %}bg-white text-[#222222] border-gray-300 hover:border-[#222222]{% endif %}">
             {{ cat.nom }}
         </a>
         {% endfor %}
@@ -35,86 +37,45 @@
 
     {# ── Articles en vedette ── #}
     {% if articles_vedette %}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-14">
-        {% for article in articles_vedette %}
-        <a href="{% url 'blog_detail' article.slug %}" class="group block">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden ring-1 ring-gray-100 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
-                {% if article.image_couverture %}
-                <div class="h-56 overflow-hidden">
-                    <img src="{{ article.image_couverture.url }}" alt="{{ article.titre }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                {% else %}
-                <div class="h-56 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
-                    </svg>
-                </div>
-                {% endif %}
-                <div class="p-6 flex flex-col flex-grow">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide">En vedette</span>
-                        {% if article.categorie %}
-                        <span class="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-1 rounded-full">{{ article.categorie.nom }}</span>
-                        {% endif %}
-                    </div>
-                    <h2 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">{{ article.titre }}</h2>
-                    <p class="text-gray-500 text-sm mb-4 flex-grow line-clamp-3">{{ article.resume }}</p>
-                    <div class="flex items-center justify-between text-xs text-gray-400 mt-auto">
-                        <span>{{ article.date_publication|date:"d F Y" }}</span>
-                        {% if article.auteur %}
-                        <span>par {{ article.auteur.get_full_name|default:article.auteur.username }}</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold text-[#222222] mb-6">En vedette</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-6 gap-y-10">
+            {% for article in articles_vedette %}
+            {% include 'blog/partials/article_card.html' with article=article badge="En vedette" %}
+            {% endfor %}
+        </div>
+    </section>
     {% endif %}
 
-    {# ── Liste des articles ── #}
+    {# ── Grille principale ── #}
     {% if articles %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {% for article in articles %}
-        <a href="{% url 'blog_detail' article.slug %}" class="group block">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden ring-1 ring-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
-                {% if article.image_couverture %}
-                <div class="h-44 overflow-hidden">
-                    <img src="{{ article.image_couverture.url }}" alt="{{ article.titre }}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                {% else %}
-                <div class="h-44 bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
-                    </svg>
-                </div>
-                {% endif %}
-                <div class="p-5 flex flex-col flex-grow">
-                    {% if article.categorie %}
-                    <span class="bg-gray-100 text-gray-600 text-xs font-medium px-2 py-0.5 rounded-full inline-block mb-2 w-fit">{{ article.categorie.nom }}</span>
-                    {% endif %}
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-2">{{ article.titre }}</h3>
-                    <p class="text-gray-500 text-sm mb-4 flex-grow line-clamp-3">{{ article.resume }}</p>
-                    <div class="flex items-center justify-between text-xs text-gray-400 mt-auto pt-3 border-t border-gray-50">
-                        <span>{{ article.date_publication|date:"d F Y" }}</span>
-                        <span class="text-indigo-600 font-semibold group-hover:underline">Lire →</span>
-                    </div>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="text-center py-20 text-gray-400">
-        <svg class="w-16 h-16 mx-auto mb-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+    <section>
+        {% if articles_vedette %}
+        <h2 class="text-xl font-semibold text-[#222222] mb-6">Tous les articles</h2>
+        {% endif %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
+            {% for article in articles %}
+            {% include 'blog/partials/article_card.html' with article=article %}
+            {% endfor %}
+        </div>
+    </section>
+    {% elif not articles_vedette %}
+    <div class="text-center py-24 text-[#717171]">
+        <svg class="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
         </svg>
-        <p class="text-lg font-medium">Aucun article pour le moment.</p>
+        <p class="text-lg font-medium text-[#222222]">Aucun article pour le moment.</p>
         <p class="text-sm mt-1">Revenez bientôt !</p>
     </div>
     {% endif %}
 
 </div>
+
+{% include 'blog/partials/blog_likes_script.html' %}
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
 {% endblock content %}

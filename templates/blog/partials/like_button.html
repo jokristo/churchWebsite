@@ -1,0 +1,11 @@
+<button type="button"
+    class="article-like-btn absolute top-3 right-3 z-10 flex items-center justify-center w-9 h-9 rounded-full bg-white/95 shadow-md hover:scale-110 active:scale-95 transition-transform duration-200"
+    data-slug="{{ article.slug }}"
+    data-liked="{% if article.user_liked %}true{% else %}false{% endif %}"
+    aria-label="{% if article.user_liked %}Retirer le like{% else %}Aimer cet article{% endif %}">
+    <svg class="like-heart w-[18px] h-[18px] transition-colors duration-200 {% if article.user_liked %}text-[#FF385C] fill-[#FF385C]{% else %}text-[#222222] fill-transparent{% endif %}"
+        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+</button>

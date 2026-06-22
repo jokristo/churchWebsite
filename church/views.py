@@ -4,6 +4,7 @@ from django.http import Http404
 from django.shortcuts import render
 
 from actualites.models import Article
+from actualites.services import annotate_articles_likes
 from sermons.models import Sermons
 
 
@@ -44,6 +45,9 @@ def index(request):
             n = others.count()
             if n:
                 article_second = others[random.randint(0, n - 1)]
+
+    home_articles = [a for a in (article_recent, article_second) if a]
+    annotate_articles_likes(request, home_articles)
 
     return render(
         request,

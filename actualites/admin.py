@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categorie, Article
+from .models import Categorie, Article, ArticleLike, Commentaire
 
 
 @admin.register(Categorie)
@@ -29,3 +29,20 @@ class ArticleAdmin(admin.ModelAdmin):
             'fields': ('est_publie', 'en_vedette', 'date_publication', 'date_modification')
         }),
     )
+
+
+@admin.register(ArticleLike)
+class ArticleLikeAdmin(admin.ModelAdmin):
+    list_display = ['article', 'utilisateur', 'session_key', 'date_creation']
+    list_filter = ('date_creation',)
+    search_fields = ('article__titre', 'utilisateur__username', 'session_key')
+    readonly_fields = ('date_creation',)
+
+
+@admin.register(Commentaire)
+class CommentaireAdmin(admin.ModelAdmin):
+    list_display = ['article', 'nom', 'est_approuve', 'date_creation']
+    list_filter = ('est_approuve', 'date_creation')
+    list_editable = ['est_approuve']
+    search_fields = ('nom', 'contenu', 'article__titre')
+    readonly_fields = ('date_creation',)

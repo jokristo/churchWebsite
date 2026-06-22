@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from OurData.views import ministres, temoignages, temoin, chantre, categorieOfficiel, officiels, biographie_pasteur, media_presse, connaissons_nous_liste, connaissons_nous_detail, ecodim_view
-from actualites.views import blog_liste, blog_detail
+from actualites.views import blog_liste, blog_detail, toggle_like
 from chat.views import chat, send_message
 from compte import views
 from compte.views import Sign, login_user, logout_user
@@ -43,6 +43,7 @@ urlpatterns = [
                   path('ministre/', ministres, name="ministres"),
                   path('temoignage/', temoignages, name="temoignages"),
                   path('blog/', blog_liste, name='blog'),
+                  path('blog/<slug:slug>/like/', toggle_like, name='blog_toggle_like'),
                   path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
                   path("temoignagecontent/", temoin, name="temoignagecontent"),
                   #voir tous le theme

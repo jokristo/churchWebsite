@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 from actualites.models import Article
 from actualites.services import annotate_articles_likes
-from sermons.models import Sermons
+from sermons.models import Orateur, Sermons, Theme
 
 
 def custom_404(request, exception):
@@ -61,14 +61,39 @@ def index(request):
 
 
 def sermons(request, *args, **kwargs):
-    sermon = Sermons.objects.all()
-    # imgsermon = Sermons.objects.get()
-    if request.method == "GET":
-        titre = request.GET.get('recherche')
-        if titre is not None:
-            sermon = Sermons.objects.filter(titre__icontains=titre)
+    qs = Sermons.objects.select_related('orateur', 'Theme').order_by('-date')
+    recherche = (request.GET.get('recherche') or '').strip()
+    theme_id = request.GET.get('theme') or ''
+    orateur_id = request.GET.get('orateur') or ''
 
-    return render(request, 'sermons.html', context={"dba": sermon})
+    if recherche:
+        qs = qs.filter(titre__icontains=recherche)
+    if theme_id.isdigit():
+        qs = qs.filter(Theme_id=int(theme_id))
+    else:
+        theme_id = ''
+    if orateur_id.isdigit():
+        qs = qs.filter(orateur_id=int(orateur_id))
+    else:
+        orateur_id = ''
+
+    has_filters = bool(recherche or theme_id or orateur_id)
+    sermon_count = qs.count()
+
+    return render(
+        request,
+        'sermons.html',
+        {
+            'dba': qs,
+            'themes': Theme.objects.order_by('NomTheme'),
+            'orateurs': Orateur.objects.order_by('Noms'),
+            'recherche': recherche,
+            'theme_actif': theme_id,
+            'orateur_actif': orateur_id,
+            'has_filters': has_filters,
+            'sermon_count': sermon_count,
+        },
+    )
 
 
 def chantre(request):

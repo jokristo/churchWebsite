@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .wmb-section-title {
+        @apply text-3xl sm:text-4xl font-extrabold text-ink tracking-tight text-center;
+    }
+    .wmb-section-rule {
+        @apply block w-16 h-1 bg-brand mx-auto mt-3 rounded-full;
+    }
+    .wmb-card {
+        @apply bg-white rounded-2xl shadow-card ring-1 ring-slate-100/80;
+    }
+    .wmb-btn-primary {
+        @apply inline-flex justify-center items-center py-3 px-6 text-sm sm:text-base font-medium text-white rounded-full bg-brand hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand/40 transition-colors duration-200;
+    }
+    .wmb-btn-ghost {
+        @apply inline-flex justify-center items-center py-3 px-6 text-sm sm:text-base font-medium text-white rounded-full border border-white/70 bg-white/10 hover:bg-white hover:text-ink focus:outline-none focus:ring-2 focus:ring-white/40 transition-colors duration-200;
+    }
+}

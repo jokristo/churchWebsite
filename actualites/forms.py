@@ -9,15 +9,15 @@ class CommentaireForm(forms.ModelForm):
         fields = ['nom', 'email', 'contenu']
         widgets = {
             'nom': forms.TextInput(attrs={
-                'class': 'w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:ring-2 focus:ring-[#FF385C]/30 focus:border-[#FF385C] outline-none transition',
+                'class': 'w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none transition',
                 'placeholder': 'Votre nom',
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:ring-2 focus:ring-[#FF385C]/30 focus:border-[#FF385C] outline-none transition',
+                'class': 'w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none transition',
                 'placeholder': 'Votre e-mail (optionnel)',
             }),
             'contenu': forms.Textarea(attrs={
-                'class': 'w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:ring-2 focus:ring-[#FF385C]/30 focus:border-[#FF385C] outline-none transition resize-none',
+                'class': 'w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-brand/30 focus:border-brand outline-none transition resize-none',
                 'placeholder': 'Partagez votre réflexion…',
                 'rows': 4,
             }),

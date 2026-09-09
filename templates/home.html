@@ -16,36 +16,30 @@
     <div class="relative px-4 mx-auto max-w-screen-xl text-center z-10 py-10">
 
         <h1
-            class="mb-4 text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-none text-white drop-shadow-2xl">
+            class="mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight text-white">
             Jésus-Christ est le même Hier, Aujourd'hui et Éternellement
         </h1>
 
-        <p class="mb-8 text-lg font-light text-gray-200 lg:text-xl sm:px-16 lg:px-48 drop-shadow-lg">
+        <p class="mb-10 text-base sm:text-lg text-white/85 lg:text-xl sm:px-16 lg:px-40 font-light">
             Dieu vous appelle à faire partie de cette œuvre glorieuse.
         </p>
 
-        <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-6">
-
-            <a href="https://www.youtube.com/@pasteurrbob" target="_blank"
-                class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all duration-300 shadow-xl shadow-indigo-500/50 hover:shadow-2xl hover:scale-[1.02] transform">
+        <div class="flex flex-wrap justify-center gap-3">
+            <a href="https://www.youtube.com/@pasteurrbob" target="_blank" rel="noopener" class="wmb-btn-primary">
                 Suivez-nous sur YouTube
-                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 14 10">
+                <svg class="w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
             </a>
-
-            <a href="{% url 'biographie_pasteur' %}"
-                class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full border-2 border-white hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-gray-400 transition-all duration-300 hover:scale-[1.02] transform">
+            <a href="{% url 'biographie_pasteur' %}" class="wmb-btn-ghost">
                 Biographie Pasteur
             </a>
-            <a href="https://wa.me/243897779439"
-                class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full border-2 border-white hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-gray-400 transition-all duration-300 hover:scale-[1.02] transform">
+            <a href="https://wa.me/243897779439" class="wmb-btn-ghost">
                 Communiquer avec le pasteur
             </a>
-            <a href="{% url 'contribution' %}"
-                class="inline-flex justify-center items-center py-3 px-6 text-base font-medium text-center text-white rounded-full border-2 border-white hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-gray-400 transition-all duration-300 hover:scale-[1.02] transform">
+            <a href="{% url 'contribution' %}" class="wmb-btn-ghost">
                 Contribuer à l'œuvre
             </a>
         </div>
@@ -53,25 +47,26 @@
 </section>
 
 {# ================================================================= #}
-{# 2. ARTICLES — style Airbnb, récent + vedette #}
+{# 2. ARTICLES — récent + vedette #}
 {% if article_recent %}
-<section class="py-14 sm:py-16 bg-[#f7f7f7]">
-    <div class="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-20">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 sm:mb-10">
+<section class="py-16 sm:py-20 bg-canvas">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div>
-                <h2 class="text-[26px] sm:text-[32px] font-semibold text-[#222222] tracking-tight">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
                     Articles en vedette &amp; blog
                 </h2>
-                <p class="mt-2 text-[#717171] text-base">Nos dernières actualités de l'église.</p>
+                <span class="block w-16 h-1 bg-brand mt-3 rounded-full"></span>
+                <p class="mt-3 text-muted text-base">Nos dernières actualités de l'église.</p>
             </div>
             <a href="{% url 'blog' %}"
-                class="shrink-0 inline-flex items-center gap-1 text-sm font-semibold text-[#222222] underline hover:no-underline transition-colors">
+                class="shrink-0 inline-flex items-center gap-1 text-sm font-semibold text-brand hover:text-brand-dark transition-colors">
                 Voir tous les articles
                 <span aria-hidden="true">→</span>
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-10 max-w-4xl mx-auto sm:max-w-none">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {% include 'blog/partials/article_card.html' with article=article_recent badge="Plus récent" %}
             {% if article_second %}
             {% if second_is_vedette %}
@@ -89,53 +84,46 @@
 
 {# ================================================================= #}
 {# 3. SECTION PASTEURS - Mise à jour avec les bios réelles #}
-<section class="py-16 bg-white">
-    <div class="max-w-6xl mx-auto px-4">
+<section class="py-16 sm:py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
-        <h2 class="text-4xl font-extrabold text-center mb-16 text-slate-800 tracking-tight relative">
+        <h2 class="wmb-section-title mb-12 sm:mb-16">
             Nos Pasteurs
-            <span class="block w-20 h-1 bg-indigo-600 mx-auto mt-2 rounded-full"></span>
+            <span class="wmb-section-rule"></span>
         </h2>
 
-        {# Card 1: Pasteur Titulaire (Bob) #}
         <div
-            class="flex flex-col md:flex-row items-center gap-12 mb-16 p-6 md:p-10 bg-gray-50 rounded-2xl shadow-xl ring-1 ring-gray-200 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
-            <div class="md:w-1/2 order-2 md:order-1">
-                <h3 class="text-3xl font-bold text-gray-900 mb-2">BOB MUNANGA MATEKYA</h3>
-                <p class="text-indigo-600 font-semibold mb-4 text-xl">Pasteur Titulaire</p>
-                <p class="text-gray-600 text-justify leading-relaxed">
+            class="flex flex-col md:flex-row items-center gap-10 md:gap-14 mb-10 p-6 md:p-10 wmb-card">
+            <div class="md:w-[55%] order-2 md:order-1">
+                <h3 class="text-2xl sm:text-3xl font-bold text-ink mb-2 tracking-tight">BOB MUNANGA MATEKYA</h3>
+                <p class="text-brand font-semibold mb-4 text-lg">Pasteur Titulaire</p>
+                <p class="text-muted leading-relaxed">
                     Au service du Seigneur depuis 1986, le Pasteur Bob a débuté son œuvre évangélique très jeune avec le groupe "Discovery of Jesus". Après une mission de 5 ans au Nigéria, il revient en RDC pour être consacré Pasteur en 1999. Homme de foi inébranlable, il enseigne que le Saint-Esprit est le guide suprême qui conduit infailliblement vers le Message de l'heure.
                 </p>
                 <a href="{% url 'biographie_pasteur' %}"
-                    class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors group">
+                    class="mt-5 inline-flex items-center text-brand hover:text-brand-dark font-medium transition-colors group">
                     Lire la biographie complète
-                    <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
+                    <span class="group-hover:translate-x-1 transition-transform inline-block ms-1">→</span>
                 </a>
             </div>
-            <div class="md:w-1/2 flex justify-center order-1 md:order-2">
+            <div class="md:w-[45%] flex justify-center order-1 md:order-2">
                 <img src="{% static 'pastb.JPG' %}" alt="Pasteur Bob Munanga"
-                    class="w-64 h-64 object-cover rounded-full shadow-2xl border-4 border-indigo-200 hover:border-indigo-600 transition-all duration-500">
+                    class="w-56 h-56 sm:w-64 sm:h-64 object-cover rounded-full shadow-card ring-4 ring-brand-soft">
             </div>
         </div>
 
-        {# Card 2: Pasteur Associé (Joseph) #}
         <div
-            class="flex flex-col md:flex-row items-center gap-12 p-6 md:p-10 bg-white rounded-2xl shadow-xl ring-1 ring-gray-200 transform hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
-            <div class="md:w-1/2 flex justify-center order-1">
+            class="flex flex-col md:flex-row items-center gap-10 md:gap-14 p-6 md:p-10 wmb-card">
+            <div class="md:w-[45%] flex justify-center order-1">
                 <img src="{% static 'pastl.JPG' %}" alt="Pasteur Joseph Tshole"
-                    class="w-64 h-64 object-cover rounded-full shadow-2xl border-4 border-indigo-200 hover:border-indigo-600 transition-all duration-500">
+                    class="w-56 h-56 sm:w-64 sm:h-64 object-cover rounded-full shadow-card ring-4 ring-brand-soft">
             </div>
-            <div class="md:w-1/2 order-2">
-                <h3 class="text-3xl font-bold text-gray-900 mb-2">JOSEPH TSHOLE LUZOLO</h3>
-                <p class="text-indigo-600 font-semibold mb-4 text-xl">Pasteur Associé</p>
-                <p class="text-gray-600 text-justify leading-relaxed">
+            <div class="md:w-[55%] order-2">
+                <h3 class="text-2xl sm:text-3xl font-bold text-ink mb-2 tracking-tight">JOSEPH TSHOLE LUZOLO</h3>
+                <p class="text-brand font-semibold mb-4 text-lg">Pasteur Associé</p>
+                <p class="text-muted leading-relaxed">
                     Issu du catholicisme, le Pasteur Joseph a embrassé le Message en 1989 après une quête sincère de la vérité. Son ministère s'est confirmé de manière miraculeuse lorsqu'il fut envoyé prier pour les malades dans les hôpitaux. Prédicateur fidèle depuis plus de 20 ans, il œuvre aujourd'hui comme Pasteur Associé, bras droit dévoué du ministère.
                 </p>
-                <!-- <a href="/ministre/"
-                    class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors group">
-                    Lire la biographie complète
-                    <span class="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </a> -->
             </div>
         </div>
     </div>
@@ -143,27 +131,34 @@
 
 {# ================================================================= #}
 {# 4. CHANTRE SECTION #}
-<section class="py-16 bg-gray-50">
-    <div class="max-w-6xl mx-auto px-4">
+<section class="py-16 sm:py-20 bg-canvas">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
-        <h2 class="text-4xl font-extrabold text-center mb-16 text-slate-800 tracking-tight relative">
+        <h2 class="wmb-section-title mb-12 sm:mb-14">
             Notre Corps des Chantres
-            <span class="block w-20 h-1 bg-indigo-600 mx-auto mt-2 rounded-full"></span>
+            <span class="wmb-section-rule"></span>
         </h2>
 
-        <div id="chantre-scroller" class="flex space-x-6 pb-8 overflow-x-auto scrollbar-hide">
+        <div id="chantre-scroller" class="flex gap-5 pb-4 overflow-x-auto scrollbar-hide">
             {% for _ in "1234567890AB" %}
             <div
-                class="flex-shrink-0 w-72 h-96 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white bg-white transform hover:scale-[1.03] transition-all duration-300 cursor-pointer group">
+                class="chantre-tile relative flex-shrink-0 w-64 sm:w-72 h-80 sm:h-96 rounded-2xl overflow-hidden shadow-card bg-brand-soft">
                 <img src="{% static 'chantre' %}{{ forloop.counter }}.jpg" alt="Chantre {{ forloop.counter }}"
-                    class="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300">
+                    class="chantre-photo w-full h-full object-cover"
+                    onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                <div class="hidden absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-brand-soft to-indigo-100">
+                    <svg class="w-12 h-12 text-brand/40 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                    </svg>
+                    <span class="text-sm font-medium text-muted">Chantre {{ forloop.counter }}</span>
+                </div>
             </div>
             {% endfor %}
         </div>
 
-        <div class="text-center mt-8">
-            <a href="{% url 'chantre' %}"
-                class="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-full text-lg px-8 py-3 shadow-xl shadow-indigo-500/50 transition-all duration-300 hover:scale-105 transform">
+        <div class="text-center mt-10">
+            <a href="{% url 'chantre' %}" class="wmb-btn-primary text-base px-8">
                 Découvrir l'équipe complète
             </a>
         </div>

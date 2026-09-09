@@ -10,9 +10,9 @@
         btn.dataset.liked = liked ? 'true' : 'false';
         btn.setAttribute('aria-label', liked ? 'Retirer le like' : 'Aimer cet article');
         if (heart) {
-            heart.classList.toggle('text-[#FF385C]', liked);
-            heart.classList.toggle('fill-[#FF385C]', liked);
-            heart.classList.toggle('text-[#222222]', !liked);
+            heart.classList.toggle('text-rose-500', liked);
+            heart.classList.toggle('fill-rose-500', liked);
+            heart.classList.toggle('text-ink', !liked);
             heart.classList.toggle('fill-transparent', !liked);
         }
     }
@@ -57,7 +57,7 @@
         });
     });
 
-    document.querySelectorAll('.article-card-airbnb[data-href]').forEach(function (card) {
+    document.querySelectorAll('.article-card-wmb[data-href]').forEach(function (card) {
         card.addEventListener('click', function (e) {
             if (e.target.closest('.article-like-btn')) return;
             window.location.href = card.dataset.href;

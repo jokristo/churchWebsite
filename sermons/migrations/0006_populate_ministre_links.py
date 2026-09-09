@@ -1,23 +1,46 @@
 from django.db import migrations
 
 
+def _normalize(value):
+    return ''.join(ch for ch in (value or '').lower() if ch.isalnum())
+
+
+def _first_matching(queryset, field, *needles):
+    for obj in queryset:
+        haystack = _normalize(getattr(obj, field))
+        if all(needle in haystack for needle in needles):
+            return obj
+    return None
+
+
 def populate(apps, schema_editor):
     Ministre = apps.get_model('OurData', 'Ministre')
     Orateur = apps.get_model('sermons', 'Orateur')
 
-    data = {
-        1: {'fonction': 'titulaire', 'ordre': 1, 'orateur_id': 1},
-        3: {'fonction': 'associe', 'ordre': 2, 'orateur_id': 2},
-        2: {'fonction': 'ministre', 'ordre': 3, 'orateur_id': None},
-    }
+    ministres = list(Ministre.objects.all())
+    orateurs = list(Orateur.objects.all())
+    if not ministres:
+        return
 
-    for ministre_id, values in data.items():
-        Ministre.objects.filter(pk=ministre_id).update(
-            fonction=values['fonction'],
-            ordre=values['ordre'],
-        )
-        if values['orateur_id']:
-            Orateur.objects.filter(pk=values['orateur_id']).update(ministre_id=ministre_id)
+    links = [
+        (('munanga',), 'titulaire', 1, ('munanga',)),
+        (('luzolo',), 'associe', 2, ('luzolo',)),
+        (('meschac',), 'ministre', 3, None),
+        (('kristo',), 'ministre', 3, None),
+    ]
+    seen = set()
+
+    for ministre_needles, fonction, ordre, orateur_needles in links:
+        ministre = _first_matching(ministres, 'Nom', *ministre_needles)
+        if ministre is None or ministre.pk in seen:
+            continue
+        seen.add(ministre.pk)
+        Ministre.objects.filter(pk=ministre.pk).update(fonction=fonction, ordre=ordre)
+        if not orateur_needles:
+            continue
+        orateur = _first_matching(orateurs, 'Noms', *orateur_needles)
+        if orateur is not None:
+            Orateur.objects.filter(pk=orateur.pk).update(ministre_id=ministre.pk)
 
 
 def noop(apps, schema_editor):

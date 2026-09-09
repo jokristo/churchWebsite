@@ -1,8 +1,10 @@
+from django.db.models import Count, Prefetch
 from django.shortcuts import render, get_object_or_404, redirect, Http404
 # Create your views here.
 # from OurData.forms import TemoignageForm
 from OurData.forms import TemoignageForm
 from OurData.models import Ministre, Temoignages, Chantre, CategorieOfficiel, Officiel, Croyant, ClasseEcodim, Moniteur, MembreMedia
+from sermons.models import Orateur
 
 
 
@@ -23,9 +25,45 @@ def officiels(request, categorie_id):
 
 
 def ministres(request):
-    ministre = Ministre.objects.all()
-    # imgmin = Ministre.objects.get()
-    return render(request, 'ministre.html', context={"ministres": ministre})
+    qs = Ministre.objects.annotate(
+        sermon_count=Count('orateurs__sermons', distinct=True)
+    ).prefetch_related(Prefetch('orateurs', queryset=Orateur.objects.order_by('id')))
+
+    recherche = (request.GET.get('recherche') or '').strip()
+    fonction = request.GET.get('fonction') or ''
+    predications = request.GET.get('predications') or ''
+
+    fonctions_valides = {key for key, _ in Ministre.FONCTION_CHOICES}
+    if fonction not in fonctions_valides:
+        fonction = ''
+    if predications not in {'avec', 'sans'}:
+        predications = ''
+
+    if recherche:
+        qs = qs.filter(Nom__icontains=recherche)
+    if fonction:
+        qs = qs.filter(fonction=fonction)
+    if predications == 'avec':
+        qs = qs.filter(sermon_count__gt=0)
+    elif predications == 'sans':
+        qs = qs.filter(sermon_count=0)
+
+    qs = qs.order_by('ordre', 'Nom')
+    has_filters = bool(recherche or fonction or predications)
+
+    return render(
+        request,
+        'ministre.html',
+        {
+            'ministres': qs,
+            'recherche': recherche,
+            'fonction_active': fonction,
+            'predications_actives': predications,
+            'fonctions': Ministre.FONCTION_CHOICES,
+            'has_filters': has_filters,
+            'ministre_count': qs.count(),
+        },
+    )
 
 
 def temoignages(request):

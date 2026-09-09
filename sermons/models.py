@@ -9,7 +9,9 @@ from church.utils.audio import AudioCompressionMixin
 class Orateur(models.Model):
     Noms = models.CharField(max_length=100, blank=False)
     Provenance = models.CharField(max_length = 50, blank = True, null = True)
-
+    ministre = models.ForeignKey(
+        Ministre, on_delete=models.SET_NULL, null=True, blank=True, related_name='orateurs'
+    )
 
     def __str__(self):
         return self.Noms
@@ -36,7 +38,7 @@ class Sermons(AudioCompressionMixin, models.Model):
         format='WEBP',
         options={'quality': 80}
     )
-    orateur = models.ForeignKey(Orateur, on_delete=models.SET_NULL, null=True)
+    orateur = models.ForeignKey(Orateur, on_delete=models.SET_NULL, null=True, related_name='sermons')
     date = models.DateTimeField(default=now, null=True)
     lien = models.URLField(max_length=200, blank=True, null=True)
     audio = models.FileField(blank=True, upload_to='audio')

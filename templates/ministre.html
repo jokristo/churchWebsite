@@ -4,47 +4,139 @@
 {% block meta_description %}Les ministres de la Parole du William Marrion Branham Tabernacle de Mont-Ngafula. Découvrez ceux qui prêchent et enseignent à Kinshasa.{% endblock meta_description %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
-    
-    <h1 class="text-4xl font-extrabold text-center mb-12 text-slate-800 tracking-tight relative">
-        Nos Ministres de la Parole
-        <span class="block w-20 h-1 bg-indigo-600 mx-auto mt-2 rounded-full"></span>
-    </h1>
+<section class="bg-brand-soft/70 border-b border-indigo-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
-    {# Contenu en Grille Responsive #}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        
-        {% for ministre in ministres %}
-        
-        {# Carte du Ministre #}
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden text-center p-6 
-                    transform hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 border border-gray-200">
-            
-            {# Photo du Ministre - Design Circulaire #}
-            <div class="w-40 h-40 mx-auto mb-4 overflow-hidden rounded-full ring-4 ring-indigo-200 hover:ring-indigo-600 transition-colors duration-300 bg-indigo-100">
-                {% if ministre.photo %}
-                <img src="{{ ministre.photo.url }}" alt="Photo de {{ ministre.Nom }}" class="w-full h-full object-cover">
-                {% else %}
-                <div class="w-full h-full flex items-center justify-center text-indigo-600 text-4xl font-bold">{{ ministre.Nom|slice:":1" }}</div>
+        <header class="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
+                    Nos ministres de la Parole
+                </h1>
+                <span class="block w-16 h-1 bg-brand mt-2 rounded-full"></span>
+                <p class="mt-2 text-muted text-sm sm:text-base">
+                    Ceux qui prêchent et enseignent à l'église.
+                </p>
+            </div>
+            <p class="text-sm text-muted shrink-0">
+                <span class="font-semibold text-ink">{{ ministre_count }}</span>
+                ministre{{ ministre_count|pluralize }}
+                {% if has_filters %}
+                · <a href="{% url 'ministres' %}" class="font-semibold text-brand hover:text-brand-dark">Réinitialiser</a>
                 {% endif %}
+            </p>
+        </header>
+
+        <form id="ministres-filter" method="GET" class="flex flex-col lg:flex-row gap-3">
+            <label for="ministre-search" class="sr-only">Rechercher un ministre</label>
+            <div class="relative flex-1 min-w-0">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+                    <svg class="w-4 h-4 text-muted" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                </div>
+                <input type="text" id="ministre-search" name="recherche" value="{{ recherche }}"
+                    class="w-full rounded-full border-0 ring-1 ring-slate-200 bg-white ps-11 pe-4 py-3.5 text-sm text-ink placeholder:text-muted focus:ring-2 focus:ring-brand/40"
+                    placeholder="Chercher un ministre" />
             </div>
 
-            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ ministre.Nom }}</h3>
-            
-            {# Affichage du Contact (optionnel, mieux caché dans la bio si disponible, mais nous le gardons) #}
-            <p class="text-sm text-gray-500 mb-4">Contact: {{ ministre.contact }}</p>
-            
-            {# Bouton CTA Sermons #}
-            <a href="{% url 'ThemeByMinister' ministre.id %}" 
-                class="inline-flex justify-center items-center py-2 px-6 text-sm font-medium text-center text-white rounded-full 
-                       bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-colors shadow-md">
-                Voir Sermons Par Thème
-            </a>
-            
-        </div>
-        
-        {% endfor %}
-        
+            <div class="grid grid-cols-2 gap-3 lg:contents">
+                <div class="relative">
+                    <label for="filter-fonction" class="sr-only">Rôle</label>
+                    <select id="filter-fonction" name="fonction"
+                        class="w-full lg:w-56 appearance-none rounded-full border-0 ring-1 ring-slate-200 bg-white ps-4 pe-10 py-3.5 text-sm text-ink focus:ring-2 focus:ring-brand/40">
+                        <option value="">Tous les rôles</option>
+                        {% for key, label in fonctions %}
+                        <option value="{{ key }}" {% if fonction_active == key %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <svg class="pointer-events-none absolute inset-y-0 end-3.5 my-auto w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+
+                <div class="relative">
+                    <label for="filter-predications" class="sr-only">Prédications</label>
+                    <select id="filter-predications" name="predications"
+                        class="w-full lg:w-56 appearance-none rounded-full border-0 ring-1 ring-slate-200 bg-white ps-4 pe-10 py-3.5 text-sm text-ink focus:ring-2 focus:ring-brand/40">
+                        <option value="">Toutes</option>
+                        <option value="avec" {% if predications_actives == 'avec' %}selected{% endif %}>Avec prédications</option>
+                        <option value="sans" {% if predications_actives == 'sans' %}selected{% endif %}>Sans prédication</option>
+                    </select>
+                    <svg class="pointer-events-none absolute inset-y-0 end-3.5 my-auto w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="shrink-0 rounded-full bg-brand hover:bg-brand-dark text-white text-sm font-medium px-6 py-3.5 transition-colors">
+                Rechercher
+            </button>
+        </form>
     </div>
+</section>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    {% if ministres %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {% for ministre in ministres %}
+        {% with orateur=ministre.orateurs.all.0 %}
+        <article class="wmb-card overflow-hidden flex flex-col h-full text-center hover:shadow-lift transition-shadow duration-300">
+            <a href="{% if orateur %}{% url 'sermons' %}?orateur={{ orateur.id }}{% else %}{% url 'ThemeByMinister' ministre.id %}{% endif %}"
+                class="group flex flex-col flex-1 items-center p-6 sm:p-7">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 mb-4 overflow-hidden rounded-full ring-4 ring-brand-soft bg-brand-soft">
+                    {% if ministre.photo %}
+                    <img src="{{ ministre.photo.url }}" alt="Photo de {{ ministre.Nom }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-brand text-3xl font-bold">{{ ministre.Nom|slice:":1" }}</div>
+                    {% endif %}
+                </div>
+
+                <h2 class="text-lg font-bold text-ink tracking-tight h-14 line-clamp-2">{{ ministre.Nom }}</h2>
+
+                {% if ministre.fonction %}
+                <p class="text-sm font-semibold text-brand mt-1">{{ ministre.get_fonction_display }}</p>
+                {% else %}
+                <p class="text-sm font-semibold text-transparent mt-1 select-none">—</p>
+                {% endif %}
+
+                <p class="text-sm text-muted mt-1">
+                    {{ ministre.sermon_count }} prédication{{ ministre.sermon_count|pluralize }}
+                </p>
+
+                <span class="mt-auto pt-5 inline-flex justify-center items-center py-2.5 px-5 text-sm font-medium text-white rounded-full bg-brand group-hover:bg-brand-dark">
+                    Voir les prédications
+                </span>
+            </a>
+
+            {% if ministre.contact %}
+            <a href="tel:{{ ministre.contact }}" class="pb-5 text-sm text-muted hover:text-brand transition-colors">
+                {{ ministre.contact }}
+            </a>
+            {% endif %}
+        </article>
+        {% endwith %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 rounded-2xl bg-canvas">
+        <p class="text-lg font-medium text-ink">Aucun ministre trouvé.</p>
+        {% if has_filters %}
+        <a href="{% url 'ministres' %}" class="inline-block mt-3 text-sm font-semibold text-brand hover:text-brand-dark">
+            Réinitialiser les filtres
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
 </div>
+
+<script>
+document.getElementById('ministres-filter').addEventListener('submit', function() {
+    this.querySelectorAll('input[name], select[name]').forEach(function(field) {
+        if (!field.value.trim()) field.disabled = true;
+    });
+});
+</script>
 {% endblock content %}

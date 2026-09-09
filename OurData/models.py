@@ -6,6 +6,14 @@ from church.utils.audio import AudioCompressionMixin
 
 # Create your models here.
 class Ministre(models.Model):
+    FONCTION_CHOICES = [
+        ('titulaire', 'Pasteur titulaire'),
+        ('associe', 'Pasteur associé'),
+        ('evangeliste', 'Évangéliste'),
+        ('ministre', 'Ministre de la Parole'),
+        ('invite', 'Invité'),
+    ]
+
     Nom = models.CharField(max_length=100, blank=False)
     photo = ProcessedImageField(
         blank=True, upload_to='ministrespictures',
@@ -13,9 +21,12 @@ class Ministre(models.Model):
         format='WEBP', options={'quality': 82}
     )
     contact = models.CharField(max_length=25, blank=True)
+    fonction = models.CharField(max_length=20, choices=FONCTION_CHOICES, blank=True)
+    ordre = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = 'Ministre'
+        ordering = ['ordre', 'Nom']
 
     def __str__(self):
         return self.Nom

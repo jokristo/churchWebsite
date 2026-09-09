@@ -28,9 +28,9 @@ class OrateurAdmin(admin.ModelAdmin):
     list_display = [
         "Noms",
         "Provenance",
-
+        "ministre",
     ]
-
+    autocomplete_fields = ['ministre']
     search_fields = ('Noms',)
 
 @admin.register(Theme)
@@ -47,10 +47,13 @@ class ThemeAdmin(admin.ModelAdmin):
 class MinistreAdmin(admin.ModelAdmin):
     list_display = [
         "Nom",
+        "fonction",
         "contact",
+        "ordre",
     ]
-
-    search_fields=('Nom',)
+    list_editable = ["fonction", "ordre"]
+    list_filter = ("fonction",)
+    search_fields = ('Nom',)
 
 @admin.register(Officiel)
 class MinistreAdmin(admin.ModelAdmin):

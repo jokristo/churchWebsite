@@ -1,20 +1,48 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}ViewTheme{% endblock title %}
-<link rel="stylesheet" href="{% static 'css/styleend.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/bootstrap-icons/bootstrap-icons.css' %}">
-<script src="{% static 'JS/bootstrap.min.js' %}"></script>
+{% block title %}Voir Thèmes{% endblock title %}
+{% block meta_description %}Explorez les prédications du WMB Tabernacle par thème. Sermons classés par sujet pour approfondir votre foi.{% endblock meta_description %}
+
+<script src="{% static 'JS/bootstrap.min.js' %}" defer></script>
 {% block content %}
-    <div class="flex-card">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white">
+    
+    <h1 class="text-4xl font-extrabold text-center mb-10 text-indigo-700 tracking-tight">
+        Explorer par Thème
+    </h1>
+
+    {# Contenu en Grille Responsive #}
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {% for theme in themes %}
-      <div class="class="flex-initial md:flex flex-col" id="sermon_id">
-          <img class="card-img-top" src="{{ theme.image.url }}" alt="Card image">
-          <div class="">
-            <h4 class="card-title">{{ theme.NomTheme }} </h4>
-            <a href="{% url 'SermonByTheme' theme.id %}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">voir les sermons</a>
-          </div>
-      </div>
+        
+        {# Carte du Thème #}
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-4 transform hover:shadow-xl hover:scale-[1.03] transition-all duration-300 border border-gray-200 cursor-pointer">
+            
+            {# Image/Icône du Thème (Utilise l'image du thème s'il y en a une) #}
+            <div class="h-32 w-32 mx-auto mb-3 overflow-hidden rounded-full ring-4 ring-indigo-100 bg-indigo-100">
+                 {% if theme.image %}
+                 <img class="w-full h-full object-cover" src="{{ theme.image.url }}" alt="Image du thème">
+                 {% else %}
+                 <div class="w-full h-full flex items-center justify-center text-indigo-400">
+                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                 </div>
+                 {% endif %}
+            </div>
+            
+            <h4 class="text-lg font-bold text-gray-900 mb-4 line-clamp-2">{{ theme.NomTheme }}</h4>
+            
+            {# Bouton Voir les Sermons #}
+            <a href="{% url 'SermonByTheme' theme.id %}" 
+               class="inline-block w-full py-2 text-sm font-medium text-white rounded-full bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-colors">
+                Voir les sermons
+            </a>
+            
+        </div>
+        
         {% endfor %}
     </div>
+
+</div>
+
 {% endblock content %}

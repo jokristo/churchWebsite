@@ -1,30 +1,56 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}theme by minister{% endblock title %}
+{% block title %}Thèmes par Ministre{% endblock title %}
+{% block meta_description %}Prédications du WMB Tabernacle classées par ministre. Explorez les sermons par orateur.{% endblock meta_description %}
 
 {% block content %}
-<div  class="text-center sm:text-left"  style="color: rgb(96 165 250 / var(--tw-text-opacity, 1)); font-weight: 600;">
-    <h1 >Predication par theme de {{ ministre.Nom }}</h1>
-    <a href="{% url 'ministres' %}" style="	color: rgb(2 6 23 / var(--tw-text-opacity, 1));">Retour à la liste des Ministres</a>
-</div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white">
+    
+    {# En-tête du Ministre #}
+    <div class="text-center sm:text-left mb-10 pb-4 border-b border-indigo-200">
+        <div class="flex items-center justify-center sm:justify-start mb-4">
+             {# Image du Ministre #}
+            {% if ministre.photo %}
+            <img class="w-16 h-16 object-cover rounded-full shadow-lg me-4 border-2 border-indigo-400" src="{{ ministre.photo.url }}" alt="{{ ministre.Nom }}">
+            {% else %}
+            <div class="w-16 h-16 rounded-full shadow-lg me-4 border-2 border-indigo-400 bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xl">{{ ministre.Nom|slice:":1" }}</div>
+            {% endif %}
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
+                Prédications par Thème de <span class="text-indigo-700">{{ ministre.Nom }}</span>
+            </h1>
+        </div>
+        
+        {# Lien de retour #}
+        <a href="{% url 'ministres' %}" class="inline-flex items-center text-gray-700 hover:text-gray-900 font-medium transition-colors group">
+            <svg class="w-4 h-4 me-1.5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            Retour à la liste des Ministres
+        </a>
+    </div>
 
-<ul>
+    {# Liste des Thèmes en Grille #}
     {% if themes %}
-    <div class="flex-card">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {% for theme in themes %}
-      <div class="class="flex-initial md:flex flex-col" id="sermon_id">
-          <img class="card-img-top" src="{{ ministre.photo.url }}" alt="Card image">
-          <div class="">
-            <a href="{% url 'SermonByTheme' theme.id %}"  style="color: rgb(96 165 250 / var(--tw-text-opacity, 1)); font-weight: 600;">{{ theme.NomTheme }}</a>
-          </div>
-      </div>
+        
+        {# Carte du Thème (Même style que ViewTheme.html) #}
+        <a href="{% url 'SermonByTheme' theme.id %}" class="bg-white rounded-xl shadow-lg overflow-hidden text-center p-4 transform hover:shadow-xl hover:scale-[1.03] transition-all duration-300 border border-gray-200 block">
+            
+            <div class="h-32 w-32 mx-auto mb-3 overflow-hidden rounded-full ring-4 ring-indigo-100 bg-indigo-100">
+                 {% if ministre.photo %}
+                 <img class="w-full h-full object-cover" src="{{ ministre.photo.url }}" alt="{{ ministre.Nom }}">
+                 {% else %}
+                 <div class="w-full h-full flex items-center justify-center text-indigo-400 text-4xl font-bold">{{ ministre.Nom|slice:":1" }}</div>
+                 {% endif %}
+            </div>
+            
+            <h4 class="text-lg font-bold text-gray-900 line-clamp-2">{{ theme.NomTheme }}</h4>
+        </a>
+        
         {% endfor %}
     </div>
     {% else %}
-        <p>Aucun thème trouvé.</p>
+        <p class="text-center text-lg text-gray-600 mt-8">Aucun thème trouvé pour ce ministre.</p>
     {% endif %}
-</ul>
 
-
-
+</div>
 {% endblock content %}

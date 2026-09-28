@@ -3,12 +3,9 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<link rel="stylesheet" href="{% static 'css/bootstrap-icons/bootstrap-icons.css' %}">
-	<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/stylesecondaire.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+
 	<script src="{% static 'JS/bootstrap.min.js' %}"></script>
-	<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
 	<title>Accueil</title>
 	<style>
 		.adresse{
@@ -56,18 +53,18 @@
 			</div>-->
 			<nav id="nav" class="navbar navbar-expand-lg navbar-light  fond2" style="position: absolute;">
 				<div class="container-fluid">
-				  <a class="navbar-brand" href="#"><div><img class="logo" src="{% static 'css/logo24.png' %}" alt="logo"></div></a>
+				  <a class="navbar-brand" href="{% url 'home' %}"><div><img class="logo" src="{% static 'logo24.png' %}" alt="logo"></div></a>
 				  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				  </button>
 				  <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
 					<div class="navbar-nav">
-					  <a id="lien" class="nav-link lien" aria-current="page" href=" / ">Accueil</a>
-					  <a id="lien" class="nav-link lien" href="/sermons/" target ="_blank">Sermons</a>
-					  <a id="lien" class="nav-link lien" href="event">Evenement</a>
-					  <a id="lien" class="nav-link lien" href="/ministre/">Ministres</a>
-					  <a id="lien" class="nav-link lien" href="/offi/">Officiels</a>
-					  <a id="lien" class="nav-link lien" href="/temoignage/">Temoignages</a>
+					  <a id="lien" class="nav-link lien" aria-current="page" href="{% url 'home' %}">Accueil</a>
+					  <a id="lien" class="nav-link lien" href="{% url 'sermons' %}">Sermons</a>
+					  <a id="lien" class="nav-link lien" href="{% url 'blog' %}">Blog</a>
+					  <a id="lien" class="nav-link lien" href="{% url 'ministres' %}">Ministres</a>
+					  <a id="lien" class="nav-link lien" href="{% url 'categorieOfficiel' %}">Officiels</a>
+					  <a id="lien" class="nav-link lien" href="{% url 'temoignages' %}">Temoignages</a>
 					</div>
 				  </div>
 				</div>
@@ -143,7 +140,7 @@
 				<div class="voir2">
 
 					<!--le bouton cliquez ici-->
-					<div class="voir"><a class="cli" href="#">VOIR BIOGRAPHIE</a></div>
+					<div class="voir"><a class="cli" href="{% url 'biographie_pasteur' %}">VOIR BIOGRAPHIE</a></div>
 
 				</div>
 
@@ -151,17 +148,16 @@
 	<footer style="background-color: #232F3E; padding: 20px; text-align: center;">
 		<div class="logo" style="margin-left: 50%;">
             <!-- Remplacez "votre-logo.png" par le chemin de votre logo -->
-            <img src="{% static 'css/logo24.png' %}" alt="Logo" style="width: 60px; height: auto; margin-bottom: 20px; ">
+            <img src="{% static 'logo24.png' %}" alt="Logo" style="width: 60px; height: auto; margin-bottom: 20px; ">
         </div>
 
         <div class="footer-text" style="color:#EDEDED; display: flex; justify-content: space-around; flex-wrap: wrap; font-family: poppins; ">
-            <div ><a id="footlien" href=" / ">Accueil</a></div>
-            <div><a id="footlien" href="/sermons/">sermons</a></div>
-            <div><a id="footlien" href="/ministre/">Ministres</a></div>
-			<div><a id="footlien" href="/offi/">Officiels</a></div>
-			<div><a id="footlien" href="login/">Chantres</a></div>
-			<div><a id="footlien" href="/temoignage/">temoignages</a></div>
-			<div><a id="footlien" href="login/">Portail</a></div>
+            <div><a id="footlien" href="{% url 'home' %}">Accueil</a></div>
+            <div><a id="footlien" href="{% url 'sermons' %}">Sermons</a></div>
+            <div><a id="footlien" href="{% url 'ministres' %}">Ministres</a></div>
+			<div><a id="footlien" href="{% url 'categorieOfficiel' %}">Officiels</a></div>
+			<div><a id="footlien" href="{% url 'chantre' %}">Chantres</a></div>
+			<div><a id="footlien" href="{% url 'temoignages' %}">Témoignages</a></div>
         </div>
 		<br>
 		<div class="adresse">
@@ -174,7 +170,7 @@
         <div class="social-icons">
             <!-- Ajoutez vos liens de réseaux sociaux -->
             <a href="https://web.facebook.com/wmbtabdemontngafula" target="_blank"><i class="bi bi-facebook" style="width: 30px; color: #EDEDED;",></i></a>
-            <a href="#" target="_blank"><i class="bi bi-whatsapp" style="width: 30px; color: #EDEDED;"></i></a>
+            <a href="https://wa.me/243999956607" target="_blank"><i class="bi bi-whatsapp" style="width: 30px; color: #EDEDED;"></i></a>
             <a href="https://www.youtube.com/@pasteurrbob" target="_blank"><i class="bi bi-youtube" style="width: 30px; color: #EDEDED;"></i></a>
         </div>
 

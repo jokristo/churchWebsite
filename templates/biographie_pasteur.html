@@ -1,0 +1,64 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Biographie - Pasteur Bob Munanga{% endblock title %}
+{% block meta_description %}Biographie du Pasteur Bob Munanga Matekya, pasteur titulaire du WMB Tabernacle de Mont-Ngafula. Parcours, vision et ministère depuis 1986.{% endblock meta_description %}
+
+{% block content %}
+<section class="py-16 bg-white min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="md:flex md:items-start md:space-x-8 mb-10">
+            <div class="flex-shrink-0 mb-6 md:mb-0">
+                <img class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover shadow-2xl border-4 border-indigo-600" 
+                     src="{% static 'pastb.JPG' %}" alt="Pasteur Bob Munanga">
+            </div>
+            <div class="flex-grow text-center md:text-left">
+                <h1 class="text-4xl font-extrabold text-gray-900 mb-2">Pasteur BOB MUNANGA MATEKYA</h1>
+                <p class="text-xl font-semibold text-indigo-600 mb-4">Pasteur Titulaire de l'Église William Marrion Branham Tabernacle</p>
+                
+                <div class="flex justify-center md:justify-start space-x-4">
+                    <a href="https://www.youtube.com/@pasteurrbob" target="_blank" class="text-gray-500 hover:text-red-600 transition-colors flex items-center gap-1">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                        Chaîne YouTube
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-8 text-gray-700 leading-relaxed text-lg text-justify">
+            
+            <div>
+                <h2 class="text-2xl font-bold text-indigo-700 border-b pb-2 mb-4">Son Parcours Ministériel</h2>
+                <p class="mb-4">
+                    La marche du Pasteur Bob avec le Seigneur remonte à <strong>1986</strong>. Alors étudiant à l'ITC Kisantu (Collège Saint-Pierre), il reçoit la révélation de Jésus-Christ et vit l'expérience du baptême du Saint-Esprit. Animé par un zèle ardent pour l'Évangile, il co-fonde très tôt le groupe d'évangélisation <em>"Discovery of Jesus"</em> pour partager la foi avec ses camarades.
+                </p>
+                <p>
+                    Son ministère pastoral débute véritablement en <strong>1993</strong> avec la direction du "Mousoso Tabernacle", né de sa fidélité au Message du temps de la fin. Son parcours est marqué par une mission de 5 ans au <strong>Nigéria (1993-1998)</strong>, où il a servi et approfondi sa doctrine. De retour en RDC en 1998, il rejoint l'assemblée Agneau Tabernacle avant d'être officiellement consacré et voté Pasteur en 1999.
+                </p>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold text-indigo-700 border-b pb-2 mb-4">Sa Vision et Sa Foi</h2>
+                <p>
+                    Sa vision est ancrée dans une conviction profonde : <em>"L'Esprit conduit dans toute la Vérité"</em>. Pour le Pasteur Bob, le Saint-Esprit n'est pas une théorie, mais une personne vivante qui amène le croyant à la révélation de la Parole faite chair.
+                </p>
+                <p class="mt-2">
+                    Il prêche un message de restauration, insistant sur le fait que Dieu est le même hier, aujourd'hui et éternellement. 
+                </p>
+            </div>
+            
+            <div>
+                <h2 class="text-2xl font-bold text-indigo-700 border-b pb-2 mb-4">Vie Personnelle et Famille</h2>
+                <p>
+                    Le Pasteur Bob est marié à sa fidèle compagne, <strong>Maman Sandra Nzalanzia</strong>, depuis l'an 2000. De cette union bénie sont nés cinq enfants. 
+                </p>
+                <p class="mt-2">
+                    Pour lui, la famille est le premier ministère. Il enseigne avec sagesse que l'harmonie du foyer repose sur le pardon et l'amour inconditionnel. Comme il aime à le dire : <em>"L'amour couvre un grand nombre de fautes. Quand on aime réellement, on regarde au-dessus des erreurs et on pardonne."</em>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock content %}

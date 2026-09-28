@@ -1,0 +1,74 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Blog — WMB Tabernacle{% endblock title %}
+{% block meta_description %}Actualités, enseignements et annonces du WMB Tabernacle de Mont-Ngafula. Restez connectés à la vie de notre église.{% endblock meta_description %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+
+    <header class="mb-10">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
+            Actualités &amp; articles
+        </h1>
+        <span class="block w-16 h-1 bg-brand mt-3 rounded-full"></span>
+        <p class="mt-3 text-muted text-base max-w-2xl">
+            Annonces, réflexions spirituelles et événements de l'église.
+        </p>
+    </header>
+
+    {% if categories %}
+    <div class="flex gap-2 overflow-x-auto pb-4 mb-10 scrollbar-hide">
+        <a href="{% url 'blog' %}"
+            class="shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors
+            {% if not categorie_active %}bg-brand text-white{% else %}bg-white text-ink ring-1 ring-slate-200 hover:ring-brand/40{% endif %}">
+            Tout voir
+        </a>
+        {% for cat in categories %}
+        <a href="{% url 'blog' %}?categorie={{ cat.slug }}"
+            class="shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors
+            {% if categorie_active.slug == cat.slug %}bg-brand text-white{% else %}bg-white text-ink ring-1 ring-slate-200 hover:ring-brand/40{% endif %}">
+            {{ cat.nom }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if articles_vedette %}
+    <section class="mb-14">
+        <h2 class="text-xl font-bold text-ink mb-6">En vedette</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+            {% for article in articles_vedette %}
+            {% include 'blog/partials/article_card.html' with article=article badge="En vedette" %}
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if articles %}
+    <section>
+        {% if articles_vedette %}
+        <h2 class="text-xl font-bold text-ink mb-6">Tous les articles</h2>
+        {% endif %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {% for article in articles %}
+            {% include 'blog/partials/article_card.html' with article=article %}
+            {% endfor %}
+        </div>
+    </section>
+    {% elif not articles_vedette %}
+    <div class="text-center py-24 text-muted">
+        <p class="text-lg font-medium text-ink">Aucun article pour le moment.</p>
+        <p class="text-sm mt-1">Revenez bientôt !</p>
+    </div>
+    {% endif %}
+
+</div>
+
+{% include 'blog/partials/blog_likes_script.html' %}
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+{% endblock content %}

@@ -1,0 +1,49 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Connaissons-nous — La famille WMB Tab{% endblock title %}
+{% block meta_description %}Découvrez les membres du WMB Tabernacle de Mont-Ngafula. Parcours et témoignages des frères et sœurs de notre assemblée.{% endblock meta_description %}
+
+{% block content %}
+<section class="bg-gray-50 py-16 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">La Famille WMB Tab de Mont-Ngafula</h1>
+        <p class="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+            Chaque semaine, découvrez le parcours et le cœur d'un frère ou d'une sœur de notre assemblée.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+            {% for croyant in croyants %}
+            <div
+                class="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+
+                <div class="relative w-32 h-32 mx-auto mb-4">
+                    <div
+                        class="absolute inset-0 rounded-full border-2 border-dashed border-indigo-300 group-hover:animate-spin-slow">
+                    </div>
+
+                    {% if croyant.photo_profil %}
+                    <img src="{{ croyant.photo_profil.url }}" class="w-full h-full rounded-full object-cover"
+                        alt="{{ croyant.nom }}">
+                    {% else %}
+                    <div class="w-full h-full rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-3xl font-bold">{{ croyant.nom|slice:":1" }}</div>
+                    {% endif %}
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ croyant.nom }}</h3>
+                <p class="text-xs text-indigo-500 font-semibold uppercase tracking-wide mb-4">
+                    Membre depuis {{ croyant.date_conversion|slice:"-4:" }} </p>
+
+                <a href="{% url 'connaissons_nous_detail' croyant.id %}"
+                    class="inline-block w-full py-2 px-4 bg-gray-50 hover:bg-indigo-600 text-gray-700 hover:text-white rounded-lg transition-colors font-medium text-sm">
+                    Consulter le profil
+                </a>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+{% endblock content %}

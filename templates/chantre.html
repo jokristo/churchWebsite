@@ -1,22 +1,54 @@
 {% extends "_base.html" %}
 {% load static %}
 {% block title %}Chantres{% endblock title %}
+{% block meta_description %}Découvrez le corps des chantres du WMB Tabernacle de Mont-Ngafula. Louange et adoration à Kinshasa.{% endblock meta_description %}
 
 {% block content %}
-<div class="row">
-{% for chantre in chantres %}
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row-min">
-    <div class="col-md-4">
-      <img src="{{chantre.photo.url}}" class="img" alt="...">
-    </div>
-    <div class="card-body">
-      <h5 class="card-title"> {{ chantre.Nom }} </h5>
-      <p class="card-text">contact : {{ chantre.Phone_number }}</p>
-    </div>
-  </div>
-</div>
-{% endfor %}
-</div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
+    
+    <h1 class="text-4xl font-extrabold text-center mb-12 text-gray-800 tracking-tight relative" data-aos="fade-down">
+        Notre Corps des Chantres
+        <span class="block w-20 h-1 bg-indigo-600 mx-auto mt-2 rounded-full"></span>
+    </h1>
 
+    {# Contenu en Grille Responsive #}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        
+        {% for chantre in chantres %}
+        
+        {# Définit le délai en utilisant forloop.counter0 pour un index 0, 1, 2, ... #}
+        {# Pour simuler la multiplication par 100 sans filtre 'mul' : #}
+        {% with delay=forloop.counter0|stringformat:"00" %}
+        
+        {# Carte du Chantre #}
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden text-center p-6 
+                    transform hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 border border-gray-200" 
+             data-aos="fade-up" data-aos-delay="{{ delay }}">
+            
+            {# Photo du Chantre - Design Circulaire #}
+            <div class="w-40 h-40 mx-auto mb-4 overflow-hidden rounded-full ring-4 ring-indigo-200 hover:ring-indigo-600 transition-colors duration-300 bg-indigo-100">
+                {% if chantre.photo %}
+                <img src="{{ chantre.photo.url }}" alt="Photo de {{ chantre.Nom }}" class="w-full h-full object-cover">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center text-indigo-600 text-4xl font-bold">{{ chantre.Nom|slice:":1" }}</div>
+                {% endif %}
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ chantre.Nom }}</h3>
+            
+            {# Contact #}
+            <p class="text-sm text-gray-500 mb-4 flex items-center justify-center">
+                <svg class="w-4 h-4 inline me-1.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                {{ chantre.Phone_number }}
+            </p>
+            
+        </div>
+        
+        {# Fin de la variable de délai #}
+        {% endwith %}
+        
+        {% endfor %}
+        
+    </div>
+</div>
 {% endblock content %}

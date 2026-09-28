@@ -1,43 +1,218 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}sermons{% endblock title %}
+{% block title %}Sermons{% endblock title %}
+{% block meta_description %}Écoutez et téléchargez les prédications du William Marrion Branham Tabernacle de Mont-Ngafula. Bibliothèque de sermons par thème et par orateur.{% endblock meta_description %}
 
-<link rel="stylesheet" href="{% static 'css/styleend.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/bootstrap-icons/bootstrap-icons.css' %}">
-<script src="{% static 'JS/bootstrap.min.js' %}"></script>
 {% block content %}
-<!--search bar-->
-<form class="flex items-center max-w-sm mx-auto">
-    <label for="simple-search" class="sr-only">Search</label>
-    <div class="relative w-full">
-        <input type="text" id="simple-search"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="chercher une Predication" name="recherche" required />
-    </div>
-    <button type="submit"
-        class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-        </svg>
-        <span class="sr-only">Search</span>
-    </button>
-</form>
-<a class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" href="{% url 'ViewTheme' %}" style="padding-top: -40px;">Voir Par Thème</a>
+<section class="bg-brand-soft/70 border-b border-indigo-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
-<!--content -->
-<div class="flex-card">
-      {% for sermon in dba %}
-    <div class="class="flex-initial md:flex flex-col" id="sermon_id">
-        <img class="card-img-top" src="{{ sermon.image.url }}" alt="Card image">
-        <div class="">
-          <h4 class="card-title">{{ sermon.orateur }} </h4>
-          <p class="card-text">Prechée le {{ sermon.date }} </p>
-          <p class="card-text"><audio src="{{ sermon.audio.url }}" controls style="width: 200px;"></audio></p>
-          <a href="{{ sermon.audio.url }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Cliquer ici pour telecharger l'audio</a>
-        </div>
+        <header class="mb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
+                    Bibliothèque de prédications
+                </h1>
+                <span class="block w-16 h-1 bg-brand mt-2 rounded-full"></span>
+                <p class="mt-2 text-muted text-sm sm:text-base">
+                    Écoutez et téléchargez les sermons de l'église.
+                </p>
+            </div>
+            <p class="text-sm text-muted shrink-0">
+                <span class="font-semibold text-ink">{{ sermon_count }}</span>
+                prédication{{ sermon_count|pluralize }}
+                {% if has_filters %}
+                · <a href="{% url 'sermons' %}" class="font-semibold text-brand hover:text-brand-dark">Réinitialiser</a>
+                {% endif %}
+            </p>
+        </header>
+
+        <form id="sermons-filter" method="GET" class="flex flex-col lg:flex-row gap-3">
+            <label for="simple-search" class="sr-only">Rechercher une prédication</label>
+            <div class="relative flex-1 min-w-0">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
+                    <svg class="w-4 h-4 text-muted" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                </div>
+                <input type="text" id="simple-search" name="recherche" value="{{ recherche }}"
+                    class="w-full rounded-full border-0 ring-1 ring-slate-200 bg-white ps-11 pe-4 py-3.5 text-sm text-ink placeholder:text-muted focus:ring-2 focus:ring-brand/40"
+                    placeholder="Chercher une prédication" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 lg:contents">
+                <div class="relative">
+                    <label for="filter-theme" class="sr-only">Thème</label>
+                    <select id="filter-theme" name="theme"
+                        class="w-full lg:w-52 appearance-none rounded-full border-0 ring-1 ring-slate-200 bg-white ps-4 pe-10 py-3.5 text-sm text-ink focus:ring-2 focus:ring-brand/40">
+                        <option value="">Tous les thèmes</option>
+                        {% for theme in themes %}
+                        <option value="{{ theme.id }}" {% if theme_actif == theme.id|stringformat:'s' %}selected{% endif %}>
+                            {{ theme.NomTheme }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <svg class="pointer-events-none absolute inset-y-0 end-3.5 my-auto w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+
+                <div class="relative">
+                    <label for="filter-orateur" class="sr-only">Orateur</label>
+                    <select id="filter-orateur" name="orateur"
+                        class="w-full lg:w-64 appearance-none rounded-full border-0 ring-1 ring-slate-200 bg-white ps-4 pe-10 py-3.5 text-sm text-ink focus:ring-2 focus:ring-brand/40">
+                        <option value="">Tous les orateurs</option>
+                        {% for orateur in orateurs %}
+                        <option value="{{ orateur.id }}" {% if orateur_actif == orateur.id|stringformat:'s' %}selected{% endif %}>
+                            {{ orateur.Noms }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <svg class="pointer-events-none absolute inset-y-0 end-3.5 my-auto w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="shrink-0 rounded-full bg-brand hover:bg-brand-dark text-white text-sm font-medium px-6 py-3.5 transition-colors">
+                Rechercher
+            </button>
+        </form>
     </div>
-      {% endfor %}
+</section>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    {% if dba %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {% for sermon in dba %}
+        <article class="wmb-card overflow-hidden flex flex-col h-full hover:shadow-lift transition-shadow duration-300">
+
+            <div class="aspect-[16/9] bg-brand-soft overflow-hidden">
+                {% if sermon.image %}
+                <img class="w-full h-full object-cover" src="{{ sermon.image.url }}" alt="{{ sermon.titre }}">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center text-brand/40">
+                    <svg class="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                    </svg>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="p-5 sm:p-6 flex flex-col flex-1 min-w-0">
+                <div class="mb-4">
+                    {% if sermon.Theme %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wide bg-brand-soft text-brand mb-2">
+                        {{ sermon.Theme.NomTheme }}
+                    </span>
+                    {% endif %}
+                    <h3 class="text-lg font-bold text-ink leading-snug line-clamp-2">{{ sermon.titre }}</h3>
+                    {% if sermon.orateur %}
+                    <p class="mt-1 text-sm font-semibold text-brand">{{ sermon.orateur }}</p>
+                    {% endif %}
+                    {% if sermon.date %}
+                    <p class="mt-1 text-xs text-muted">{{ sermon.date|date:"d F Y" }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="mt-auto space-y-3">
+                    {% if sermon.audio %}
+                    <div class="rounded-xl bg-canvas p-2">
+                        <audio src="{{ sermon.audio.url }}" controls class="w-full h-10"></audio>
+                    </div>
+                    <a href="{{ sermon.audio.url }}" download
+                       class="download-btn inline-flex justify-center items-center w-full py-2 px-4 text-sm font-medium rounded-full border border-brand text-brand hover:bg-brand-soft transition-colors">
+                        <svg class="download-spinner w-4 h-4 mr-2 hidden animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                        <span class="download-label">Télécharger l'audio</span>
+                    </a>
+                    {% else %}
+                    <p class="text-sm text-muted italic">Pas d'audio disponible</p>
+                    {% endif %}
+
+                    {% with page_url=request.build_absolute_uri %}
+                    <div class="flex items-center gap-2 pt-3 border-t border-slate-100">
+                        <span class="text-xs text-muted font-medium shrink-0">Partager</span>
+                        <a href="https://wa.me/?text={{ sermon.titre|urlencode }}%20{{ page_url|urlencode }}"
+                           target="_blank" rel="noopener"
+                           class="flex items-center justify-center w-8 h-8 rounded-full ring-1 ring-slate-200 text-ink hover:ring-brand/40 hover:text-brand transition-colors"
+                           title="WhatsApp">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.865 9.865 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ page_url|urlencode }}"
+                           target="_blank" rel="noopener"
+                           class="flex items-center justify-center w-8 h-8 rounded-full ring-1 ring-slate-200 text-ink hover:ring-brand/40 hover:text-brand transition-colors"
+                           title="Facebook">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?text={{ sermon.titre|urlencode }}&url={{ page_url|urlencode }}"
+                           target="_blank" rel="noopener"
+                           class="flex items-center justify-center w-8 h-8 rounded-full ring-1 ring-slate-200 text-ink hover:ring-brand/40 hover:text-brand transition-colors"
+                           title="X (Twitter)">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <button type="button" onclick="copySermonLink('{{ page_url }}', {{ forloop.counter }})"
+                           class="flex items-center justify-center w-8 h-8 rounded-full ring-1 ring-slate-200 text-ink hover:ring-brand/40 hover:text-brand transition-colors"
+                           title="Copier le lien">
+                            <svg id="sermon-copy-{{ forloop.counter }}" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-20 rounded-2xl bg-canvas">
+        <p class="text-lg font-medium text-ink">Aucune prédication trouvée.</p>
+        {% if has_filters %}
+        <a href="{% url 'sermons' %}" class="inline-block mt-3 text-sm font-semibold text-brand hover:text-brand-dark">
+            Réinitialiser les filtres
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
 </div>
+
+<script>
+document.getElementById('sermons-filter').addEventListener('submit', function() {
+    this.querySelectorAll('input[name], select[name]').forEach(function(field) {
+        if (!field.value.trim()) field.disabled = true;
+    });
+});
+
+function copySermonLink(url, n) {
+    navigator.clipboard.writeText(url).then(function() {
+        const icon = document.getElementById('sermon-copy-' + n);
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+        setTimeout(() => {
+            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3"/>';
+        }, 2000);
+    });
+}
+
+document.querySelectorAll('.download-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        if (btn.classList.contains('downloading')) {
+            e.preventDefault();
+            return;
+        }
+        btn.classList.add('downloading', 'pointer-events-none', 'opacity-60');
+        btn.querySelector('.download-spinner').classList.remove('hidden');
+        btn.querySelector('.download-label').textContent = 'Téléchargement...';
+        setTimeout(function() {
+            btn.classList.remove('downloading', 'pointer-events-none', 'opacity-60');
+            btn.querySelector('.download-spinner').classList.add('hidden');
+            btn.querySelector('.download-label').textContent = "Télécharger l'audio";
+        }, 5000);
+    });
+});
+</script>
 {% endblock content %}

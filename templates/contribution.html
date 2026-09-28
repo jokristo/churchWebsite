@@ -1,0 +1,121 @@
+
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Soutenir l'Œuvre  W.M.B. Tabernacle de mont-ngafula{% endblock title %}
+{% block meta_description %}Soutenez l'œuvre du WMB Tabernacle de Mont-Ngafula. Dons, dîmes et contributions pour la mission de l'église à Kinshasa.{% endblock meta_description %}
+
+{% block content %}
+<script src="https://www.paypal.com/sdk/js?client-id=BAAUsEOO7dBHMUFNH5kJlMac_zeQW3R3hqPHBSjwl0_y4M9GNq2Qno47FUlFJLoKyUu5e2pbxXhvS4y-So&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
+
+<section class="bg-indigo-900 py-16 text-center text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20 bg-[url('{% static 'church.jpg' %}')] bg-cover bg-center"></div>
+    <div class="relative z-10 max-w-4xl mx-auto px-4">
+        <h1 class="text-4xl font-extrabold mb-4">Soutenir l'Œuvre de Dieu</h1>
+        <p class="text-xl text-indigo-100 italic">"Apportez à la maison du trésor toutes les dîmes..." — Malachie 3:10</p>
+    </div>
+</section>
+
+<section class="py-12 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            
+            <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center flex flex-col justify-between">
+                <div>
+                    <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">📖</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Dîmes</h3>
+                    <p class="text-gray-500 mb-8">Pour soutenir le fonctionnement spirituel et matériel de l'église.</p>
+                </div>
+                 <div id="paypal-container-RKE794N822TH4"></div>
+                
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center flex flex-col justify-between transform md:scale-105 ring-4 ring-indigo-500/10">
+                <div>
+                    <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">❤️</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Offrandes</h3>
+                    <p class="text-gray-500 mb-8">Un don volontaire pour exprimer votre reconnaissance au Seigneur.</p>
+                </div>
+                <div id="paypal-container-9LMD5ZTE4YY7Q"></div>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center flex flex-col justify-between">
+                <div>
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🏗️</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Construction</h3>
+                    <p class="text-gray-500 mb-8">Pour les travaux de construction du temple du seigneur.</p>
+                </div>
+                <div id="paypal-container-A7UTUV2VDWN64"></div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    📱 Mobile Money (RDC)
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-4 bg-orange-50 rounded-xl border border-orange-200">
+                        <span class="font-bold text-orange-700">Orange Money</span>
+                        <span class="font-mono text-lg">+243 89 77 79 439</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-red-50 rounded-xl border border-red-200">
+                        <span class="font-bold text-red-700">Airtel Money</span>
+                        <span class="font-mono text-lg">+243 99 99 56 607</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-blue-50 rounded-xl border border-blue-200">
+                        <span class="font-bold text-blue-700">M-Pesa</span>
+                        <span class="font-mono text-lg">+243 82 23 81 056</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-indigo-900 p-8 rounded-3xl shadow-xl text-white">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    Dernières Contributions
+                </h3>
+                <div class="overflow-hidden">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-indigo-300 uppercase text-xs border-b border-indigo-800">
+                            <tr>
+                                <th class="pb-3">Donateur</th>
+                                <th class="pb-3 text-right">Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-indigo-800">
+                            {% for don in dons %}
+                            <tr>
+                                <td class="py-4 font-medium">{{ don.nom_donateur|default:"Anonyme" }}</td>
+                                <td class="py-4 text-right font-bold text-green-400">{{ don.montant }} $</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="py-8 text-center text-indigo-300 italic">Aucune contribution pour le moment.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-6 text-xs text-indigo-300 italic text-center">
+                    Que Dieu vous bénisse pour votre générosité.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    if (typeof paypal !== 'undefined') {
+        // Bouton Dîmes
+        paypal.HostedButtons({ hostedButtonId: "RKE794N822TH4" }).render("#paypal-container-RKE794N822TH4");
+        // Bouton Offrandes
+        paypal.HostedButtons({ hostedButtonId: "A7UTUV2VDWN64" }).render("#paypal-container-A7UTUV2VDWN64");
+        // Bouton Soutien
+        paypal.HostedButtons({ hostedButtonId: "9LMD5ZTE4YY7Q" }).render("#paypal-container-9LMD5ZTE4YY7Q");
+    }
+</script>
+{% endblock content %}

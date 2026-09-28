@@ -33,22 +33,31 @@ module.exports = {
         /* JS 1: Ignore any JavaScript in node_modules folder. */
         // '!../../**/node_modules',
         /* JS 2: Process all JavaScript files in the project. */
-         //'../../**/*.js',
+        // '../../**/*.js',
 
         /**
          * Python: If you use Tailwind CSS classes in Python, uncomment the following line
          * and make sure the pattern below matches your project structure.
          */
-         '../../**/*.py',
-
-         "./templates/**/*.html",
-         "./static/**/*.css",
-         "./**/views.py",
-         "./**/forms.py",
-
+        '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                ink: '#1e1b4b',
+                muted: '#64748b',
+                canvas: '#f8fafc',
+                brand: {
+                    DEFAULT: '#4f46e5',
+                    dark: '#3730a3',
+                    soft: '#eef2ff',
+                },
+            },
+            boxShadow: {
+                card: '0 8px 30px rgba(30, 27, 75, 0.06)',
+                lift: '0 16px 40px rgba(30, 27, 75, 0.09)',
+            },
+        },
     },
     plugins: [
         /**
@@ -58,11 +67,7 @@ module.exports = {
          */
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
+        require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
     ],
-    safelist: [
-        'justify-evenly',
-        'w-[200px]',
-        'h-[200px]'
-    ]
 }

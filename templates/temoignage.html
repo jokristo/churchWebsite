@@ -1,86 +1,177 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}Temoignages{% endblock title %}
+
+{% block title %}Témoignages{% endblock title %}
+{% block meta_description %}Partagez et découvrez les témoignages de foi des croyants du William Marrion Branham Tabernacle de Mont-Ngafula. Votre histoire inspire notre foi commune.{% endblock meta_description %}
+
 {% block content %}
-<style>
-form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-input, textarea{
-    display: block;
-    padding: .75rem;
-    font-size: 1rem;
-    border: 1px solid #ced4da;
-    min-width: 600px;
-    font-family: poppins;
-}
-label {
-    display: inline-block;
-    box-sizing: border-box;
-    margin: 1rem 0;
-}
-.titretemoin{
-display: flex;
-justify-content: space-between;
-text-decoration: none;
-color: #838CFC;
-}
-#bot{
-    background-color: #838CFC;
-    color: #ffffff;
-}
-.titretemoin>a{
-    text-decoration: none;
-    font-family: poppins;
-}
-#tem{
-    color: white;
-}
-#id_Audio{
-    padding-bottom: 20px;
-}
+<section class="bg-gray-50 min-h-[80vh] flex items-center justify-center relative overflow-hidden">
+    
+    <div class="absolute top-0 left-0 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
 
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10" data-aos="fade-up">
+        
+        <span class="text-indigo-600 font-semibold tracking-wide uppercase text-sm">Témoignages</span>
+        
+        <h1 class="mt-4 text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
+            Votre histoire inspire<br>
+            <span class="text-indigo-600">notre foi commune.</span>
+        </h1>
+        
+        <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Les témoignages sont les pierres vivantes de notre église. Partagez ce que Dieu a fait pour vous afin d'encourager, de fortifier et d'édifier le corps du Christ.
+        </p>
 
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button id="openModalBtn" type="button" 
+                class="inline-flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-full text-lg px-8 py-4 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                Partager mon témoignage
+            </button>
 
-@media(max-width:600px){
-    input, textarea{
-    display: block;
-    padding: .200rem;
-    font-size: 0.8rem;
-    border: 1px solid #ced4da;
-    min-width: 200px;
-    font-family: poppins;
-}
-.titretemoin{
-display: flex;
-justify-content: space-between;
-text-decoration: none;
-color: #838CFC;
-font-size: small;
-}
-.titretemoin a{
-    text-align: center;
-    color: white;
-    font-family: poppins;
-    font-size: small;
-}
+            <a href="{% url 'temoignagecontent' %}" 
+               class="inline-flex items-center justify-center text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-lg px-8 py-4 shadow-sm hover:shadow-md transition-all duration-300 w-full sm:w-auto">
+                Lire les témoignages
+            </a>
+        </div>
+    </div>
+</section>
 
+<div id="testimonyModal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" id="modalBackdrop"></div>
 
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-gray-100 scale-95 opacity-0 transition-all duration-300" id="modalPanel">
+                
+                <div class="bg-indigo-50 px-4 py-4 sm:px-6 flex justify-between items-center border-b border-indigo-100">
+                    <h3 class="text-xl font-bold leading-6 text-indigo-900" id="modal-title">Nouveau Témoignage</h3>
+                    <button type="button" id="closeModalBtn" class="text-indigo-400 hover:text-indigo-600 transition-colors focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
-}
+                <div class="px-4 py-6 sm:p-8 max-h-[70vh] overflow-y-auto">
+                    <form method="POST" enctype="multipart/form-data" class="space-y-6" id="temoignageForm">
+                        {% csrf_token %}
+                        
+                        {# Boucle sur les champs pour l'affichage #}
+                        {% for field in form %}
+                        <div class="flex flex-col space-y-2">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-900">
+                                {{ field.label }} {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                            </label>
+                            
+                            <div class="relative">
+                                {{ field }}
+                            </div>
+                            
+                            {% if field.errors %}
+                                <p class="text-red-600 text-xs mt-1">{{ field.errors.0 }}</p>
+                            {% endif %}
+                            
+                            {% if field.help_text %}
+                                <p class="text-gray-400 text-xs">{{ field.help_text }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
 
-</style>
-<div class="titretemoin">
-    <button type="button" class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Placer un Temoignage</button>
-    <a href="/temoignagecontent/" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Voir tous les Temoignages</a>
+                        <div class="mt-8 sm:flex sm:flex-row-reverse">
+                            <button type="submit" class="inline-flex w-full justify-center rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto transition-colors">
+                                Publier maintenant
+                            </button>
+                            <button type="button" id="cancelModalBtn" class="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors">
+                                Annuler
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ formute.as_p }}
-        <input type="submit" value="Enregistrer" id="buton" class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-    </form>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- 1. Gestion du Modal ---
+        const modal = document.getElementById('testimonyModal');
+        const modalPanel = document.getElementById('modalPanel');
+        const openBtn = document.getElementById('openModalBtn');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelModalBtn');
+        const backdrop = document.getElementById('modalBackdrop');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            // Petit délai pour permettre à la classe hidden de s'enlever avant l'animation
+            setTimeout(() => {
+                modalPanel.classList.remove('scale-95', 'opacity-0');
+                modalPanel.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalPanel.classList.remove('scale-100', 'opacity-100');
+            modalPanel.classList.add('scale-95', 'opacity-0');
+            
+            // Attendre la fin de l'animation CSS (300ms) avant de cacher
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Événements
+        if(openBtn) openBtn.addEventListener('click', openModal);
+        if(closeBtn) closeBtn.addEventListener('click', closeModal);
+        if(cancelBtn) cancelBtn.addEventListener('click', closeModal);
+        if(backdrop) backdrop.addEventListener('click', closeModal); // Fermer en cliquant à l'extérieur
+
+        // --- 2. Application du style Tailwind aux inputs Django ---
+        const form = document.getElementById('temoignageForm');
+        const inputs = form.querySelectorAll('input:not([type="hidden"]):not([type="submit"]), textarea, select');
+
+        const baseClasses = [
+            'bg-gray-50', 'border', 'border-gray-300', 'text-gray-900', 'text-sm', 
+            'rounded-lg', 'focus:ring-indigo-500', 'focus:border-indigo-500', 
+            'block', 'w-full', 'p-3', 'transition-colors', 'duration-200'
+        ];
+
+        const fileClasses = [
+            'block', 'w-full', 'text-sm', 'text-gray-900', 'border', 'border-gray-300', 
+            'rounded-lg', 'cursor-pointer', 'bg-gray-50', 'focus:outline-none',
+            'file:mr-4', 'file:py-2', 'file:px-4', 'file:rounded-l-lg', 'file:border-0',
+            'file:text-sm', 'file:font-semibold', 'file:bg-indigo-600', 'file:text-white',
+            'hover:file:bg-indigo-700', 'file:cursor-pointer'
+        ];
+
+        inputs.forEach(input => {
+            if (input.type === 'file') {
+                input.classList.add(...fileClasses);
+            } else {
+                input.classList.add(...baseClasses);
+            }
+        });
+    });
+</script>
+
+<style>
+    @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob {
+        animation: blob 7s infinite;
+    }
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+</style>
 
 {% endblock content %}

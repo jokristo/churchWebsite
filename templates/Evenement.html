@@ -1,16 +1,28 @@
 {% extends "_base.html" %}
 {% load static %}
-{% block title %}evenements{% endblock title %}
+{% block title %}Événements{% endblock title %}
+{% block meta_description %}Événements et activités du WMB Tabernacle de Mont-Ngafula. Retrouvez les cultes, conférences et rendez-vous de l'église.{% endblock meta_description %}
+
 {% block content %}
 <div class="row">
       {% for event in events %}
     <div class="card" style="width:300px">
+        {% if event.VisuelEvenement %}
         <img class="card-img-top" src="{{ event.VisuelEvenement.url }}" alt="Card image">
+        {% else %}
+        <div class="card-img-top bg-gray-200 d-flex align-items-center justify-content-center" style="height: 200px;">
+            <span class="text-muted">Aucune image</span>
+        </div>
+        {% endif %}
         <div class="card-body">
           <h4 class="card-title">{{ event.NomEvenement }} </h4>
           <p class="card-text">{{ event.Date }} </p>
+          {% if event.VideoEvenement %}
           <p class="card-text"><video src="{{ event.VideoEvenement.url }}" controls style="width: 200px;"></video></p>
           <a href="{{ event.VideoEvenement.url }}" class="btn btn-primary" style="font-family: poppins;">Cliquer ici pour telecharger la video de l'evenement</a>
+          {% else %}
+          <p class="card-text text-muted small">Pas de vidéo disponible</p>
+          {% endif %}
         </div>
       </div>
       {% endfor %}

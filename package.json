@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "tailwindcss": "^3.4.4"
   },
   "dependencies": {
@@ -8,6 +9,7 @@
     "postcss": "^8.4.38"
   },
   "scripts": {
-    "build:css": "tailwindcss build -i static/src/input.css -o static/css/output.css --watch"
+    "build:css": "tailwindcss -i church/static/src/input.css -o church/static/css/output.css --minify",
+    "watch:css": "tailwindcss -i church/static/src/input.css -o church/static/css/output.css --watch"
   }
 }

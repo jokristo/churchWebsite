@@ -17,12 +17,22 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from OurData.views import ministres, temoignages, Evenement, temoin, chantre, categorieOfficiel, officiels
+from OurData.views import ministres, temoignages, temoin, chantre, categorieOfficiel, officiels, biographie_pasteur, media_presse, connaissons_nous_liste, connaissons_nous_detail, ecodim_view
+from actualites.views import blog_liste, blog_detail, toggle_like
 from chat.views import chat, send_message
+from compte import views
 from compte.views import Sign, login_user, logout_user
 from .views import index, sermons
 from sermons.views import ViewTheme, SermonByTheme, ThemeByMinister
+from contribution.views import page_contribution, enregistrer_don
 from church import settings
+from django.conf import settings
+from church.views import custom_404, custom_500, custom_403, custom_400, test_404
+
+handler404 = custom_404
+handler500 = custom_500
+handler403 = custom_403
+handler400 = custom_400
 
 # checkview, chat, room, send, getMessages,
 urlpatterns = [
@@ -32,7 +42,9 @@ urlpatterns = [
                   path('offi/<int:categorie_id>/', officiels, name="officiels"),
                   path('ministre/', ministres, name="ministres"),
                   path('temoignage/', temoignages, name="temoignages"),
-                  path('event/', Evenement, name='event'),
+                  path('blog/', blog_liste, name='blog'),
+                  path('blog/<slug:slug>/like/', toggle_like, name='blog_toggle_like'),
+                  path('blog/<slug:slug>/', blog_detail, name='blog_detail'),
                   path("temoignagecontent/", temoin, name="temoignagecontent"),
                   #voir tous le theme
                   path("ViewTheme/", ViewTheme, name="ViewTheme"),
@@ -43,6 +55,19 @@ urlpatterns = [
                   #categories des officiels
                   path("cateOffi/", categorieOfficiel, name='categorieOfficiel'),
                   #vue pour voir tous le chantres
-                  path("chantre/", chantre, name="chantre")
+                  path("chantre/", chantre, name="chantre"),
+                  #path("__reload__/", include("django_browser_reload.urls")),
+                  path('media/', media_presse, name='media_presse'),
+                  path('biographie/', biographie_pasteur, name='biographie_pasteur'),
+                  path('connaissons-nous/', connaissons_nous_liste, name='connaissons_nous_liste'),
+                  # <int:id_croyant> permet de capturer le numéro (1, 2, etc.)
+                  path('connaissons-nous/<int:id_croyant>/', connaissons_nous_detail, name='connaissons_nous_detail'),
+                  path('ecodim/', ecodim_view, name='ecodim'),
+                  path('contribution/', page_contribution, name='contribution'),
+                  # Test des pages d'erreur (visiter /erreur-404/ pour voir la page 404)
+                  path('erreur-404/', test_404),
+                  path('inscription/', Sign, name='Sign'),
+                  path('connexion/', login_user, name='login'),
+                  path('deconnexion/', logout_user, name='logout'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

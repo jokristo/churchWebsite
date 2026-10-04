@@ -1,6 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-# Register your models here.
 from compte.models import Utilisateur
 
-admin.site.register(Utilisateur)
+
+@admin.register(Utilisateur)
+class UtilisateurAdmin(UserAdmin):
+    """UserAdmin gère correctement les mots de passe (hachage, formulaire dédié)."""

@@ -1,7 +1,8 @@
 import random
 
-from django.http import Http404
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.cache import cache_control
 
 from actualites.models import Article
 from actualites.services import annotate_articles_likes
@@ -22,11 +23,6 @@ def custom_403(request, exception):
 
 def custom_400(request, exception):
     return render(request, 'errors/400.html', status=400)
-
-
-def test_404(request):
-    """Vue pour tester la page 404 (visiter /erreur-404/)"""
-    raise Http404("Page de test")
 
 
 def index(request):
@@ -56,6 +52,14 @@ def index(request):
             'article_recent': article_recent,
             'article_second': article_second,
             'second_is_vedette': second_is_vedette,
+            'chantre_photos': (
+                'chantre1.jpg',
+                'chantre2.jpg',
+                'chantre3.jpg',
+                'chantre5.jpg',
+                'chantre7.jpg',
+                'chantre12.jpg',
+            ),
         },
     )
 
@@ -96,5 +100,14 @@ def sermons(request, *args, **kwargs):
     )
 
 
-def chantre(request):
-    return render(request, 'chantre.html')
+
+@cache_control(max_age=86400)
+def robots_txt(request):
+    from church.seo import site_url
+    lignes = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "",
+        f"Sitemap: {site_url()}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lignes) + "\n", content_type="text/plain")

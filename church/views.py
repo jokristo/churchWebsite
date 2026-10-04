@@ -1,6 +1,5 @@
 import random
 
-from django.http import Http404
 from django.shortcuts import render
 
 from actualites.models import Article
@@ -22,11 +21,6 @@ def custom_403(request, exception):
 
 def custom_400(request, exception):
     return render(request, 'errors/400.html', status=400)
-
-
-def test_404(request):
-    """Vue pour tester la page 404 (visiter /erreur-404/)"""
-    raise Http404("Page de test")
 
 
 def index(request):
@@ -95,6 +89,3 @@ def sermons(request, *args, **kwargs):
         },
     )
 
-
-def chantre(request):
-    return render(request, 'chantre.html')

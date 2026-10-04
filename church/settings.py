@@ -18,8 +18,6 @@ try:
 except ImportError:
     pass  # python-dotenv non installé, on utilise os.environ uniquement
 
-#import django_heroku
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -50,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sermons',
     'OurData',
-    'chat',
+    'chat',  # à retirer après application de la migration chat 0012 en production
     'compte',
     'imagekit',
     'compressor',
@@ -60,8 +58,6 @@ INSTALLED_APPS = [
     'actualites'
 
 ]
-
-#INSTALLED_APPS += ["django_browser_reload"]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -179,7 +175,6 @@ STATICFILES_FINDERS = [
 
 # Chemin npm (local dev) - optionnel en prod
 NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
-#django_heroku.settings(locals()) 
 
 # ─── Jazzmin Admin Theme ────────────────────────────────────────────────────────
 JAZZMIN_SETTINGS = {
@@ -214,7 +209,6 @@ JAZZMIN_SETTINGS = {
         "OurData.Ministre": "fas fa-praying-hands",
         "OurData.Officiel": "fas fa-user-tie",
         "OurData.Temoignages": "fas fa-hands",
-        "OurData.Evenements": "fas fa-calendar-alt",
         "OurData.Chantre": "fas fa-music",
         "OurData.CategorieOfficiel": "fas fa-layer-group",
         "OurData.Croyant": "fas fa-church",

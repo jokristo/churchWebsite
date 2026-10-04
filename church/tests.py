@@ -75,6 +75,9 @@ class SeoTests(TestCase):
         self.assertContains(response, '"@type": "Church"')
         self.assertContains(response, 'Mont-Ngafula, Kinshasa')
         self.assertContains(response, 'Nous rendre visite')
+        self.assertContains(response, 'Dimanche</span> : à partir de 10h30')
+        self.assertContains(response, 'Mercredi</span> : à partir de 17h')
+        self.assertContains(response, '"dayOfWeek": "https://schema.org/Friday", "opens": "17:00"')
 
     def test_article_donnees_structurees(self):
         from actualites.models import Article

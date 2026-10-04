@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}WMB Tabernacle – Église William Marrion Branham à Kinshasa{% endblock title %}
-{% block meta_description %}Église du Message de William Marrion Branham à Kinshasa (Mont-Ngafula) : cultes, prédications, école du dimanche. 41, av. Les Adorateurs, réf. Triangle Campus.{% endblock meta_description %}
+{% block meta_description %}Église du Message de William Marrion Branham à Kinshasa (Mont-Ngafula). Cultes le dimanche à 10h30, mercredi et vendredi à 17h. 41, av. Les Adorateurs.{% endblock meta_description %}
 
 {% block content %}
 {# ================================================================= #}
@@ -74,7 +74,7 @@
                 {% if eglise_horaires %}
                 <ul class="text-gray-600 text-sm space-y-1">
                     {% for h in eglise_horaires %}
-                    <li>{{ h.jour }} : {{ h.debut }} – {{ h.fin }}</li>
+                    <li><span class="font-semibold text-gray-900">{{ h.jour }}</span> : {{ h.texte }}</li>
                     {% endfor %}
                 </ul>
                 {% else %}

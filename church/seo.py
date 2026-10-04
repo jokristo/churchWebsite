@@ -40,9 +40,13 @@ EGLISE = {
     # Clic droit sur le lieu dans Google Maps pour les copier. Laisser None si inconnues.
     "latitude": None,
     "longitude": None,
-    # Horaires des cultes : ("Sunday", "09:00", "12:30"). Jours en anglais (format schema.org).
-    # Exemple : [("Sunday", "09:00", "12:30"), ("Wednesday", "17:00", "19:00")]
-    "horaires": [],
+    # Horaires des cultes : (jour en anglais, heure de début, heure de fin ou None).
+    # Les jours sont en anglais car c'est le format attendu par Google (schema.org).
+    "horaires": [
+        ("Wednesday", "17:00", None),
+        ("Friday", "17:00", None),
+        ("Sunday", "10:30", None),
+    ],
     "reseaux": [
         "https://web.facebook.com/wmbtabdemontngafula/",
         "https://www.youtube.com/@pasteurrbob",
@@ -103,15 +107,17 @@ def eglise_schema():
             "longitude": EGLISE["longitude"],
         }
     if EGLISE["horaires"]:
-        data["openingHoursSpecification"] = [
-            {
+        specs = []
+        for jour, debut, fin in EGLISE["horaires"]:
+            spec = {
                 "@type": "OpeningHoursSpecification",
                 "dayOfWeek": f"https://schema.org/{jour}",
                 "opens": debut,
-                "closes": fin,
             }
-            for jour, debut, fin in EGLISE["horaires"]
-        ]
+            if fin:
+                spec["closes"] = fin
+            specs.append(spec)
+        data["openingHoursSpecification"] = specs
     site = {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -124,11 +130,21 @@ def eglise_schema():
     return [data, site]
 
 
+def _heure_fr(heure):
+    """'17:00' -> '17h', '10:30' -> '10h30'."""
+    h, m = heure.split(":")
+    return f"{int(h)}h" if m == "00" else f"{int(h)}h{m}"
+
+
 def horaires_lisibles():
-    return [
-        {"jour": JOURS_FR.get(jour, jour), "debut": debut, "fin": fin}
-        for jour, debut, fin in EGLISE["horaires"]
-    ]
+    lignes = []
+    for jour, debut, fin in EGLISE["horaires"]:
+        if fin:
+            texte = f"de {_heure_fr(debut)} à {_heure_fr(fin)}"
+        else:
+            texte = f"à partir de {_heure_fr(debut)}"
+        lignes.append({"jour": JOURS_FR.get(jour, jour), "texte": texte})
+    return lignes
 
 
 def seo(request):

@@ -105,7 +105,7 @@
         {% if messages %}
         <div class="mb-6 space-y-2">
             {% for message in messages %}
-            <p class="text-sm px-4 py-3 rounded-xl {% if message.tags == 'success' %}bg-green-50 text-green-800 ring-1 ring-green-100{% else %}bg-slate-50 text-ink{% endif %}">
+            <p class="text-sm px-4 py-3 rounded-xl {% if message.tags == 'success' %}bg-green-50 text-green-800 ring-1 ring-green-100{% elif message.tags == 'error' %}bg-red-50 text-red-800 ring-1 ring-red-100{% else %}bg-slate-50 text-ink{% endif %}">
                 {{ message }}
             </p>
             {% endfor %}
@@ -115,6 +115,11 @@
         <form method="post" action="{% url 'blog_detail' article.slug %}" class="mb-10 p-6 rounded-2xl wmb-card">
             {% csrf_token %}
             <input type="hidden" name="commentaire" value="1">
+            {# Champ piège anti-spam : caché aux humains, ne pas supprimer #}
+            <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+                <label for="id_site_web">Ne pas remplir ce champ</label>
+                {{ comment_form.site_web }}
+            </div>
             <p class="text-sm font-semibold text-ink mb-4">Laisser un commentaire</p>
 
             {% if not user.is_authenticated %}
@@ -137,8 +142,10 @@
                 {% if comment_form.contenu.errors %}<p class="text-xs text-red-600 mt-1">{{ comment_form.contenu.errors.0 }}</p>{% endif %}
             </div>
 
+            <p class="text-xs text-muted mb-4">Les commentaires sont relus par l'équipe avant publication.</p>
+
             <button type="submit" class="wmb-btn-primary">
-                Publier
+                Envoyer
             </button>
         </form>
 

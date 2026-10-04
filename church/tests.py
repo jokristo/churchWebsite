@@ -48,3 +48,53 @@ class AdminTests(TestCase):
         ]:
             with self.subTest(url=url):
                 self.assertEqual(self.client.get(reverse(url)).status_code, 200)
+
+
+class SeoTests(TestCase):
+    def test_robots_txt(self):
+        response = self.client.get('/robots.txt')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Sitemap: https://www.wmbranhamtabernacle.org/sitemap.xml')
+        self.assertContains(response, 'Disallow: /admin/')
+
+    def test_sitemap(self):
+        from actualites.models import Article
+        Article.objects.create(titre="Culte de Pâques", slug="culte-de-paques", resume="r", contenu="c", est_publie=True)
+        Article.objects.create(titre="Brouillon", slug="brouillon", resume="r", contenu="c", est_publie=False)
+        response = self.client.get('/sitemap.xml')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<loc>https://www.wmbranhamtabernacle.org/</loc>')
+        self.assertContains(response, 'https://www.wmbranhamtabernacle.org/blog/culte-de-paques/')
+        self.assertNotContains(response, 'brouillon')
+        self.assertNotContains(response, 'connaissons-nous')
+
+    def test_accueil_seo(self):
+        response = self.client.get('/')
+        self.assertContains(response, '<title>WMB Tabernacle – Église William Marrion Branham à Kinshasa</title>')
+        self.assertContains(response, '<link rel="canonical" href="https://www.wmbranhamtabernacle.org/">')
+        self.assertContains(response, '"@type": "Church"')
+        self.assertContains(response, 'Mont-Ngafula, Kinshasa')
+        self.assertContains(response, 'Nous rendre visite')
+
+    def test_article_donnees_structurees(self):
+        from actualites.models import Article
+        Article.objects.create(titre="Culte de Pâques", slug="culte-de-paques", resume="Résumé", contenu="c", est_publie=True)
+        response = self.client.get('/blog/culte-de-paques/')
+        self.assertContains(response, '"@type": "BlogPosting"')
+        self.assertContains(response, '<meta property="og:type" content="article">')
+
+    def test_redirection_domaine_sans_www(self):
+        response = self.client.get('/sermons/?theme=2', HTTP_HOST='wmbranhamtabernacle.org')
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response['Location'], 'https://www.wmbranhamtabernacle.org/sermons/?theme=2')
+
+    def test_onrender_non_indexe(self):
+        response = self.client.get('/', HTTP_HOST='wmbtab.onrender.com')
+        self.assertEqual(response['X-Robots-Tag'], 'noindex, nofollow')
+
+    def test_profil_fidele_non_indexe(self):
+        from OurData.models import Croyant
+        fidele = Croyant.objects.create(nom="Test", photo_profil="x.webp", adresse="a",
+                                        etat_civil="e", ambitions="a", pourquoi_wmb="p")
+        response = self.client.get(f'/connaissons-nous/{fidele.pk}/')
+        self.assertContains(response, 'content="noindex, follow"')

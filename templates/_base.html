@@ -8,8 +8,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}WMB Tab{% endblock title %}</title>
+    <title>{% block title %}WMB Tabernacle – Église William Marrion Branham à Kinshasa{% endblock title %}</title>
     <meta name="description" content="{% block meta_description %}William Marrion Branham Tabernacle de Mont-Ngafula — Église, prédications, témoignages, événements et vie communautaire à Kinshasa.{% endblock meta_description %}">
+    <meta name="robots" content="{% block robots %}index, follow, max-image-preview:large{% endblock robots %}">
+    <link rel="canonical" href="{% block canonical %}{{ canonical_url }}{% endblock canonical %}">
+
+    {# Aperçus de partage (Facebook, WhatsApp, LinkedIn…) #}
+    <meta property="og:site_name" content="WMB Tabernacle de Mont-Ngafula">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:type" content="{% block og_type %}website{% endblock og_type %}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:title" content="{% block og_title %}William Marrion Branham Tabernacle de Mont-Ngafula – Kinshasa{% endblock og_title %}">
+    <meta property="og:description" content="{% block og_description %}{{ eglise.description }}{% endblock og_description %}">
+    <meta property="og:image" content="{% block og_image %}{{ og_image_defaut }}{% endblock og_image %}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    {# Données structurées lues par Google et son IA : qui nous sommes, où, comment nous joindre #}
+    <script type="application/ld+json">{{ eglise_jsonld }}</script>
+    {% block extra_jsonld %}{% endblock extra_jsonld %}
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">

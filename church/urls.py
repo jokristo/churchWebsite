@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path
 from OurData.views import ministres, temoignages, temoin, chantre, categorieOfficiel, officiels, biographie_pasteur, media_presse, connaissons_nous_liste, connaissons_nous_detail, ecodim_view
 from actualites.views import blog_liste, blog_detail, toggle_like
@@ -23,7 +24,8 @@ from .views import index, sermons
 from sermons.views import ViewTheme, SermonByTheme, ThemeByMinister
 from contribution.views import page_contribution
 from django.conf import settings
-from church.views import custom_404, custom_500, custom_403, custom_400
+from church.views import custom_404, custom_500, custom_403, custom_400, robots_txt
+from church.sitemaps import SITEMAPS
 
 handler404 = custom_404
 handler500 = custom_500
@@ -32,6 +34,8 @@ handler400 = custom_400
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
+                  path('robots.txt', robots_txt, name='robots_txt'),
+                  path('sitemap.xml', sitemap, {'sitemaps': SITEMAPS}, name='django.contrib.sitemaps.views.sitemap'),
                   path('', index, name="home"),
                   path('sermons/', sermons, name="sermons"),
                   path('offi/<int:categorie_id>/', officiels, name="officiels"),

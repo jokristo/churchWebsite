@@ -34,7 +34,10 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 
-ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", '.onrender.com','wmbtab.onrender.com', 'www.wmbranhamtabernacle.org']
+ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", 'localhost', '.onrender.com', 'www.wmbranhamtabernacle.org', 'wmbranhamtabernacle.org']
+
+# Adresse officielle du site (utilisée pour les liens canoniques, le sitemap et les données Google)
+SITE_URL = os.environ.get('SITE_URL', 'https://www.wmbranhamtabernacle.org')
 
 # Application definition
 
@@ -46,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'sermons',
     'OurData',
     'chat',  # à retirer après application de la migration chat 0012 en production
@@ -61,6 +65,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'church.middleware.DomaineCanoniqueMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,6 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'church.seo.seo',
             ],
         },
     },

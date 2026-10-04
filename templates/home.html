@@ -1,8 +1,8 @@
 {% extends "_base.html" %}
 {% load static %}
 
-{% block title %}Accueil{% endblock title %}
-{% block meta_description %}William Marrion Branham Tabernacle de Mont-Ngafula — Accueil. Jésus-Christ est le même hier, aujourd'hui et éternellement. Découvrez notre église, nos pasteurs et notre communauté à Kinshasa.{% endblock meta_description %}
+{% block title %}WMB Tabernacle – Église William Marrion Branham à Kinshasa{% endblock title %}
+{% block meta_description %}Église du Message de William Marrion Branham à Kinshasa (Mont-Ngafula) : cultes, prédications, école du dimanche. 41, av. Les Adorateurs, réf. Triangle Campus.{% endblock meta_description %}
 
 {% block content %}
 {# ================================================================= #}
@@ -15,10 +15,15 @@
 
     <div class="relative px-4 mx-auto max-w-screen-xl text-center z-10 py-10">
 
-        <h1
+        {# Le H1 porte le nom de l'église et le lieu : c'est ce que Google lit en premier. #}
+        <h1 class="mb-4 text-sm sm:text-base font-semibold uppercase tracking-widest text-indigo-200">
+            William Marrion Branham Tabernacle · Mont-Ngafula, Kinshasa
+        </h1>
+
+        <p
             class="mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight text-white">
             Jésus-Christ est le même Hier, Aujourd'hui et Éternellement
-        </h1>
+        </p>
 
         <p class="mb-10 text-base sm:text-lg text-white/85 lg:text-xl sm:px-16 lg:px-40 font-light">
             Dieu vous appelle à faire partie de cette œuvre glorieuse.
@@ -42,6 +47,47 @@
             <a href="{% url 'contribution' %}" class="wmb-btn-ghost">
                 Contribuer à l'œuvre
             </a>
+        </div>
+    </div>
+</section>
+
+{# ================================================================= #}
+{# 1b. NOUS RENDRE VISITE — infos clés pour les visiteurs, Google et son IA #}
+<section class="bg-white py-12 px-4" aria-labelledby="titre-visite">
+    <div class="max-w-5xl mx-auto">
+        <h2 id="titre-visite" class="text-2xl font-bold text-gray-900 mb-2 text-center">Nous rendre visite</h2>
+        <p class="text-gray-600 text-center mb-10 leading-relaxed">
+            {{ eglise.nom }} est une église chrétienne de Kinshasa attachée au Message
+            de William Marrion Branham. Vous êtes les bienvenus.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="wmb-card p-6 rounded-2xl">
+                <h3 class="font-semibold text-gray-900 mb-2">Adresse</h3>
+                <address class="text-gray-600 text-sm leading-relaxed" style="font-style: normal;">
+                    {{ eglise.adresse.rue }}<br>
+                    {{ eglise.adresse.commune }}, {{ eglise.adresse.ville }} (RD Congo)<br>
+                    Réf. : {{ eglise.adresse.repere }}
+                </address>
+            </div>
+            <div class="wmb-card p-6 rounded-2xl">
+                <h3 class="font-semibold text-gray-900 mb-2">Horaires des cultes</h3>
+                {% if eglise_horaires %}
+                <ul class="text-gray-600 text-sm space-y-1">
+                    {% for h in eglise_horaires %}
+                    <li>{{ h.jour }} : {{ h.debut }} – {{ h.fin }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-gray-600 text-sm leading-relaxed">Contactez-nous pour connaître les horaires des cultes.</p>
+                {% endif %}
+            </div>
+            <div class="wmb-card p-6 rounded-2xl">
+                <h3 class="font-semibold text-gray-900 mb-2">Contact</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Téléphone : <a href="tel:{{ eglise.telephone }}" class="hover:text-indigo-600">+243 999 956 607</a><br>
+                    <a href="{{ eglise.whatsapp }}" class="hover:text-indigo-600 underline">Écrire sur WhatsApp</a>
+                </p>
+            </div>
         </div>
     </div>
 </section>

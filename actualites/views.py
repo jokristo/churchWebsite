@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
+from church.seo import article_schema
+
 from .forms import CommentaireForm
 from .models import Article, Categorie, Commentaire
 from .services import annotate_articles_likes, get_ip_hash, toggle_article_like
@@ -95,6 +97,7 @@ def blog_detail(request, slug):
         'articles_recents': articles_recents,
         'commentaires': commentaires,
         'comment_form': comment_form,
+        'article_jsonld': article_schema(article),
     })
 
 

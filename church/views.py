@@ -1,6 +1,8 @@
 import random
 
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.cache import cache_control
 
 from actualites.models import Article
 from actualites.services import annotate_articles_likes
@@ -89,3 +91,15 @@ def sermons(request, *args, **kwargs):
         },
     )
 
+
+
+@cache_control(max_age=86400)
+def robots_txt(request):
+    from church.seo import site_url
+    lignes = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "",
+        f"Sitemap: {site_url()}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lignes) + "\n", content_type="text/plain")

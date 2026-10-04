@@ -1,8 +1,13 @@
 {% extends "_base.html" %}
 {% load static %}
 
-{% block title %}{{ article.titre }} — WMB Tabernacle{% endblock title %}
+{% block title %}{{ article.titre }} – WMB Tabernacle Kinshasa{% endblock title %}
 {% block meta_description %}{{ article.resume|truncatechars:160 }}{% endblock meta_description %}
+{% block og_type %}article{% endblock og_type %}
+{% block og_title %}{{ article.titre }}{% endblock og_title %}
+{% block og_description %}{{ article.resume|truncatechars:200 }}{% endblock og_description %}
+{% block og_image %}{% if article.image_couverture %}{{ site_url }}{{ article.image_couverture.url }}{% else %}{{ og_image_defaut }}{% endif %}{% endblock og_image %}
+{% block extra_jsonld %}<script type="application/ld+json">{{ article_jsonld }}</script>{% endblock extra_jsonld %}
 
 {% block content %}
 <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">

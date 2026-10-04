@@ -5,43 +5,38 @@
 {% block meta_description %}Église du Message de William Marrion Branham à Kinshasa (Mont-Ngafula). Cultes le dimanche à 10h30, mercredi et vendredi à 17h. 41, av. Les Adorateurs.{% endblock meta_description %}
 
 {% block content %}
-{# ================================================================= #}
-{# 1. HERO BANNER #}
 <section
-    class="relative min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center bg-cover bg-center bg-fixed transition-all duration-1000"
-    id="banner-hero">
+    id="banner-hero"
+    class="relative min-h-[70vh] flex items-center justify-center bg-cover bg-center"
+    style="background-image: url('{% static 'church3m.png' %}');">
 
-    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div class="absolute inset-0 bg-black/50"></div>
 
-    <div class="relative px-4 mx-auto max-w-screen-xl text-center z-10 py-10">
-
-        {# Le H1 porte le nom de l'église et le lieu : c'est ce que Google lit en premier. #}
-        <h1 class="mb-4 text-sm sm:text-base font-semibold uppercase tracking-widest text-indigo-200">
-            William Marrion Branham Tabernacle · Mont-Ngafula, Kinshasa
-        </h1>
-
-        <p
-            class="mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight text-white">
-            Jésus-Christ est le même Hier, Aujourd'hui et Éternellement
+    <div class="relative px-4 mx-auto max-w-4xl text-center z-10 py-16 sm:py-20">
+        <p class="mb-4 text-sm font-semibold uppercase tracking-widest text-indigo-200">
+            Mont-Ngafula · Kinshasa
         </p>
 
-        <p class="mb-10 text-base sm:text-lg text-white/85 lg:text-xl sm:px-16 lg:px-40 font-light">
-            Dieu vous appelle à faire partie de cette œuvre glorieuse.
+        <h1 class="mb-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
+            William Marrion Branham Tabernacle
+        </h1>
+
+        <p class="mb-4 text-lg sm:text-xl md:text-2xl text-white/90 font-medium leading-snug">
+            Jésus-Christ est le même hier, aujourd'hui et éternellement
+        </p>
+
+        <p class="mb-8 text-sm sm:text-base text-white/80">
+            Dimanche 10h30 · {{ eglise.adresse.rue }}
         </p>
 
         <div class="flex flex-wrap justify-center gap-3">
-            <a href="https://www.youtube.com/@pasteurrbob" target="_blank" rel="noopener" class="wmb-btn-primary">
-                Suivez-nous sur YouTube
-                <svg class="w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M1 5h12m0 0L9 1m4 4L9 9" />
-                </svg>
+            <a href="#visite" class="wmb-btn-primary">
+                Venir au culte
             </a>
-            <a href="{% url 'biographie_pasteur' %}" class="wmb-btn-ghost">
-                Biographie Pasteur
+            <a href="https://www.youtube.com/@pasteurrbob" target="_blank" rel="noopener" class="wmb-btn-ghost">
+                YouTube
             </a>
-            <a href="https://wa.me/243897779439" class="wmb-btn-ghost">
+            <a href="{{ eglise.whatsapp }}" class="wmb-btn-ghost">
                 Communiquer avec le pasteur
             </a>
             <a href="{% url 'contribution' %}" class="wmb-btn-ghost">
@@ -51,59 +46,136 @@
     </div>
 </section>
 
-{# ================================================================= #}
-{# 1b. NOUS RENDRE VISITE — infos clés pour les visiteurs, Google et son IA #}
-<section class="bg-white py-12 px-4" aria-labelledby="titre-visite">
-    <div class="max-w-5xl mx-auto">
-        <h2 id="titre-visite" class="text-2xl font-bold text-gray-900 mb-2 text-center">Nous rendre visite</h2>
-        <p class="text-gray-600 text-center mb-10 leading-relaxed">
+<section id="visite" class="scroll-mt-24 bg-white py-14 sm:py-16" aria-labelledby="titre-visite">
+    <div class="max-w-screen-xl mx-auto px-4">
+        <h2 id="titre-visite" class="wmb-section-title">
+            Nous rendre visite
+            <span class="wmb-section-rule"></span>
+        </h2>
+        <p class="text-muted text-center mt-4 mb-10 leading-relaxed max-w-2xl mx-auto">
             {{ eglise.nom }} est une église chrétienne de Kinshasa attachée au Message
             de William Marrion Branham. Vous êtes les bienvenus.
         </p>
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="wmb-card p-6 rounded-2xl">
-                <h3 class="font-semibold text-gray-900 mb-2">Adresse</h3>
-                <address class="text-gray-600 text-sm leading-relaxed" style="font-style: normal;">
+            <div class="wmb-card p-6">
+                <p class="text-xs font-semibold uppercase tracking-wide text-muted mb-2">Adresse</p>
+                <address class="text-ink text-sm leading-relaxed not-italic">
                     {{ eglise.adresse.rue }}<br>
-                    {{ eglise.adresse.commune }}, {{ eglise.adresse.ville }} (RD Congo)<br>
-                    Réf. : {{ eglise.adresse.repere }}
+                    {{ eglise.adresse.commune }}, {{ eglise.adresse.ville }}<br>
+                    <span class="text-muted">Réf. : {{ eglise.adresse.repere }}</span>
                 </address>
+                <a href="{{ eglise_maps_url }}" target="_blank" rel="noopener"
+                    class="mt-4 inline-flex items-center text-sm font-semibold text-brand hover:text-brand-dark">
+                    Voir sur Maps
+                    <span aria-hidden="true" class="ms-1">→</span>
+                </a>
             </div>
-            <div class="wmb-card p-6 rounded-2xl">
-                <h3 class="font-semibold text-gray-900 mb-2">Horaires des cultes</h3>
+
+            <div class="wmb-card p-6">
+                <p class="text-xs font-semibold uppercase tracking-wide text-muted mb-2">Horaires des cultes</p>
                 {% if eglise_horaires %}
-                <ul class="text-gray-600 text-sm space-y-1">
+                <ul class="space-y-3">
                     {% for h in eglise_horaires %}
-                    <li><span class="font-semibold text-gray-900">{{ h.jour }}</span> : {{ h.texte }}</li>
+                    {% if h.jour == 'Dimanche' %}
+                    <li>
+                        <p class="text-xs font-semibold uppercase tracking-wide text-brand">{{ h.jour }}</p>
+                        <p class="text-2xl font-extrabold text-ink tracking-tight">{{ h.heure }}</p>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% for h in eglise_horaires %}
+                    {% if h.jour != 'Dimanche' %}
+                    <li>
+                        <p class="text-xs font-semibold uppercase tracking-wide text-muted">{{ h.jour }}</p>
+                        <p class="text-sm font-semibold text-ink">{{ h.heure }}</p>
+                    </li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
                 {% else %}
-                <p class="text-gray-600 text-sm leading-relaxed">Contactez-nous pour connaître les horaires des cultes.</p>
+                <p class="text-muted text-sm leading-relaxed">Contactez-nous pour connaître les horaires des cultes.</p>
                 {% endif %}
             </div>
-            <div class="wmb-card p-6 rounded-2xl">
-                <h3 class="font-semibold text-gray-900 mb-2">Contact</h3>
-                <p class="text-gray-600 text-sm leading-relaxed">
-                    Téléphone : <a href="tel:{{ eglise.telephone }}" class="hover:text-indigo-600">+243 999 956 607</a><br>
-                    <a href="{{ eglise.whatsapp }}" class="hover:text-indigo-600 underline">Écrire sur WhatsApp</a>
+
+            <div class="wmb-card p-6 flex flex-col">
+                <p class="text-xs font-semibold uppercase tracking-wide text-muted mb-2">Contact</p>
+                <p class="text-sm text-ink mb-4">
+                    <a href="tel:{{ eglise.telephone }}" class="hover:text-brand">+243 999 956 607</a>
                 </p>
+                <a href="{{ eglise.whatsapp }}"
+                    class="mt-auto inline-flex justify-center items-center py-2.5 px-5 text-sm font-medium text-white rounded-full bg-brand hover:bg-brand-dark transition-colors">
+                    Écrire sur WhatsApp
+                </a>
             </div>
         </div>
     </div>
 </section>
 
-{# ================================================================= #}
-{# 2. ARTICLES — récent + vedette #}
+<section class="py-14 sm:py-16 bg-canvas">
+    <div class="max-w-screen-xl mx-auto px-4">
+
+        <h2 class="wmb-section-title mb-10 sm:mb-12">
+            Nos pasteurs
+            <span class="wmb-section-rule"></span>
+        </h2>
+
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-8 p-6 md:p-8 wmb-card">
+            <div class="md:w-[55%] order-2 md:order-1">
+                <h3 class="text-2xl sm:text-3xl font-bold text-ink mb-1 tracking-tight">Bob Munanga Matekya</h3>
+                <p class="text-brand font-semibold mb-3">Pasteur titulaire</p>
+                <p class="text-muted leading-relaxed max-w-2xl">
+                    Pasteur depuis 1999, au service du Seigneur depuis 1986. Après cinq ans de mission au Nigéria, il revient en RDC et enseigne que le Saint-Esprit conduit infailliblement vers le Message de l'heure.
+                </p>
+                <a href="{% url 'biographie_pasteur' %}"
+                    class="mt-4 inline-flex items-center text-brand hover:text-brand-dark font-medium transition-colors group">
+                    Lire la biographie
+                    <span class="group-hover:translate-x-1 transition-transform inline-block ms-1">→</span>
+                </a>
+            </div>
+            <div class="md:w-[45%] flex justify-center order-1 md:order-2">
+                <img src="{% static 'pastb.JPG' %}" alt="Pasteur Bob Munanga"
+                    class="w-52 h-52 sm:w-60 sm:h-60 object-cover rounded-full shadow-card ring-4 ring-brand-soft">
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 p-6 md:p-8 wmb-card">
+            <div class="md:w-[45%] flex justify-center order-1">
+                <img src="{% static 'pastl.JPG' %}" alt="Pasteur Joseph Tshole"
+                    class="w-52 h-52 sm:w-60 sm:h-60 object-cover rounded-full shadow-card ring-4 ring-brand-soft">
+            </div>
+            <div class="md:w-[55%] order-2">
+                <h3 class="text-2xl sm:text-3xl font-bold text-ink mb-1 tracking-tight">Joseph Tshole Luzolo</h3>
+                <p class="text-brand font-semibold mb-3">Pasteur associé</p>
+                <p class="text-muted leading-relaxed max-w-2xl">
+                    Il a embrassé le Message en 1989 après une quête sincère de la vérité. Prédicateur fidèle depuis plus de 20 ans, il sert aujourd'hui comme Pasteur Associé, bras droit du ministère.
+                </p>
+                <a href="{% url 'ministres' %}"
+                    class="mt-4 inline-flex items-center text-brand hover:text-brand-dark font-medium transition-colors group">
+                    Voir les ministres
+                    <span class="group-hover:translate-x-1 transition-transform inline-block ms-1">→</span>
+                </a>
+            </div>
+        </div>
+
+        <p class="text-center mt-8">
+            <a href="{% url 'ministres' %}" class="text-sm font-semibold text-brand hover:text-brand-dark">
+                Tous les ministres →
+            </a>
+        </p>
+    </div>
+</section>
+
 {% if article_recent %}
-<section class="py-16 sm:py-20 bg-canvas">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+<section class="py-14 sm:py-16 bg-white">
+    <div class="max-w-screen-xl mx-auto px-4">
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight">
-                    Articles en vedette &amp; blog
+                    Actualités
                 </h2>
                 <span class="block w-16 h-1 bg-brand mt-3 rounded-full"></span>
-                <p class="mt-3 text-muted text-base">Nos dernières actualités de l'église.</p>
+                <p class="mt-3 text-muted text-base">Les dernières nouvelles de l'église.</p>
             </div>
             <a href="{% url 'blog' %}"
                 class="shrink-0 inline-flex items-center gap-1 text-sm font-semibold text-brand hover:text-brand-dark transition-colors">
@@ -112,7 +184,7 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div class="grid grid-cols-1 {% if article_second %}md:grid-cols-2{% endif %} gap-6 lg:gap-8">
             {% include 'blog/partials/article_card.html' with article=article_recent badge="Plus récent" %}
             {% if article_second %}
             {% if second_is_vedette %}
@@ -127,78 +199,18 @@
 {% include 'blog/partials/blog_likes_script.html' %}
 {% endif %}
 
+<section class="py-14 sm:py-16 bg-canvas">
+    <div class="max-w-screen-xl mx-auto px-4">
 
-{# ================================================================= #}
-{# 3. SECTION PASTEURS - Mise à jour avec les bios réelles #}
-<section class="py-16 sm:py-20 bg-white">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-
-        <h2 class="wmb-section-title mb-12 sm:mb-16">
-            Nos Pasteurs
+        <h2 class="wmb-section-title mb-10 sm:mb-12">
+            Notre corps des chantres
             <span class="wmb-section-rule"></span>
         </h2>
 
-        <div
-            class="flex flex-col md:flex-row items-center gap-10 md:gap-14 mb-10 p-6 md:p-10 wmb-card">
-            <div class="md:w-[55%] order-2 md:order-1">
-                <h3 class="text-2xl sm:text-3xl font-bold text-ink mb-2 tracking-tight">BOB MUNANGA MATEKYA</h3>
-                <p class="text-brand font-semibold mb-4 text-lg">Pasteur Titulaire</p>
-                <p class="text-muted leading-relaxed">
-                    Au service du Seigneur depuis 1986, le Pasteur Bob a débuté son œuvre évangélique très jeune avec le groupe "Discovery of Jesus". Après une mission de 5 ans au Nigéria, il revient en RDC pour être consacré Pasteur en 1999. Homme de foi inébranlable, il enseigne que le Saint-Esprit est le guide suprême qui conduit infailliblement vers le Message de l'heure.
-                </p>
-                <a href="{% url 'biographie_pasteur' %}"
-                    class="mt-5 inline-flex items-center text-brand hover:text-brand-dark font-medium transition-colors group">
-                    Lire la biographie complète
-                    <span class="group-hover:translate-x-1 transition-transform inline-block ms-1">→</span>
-                </a>
-            </div>
-            <div class="md:w-[45%] flex justify-center order-1 md:order-2">
-                <img src="{% static 'pastb.JPG' %}" alt="Pasteur Bob Munanga"
-                    class="w-56 h-56 sm:w-64 sm:h-64 object-cover rounded-full shadow-card ring-4 ring-brand-soft">
-            </div>
-        </div>
-
-        <div
-            class="flex flex-col md:flex-row items-center gap-10 md:gap-14 p-6 md:p-10 wmb-card">
-            <div class="md:w-[45%] flex justify-center order-1">
-                <img src="{% static 'pastl.JPG' %}" alt="Pasteur Joseph Tshole"
-                    class="w-56 h-56 sm:w-64 sm:h-64 object-cover rounded-full shadow-card ring-4 ring-brand-soft">
-            </div>
-            <div class="md:w-[55%] order-2">
-                <h3 class="text-2xl sm:text-3xl font-bold text-ink mb-2 tracking-tight">JOSEPH TSHOLE LUZOLO</h3>
-                <p class="text-brand font-semibold mb-4 text-lg">Pasteur Associé</p>
-                <p class="text-muted leading-relaxed">
-                    Issu du catholicisme, le Pasteur Joseph a embrassé le Message en 1989 après une quête sincère de la vérité. Son ministère s'est confirmé de manière miraculeuse lorsqu'il fut envoyé prier pour les malades dans les hôpitaux. Prédicateur fidèle depuis plus de 20 ans, il œuvre aujourd'hui comme Pasteur Associé, bras droit dévoué du ministère.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-{# ================================================================= #}
-{# 4. CHANTRE SECTION #}
-<section class="py-16 sm:py-20 bg-canvas">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-
-        <h2 class="wmb-section-title mb-12 sm:mb-14">
-            Notre Corps des Chantres
-            <span class="wmb-section-rule"></span>
-        </h2>
-
-        <div id="chantre-scroller" class="flex gap-5 pb-4 overflow-x-auto scrollbar-hide">
-            {% for _ in "1234567890AB" %}
-            <div
-                class="chantre-tile relative flex-shrink-0 w-64 sm:w-72 h-80 sm:h-96 rounded-2xl overflow-hidden shadow-card bg-brand-soft">
-                <img src="{% static 'chantre' %}{{ forloop.counter }}.jpg" alt="Chantre {{ forloop.counter }}"
-                    class="chantre-photo w-full h-full object-cover"
-                    onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
-                <div class="hidden absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-brand-soft to-indigo-100">
-                    <svg class="w-12 h-12 text-brand/40 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                    </svg>
-                    <span class="text-sm font-medium text-muted">Chantre {{ forloop.counter }}</span>
-                </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
+            {% for photo in chantre_photos %}
+            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-card bg-brand-soft">
+                <img src="{% static photo %}" alt="Membre du corps des chantres" class="w-full h-full object-cover" loading="lazy">
             </div>
             {% endfor %}
         </div>
@@ -210,89 +222,4 @@
         </div>
     </div>
 </section>
-
-{# ================================================================= #}
-{# 5. JAVASCRIPT & CUSTOM STYLES #}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const banner = document.getElementById('banner-hero');
-        const scroller = document.getElementById('chantre-scroller');
-
-        // --- 1. Gestion de la Bannière Hero ---
-        const images = [
-            '{% static "church3m.png" %}',
-            '{% static "church2.png" %}',
-            '{% static "church.jpg" %}'
-        ];
-        let i = -1;
-
-        function changeBannerImage() {
-            i = (i + 1) % images.length;
-            banner.style.backgroundImage = `url(${images[i]})`;
-        }
-        changeBannerImage();
-        setInterval(changeBannerImage, 5000);
-
-
-        // --- 2. Gestion du Défilement Automatique ---
-        if (scroller) {
-            const scrollSpeed = 1;
-            let scrollDirection = 1;
-            let animationFrameId;
-
-            function autoScrollChantres() {
-                scroller.scrollLeft += scrollSpeed * scrollDirection;
-
-                if (scroller.scrollLeft >= (scroller.scrollWidth - scroller.clientWidth - 5)) {
-                    cancelAnimationFrame(animationFrameId);
-                    setTimeout(() => {
-                        scrollDirection = -1;
-                        autoScrollChantres();
-                    }, 2000); 
-                    return;
-
-                }
-                else if (scroller.scrollLeft <= 5) {
-                    cancelAnimationFrame(animationFrameId);
-                    setTimeout(() => {
-                        scrollDirection = 1;
-                        autoScrollChantres();
-                    }, 2000);
-                    return;
-                }
-
-                animationFrameId = requestAnimationFrame(autoScrollChantres);
-            }
-
-            if (scroller.scrollWidth > scroller.clientWidth) {
-                autoScrollChantres();
-            }
-
-            scroller.addEventListener('mouseover', () => {
-                cancelAnimationFrame(animationFrameId);
-            });
-
-            scroller.addEventListener('mouseout', () => {
-                if (scroller.scrollWidth > scroller.clientWidth) {
-                    animationFrameId = requestAnimationFrame(autoScrollChantres);
-                }
-            });
-        }
-    });
-</script>
-
-<style>
-    #chantre-scroller::-webkit-scrollbar {
-        display: none;
-    }
-    #chantre-scroller {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-        touch-action: pan-y;
-    }
-    #banner-hero {
-        transition: background-image 1s ease-in-out;
-    }
-</style>
-
 {% endblock content %}

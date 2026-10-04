@@ -52,6 +52,14 @@ def index(request):
             'article_recent': article_recent,
             'article_second': article_second,
             'second_is_vedette': second_is_vedette,
+            'chantre_photos': (
+                'chantre1.jpg',
+                'chantre2.jpg',
+                'chantre3.jpg',
+                'chantre5.jpg',
+                'chantre7.jpg',
+                'chantre12.jpg',
+            ),
         },
     )
 

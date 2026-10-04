@@ -10,6 +10,7 @@ Elles doivent être IDENTIQUES partout sur le web (site, fiche Google, Facebook,
 YouTube…) : nom, adresse et téléphone écrits exactement de la même façon.
 """
 import json
+from urllib.parse import quote_plus
 
 from django.conf import settings
 from django.templatetags.static import static
@@ -143,8 +144,18 @@ def horaires_lisibles():
             texte = f"de {_heure_fr(debut)} à {_heure_fr(fin)}"
         else:
             texte = f"à partir de {_heure_fr(debut)}"
-        lignes.append({"jour": JOURS_FR.get(jour, jour), "texte": texte})
+        lignes.append({
+            "jour": JOURS_FR.get(jour, jour),
+            "texte": texte,
+            "heure": _heure_fr(debut),
+        })
     return lignes
+
+
+def maps_search_url():
+    a = EGLISE["adresse"]
+    query = f"{a['rue']}, {a['commune']}, {a['ville']}"
+    return f"https://www.google.com/maps/search/?api=1&query={quote_plus(query)}"
 
 
 def seo(request):
@@ -154,6 +165,7 @@ def seo(request):
         "canonical_url": site_url() + request.path,
         "eglise": EGLISE,
         "eglise_horaires": horaires_lisibles(),
+        "eglise_maps_url": maps_search_url(),
         "eglise_jsonld": en_jsonld(eglise_schema()),
         "og_image_defaut": url_absolue(static("church3m.jpg")),
     }

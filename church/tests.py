@@ -3,7 +3,7 @@ from pathlib import Path
 
 from django.conf import settings
 from django.template.loader import get_template
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 PAGES_PUBLIQUES = [
@@ -32,6 +32,41 @@ class TemplatesTests(TestCase):
             nom = chemin.relative_to(racine).as_posix()
             with self.subTest(template=nom):
                 get_template(nom)
+
+
+class MediaTests(TestCase):
+    """Les médias doivent être servis que DEBUG soit activé ou non (voir church/urls.py).
+
+    Le document_root est capturé par django.views.static.serve au chargement
+    de l'URLconf : on écrit donc le fichier de test dans le vrai MEDIA_ROOT
+    plutôt que de surcharger le setting (sans effet sur une route déjà construite).
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.fichier = Path(settings.MEDIA_ROOT) / "test-media-chantier2.txt"
+        cls.fichier.write_text("contenu de test")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.fichier.unlink(missing_ok=True)
+        super().tearDownClass()
+
+    @override_settings(DEBUG=False)
+    def test_media_servi_sans_debug(self):
+        response = self.client.get(f'/media/{self.fichier.name}')
+        self.assertEqual(response.status_code, 200)
+
+    @override_settings(DEBUG=True)
+    def test_media_servi_avec_debug(self):
+        response = self.client.get(f'/media/{self.fichier.name}')
+        self.assertEqual(response.status_code, 200)
+
+    def test_page_media_presse_pas_ecrasee_par_le_serveur_de_fichiers(self):
+        response = self.client.get('/media/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'media_presse.html')
 
 
 class AdminTests(TestCase):

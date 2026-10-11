@@ -9,8 +9,10 @@ fi
 
 pip install -r requirements.txt
 
-# Compiler le CSS Tailwind
-npm install && npm run build:css || true
+# Compiler le CSS Tailwind (theme/static_src -> theme/static/css/dist/styles.css,
+# le seul fichier chargé par {% tailwind_css %})
+python manage.py tailwind install
+python manage.py tailwind build
 
 python manage.py collectstatic --noinput
 python manage.py migrate --noinput

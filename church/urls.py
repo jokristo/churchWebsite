@@ -14,10 +14,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
-from django.urls import path
+from django.urls import path, re_path
+from django.views.static import serve
 from OurData.views import ministres, temoignages, temoin, chantre, categorieOfficiel, officiels, biographie_pasteur, media_presse, connaissons_nous_liste, connaissons_nous_detail, ecodim_view
 from actualites.views import blog_liste, blog_detail, toggle_like
 from .views import index, sermons
@@ -62,5 +62,11 @@ urlpatterns = [
                   path('connaissons-nous/<int:id_croyant>/', connaissons_nous_detail, name='connaissons_nous_detail'),
                   path('ecodim/', ecodim_view, name='ecodim'),
                   path('contribution/', page_contribution, name='contribution'),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + [
+                  # Sert les médias (audio, images) sur le disque persistant Render,
+                  # qu'on soit en DEBUG=True ou non : django.conf.urls.static.static()
+                  # ne génère aucune route quand DEBUG=False, ce qui cassait les médias
+                  # en production dès que DEBUG passait à False.
+                  re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+              ]
 

@@ -114,6 +114,7 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 python3.11 -m venv venv && source venv/bin/activate
 grep -v '^psycopg2' requirements.txt > ../requirements-local.txt
 pip install -r ../requirements-local.txt
+cp .env.example .env  # mettre DEBUG=True dedans : le code ne met plus True par défaut (P0 sécurité)
 python manage.py migrate
 python manage.py test
 python manage.py runserver

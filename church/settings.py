@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
+DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
 
 ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", 'localhost', '.onrender.com', 'www.wmbranhamtabernacle.org', 'wmbranhamtabernacle.org']

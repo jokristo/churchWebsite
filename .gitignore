@@ -15,3 +15,7 @@ staticfiles/
 backup/
 .idea/
 .DS_Store
+
+# Médias uploadés (audio, images) : vivent sur le disque persistant Render,
+# jamais dans git (voir CLAUDE.md, "Pièges connus" #5)
+media/

@@ -1,17 +1,19 @@
 from django.contrib import admin
+from medias.admin_audio import CompressionAudioAdminMixin
 from OurData.models import ClasseEcodim, Croyant, Moniteur, Temoignages, Chantre, CategorieOfficiel, PhotoSouvenir, MembreMedia
 
 # Register your models here.
 admin.site.register(CategorieOfficiel)
 
 @admin.register(Temoignages)
-class TemoignageAdmin(admin.ModelAdmin):
+class TemoignageAdmin(CompressionAudioAdminMixin, admin.ModelAdmin):
     list_display = [
         "NomDuCroyant",
         "Description",
         "is_Approuve",
         "photo",
         "Audio",
+        "audio_etat",
     ]
     search_fields = ('NomDuCroyant',)
 

@@ -181,6 +181,11 @@ from church.stockage import config_stockage  # noqa: E402
 STORAGES = config_stockage(os.environ)
 AUTH_USER_MODEL = "compte.Utilisateur"
 
+# Compression des audios envoyés (FFmpeg en flux, en arrière-plan) : voir church/utils/audio.py.
+# AUDIO_COMPRESSION=0 sur Render la coupe sans redéployer.
+AUDIO_COMPRESSION_ACTIVE = os.environ.get('AUDIO_COMPRESSION', '1').lower() in ('1', 'true', 'yes', 'oui')
+AUDIO_DEBIT = os.environ.get('AUDIO_DEBIT', '64k')
+
 COMPRESS_ROOT = BASE_DIR / 'church/static'
 
 COMPRESS_ENABLED = True

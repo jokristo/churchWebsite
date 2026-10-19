@@ -7,9 +7,8 @@ from unittest import mock
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.base import ContentFile
-from django.core.files.storage import InMemoryStorage, storages
+from django.core.files.storage import InMemoryStorage
 from django.core.management import call_command
-from django.db.models.fields.files import FieldFile
 from django.core.management.base import CommandError
 from django.test import SimpleTestCase, TestCase, override_settings
 
@@ -23,7 +22,6 @@ ENV_R2 = {
     "AWS_S3_ENDPOINT_URL": "https://0123456789abcdef0123456789abcdef.r2.cloudflarestorage.com/",
     "AWS_S3_CUSTOM_DOMAIN": "media.wmbranhamtabernacle.org",
 }
-STOCKAGE_MEMOIRE = {"default": {"BACKEND": "django.core.files.storage.InMemoryStorage"}, "staticfiles": STATICFILES}
 
 
 def stockages_disque(dossier):
@@ -142,90 +140,6 @@ class ServirMediaTests(TestCase):
                 response = self.client.get("/media/")
                 self.assertEqual(response.status_code, 200)
                 self.assertTemplateUsed(response, "media_presse.html")
-
-
-class FauxAudioSegment:
-    """Remplace pydub : enregistre ce qu'il a reçu et produit un « MP3 » factice."""
-    recu = []
-
-    def __init__(self, channels=2):
-        self.channels = channels
-
-    @classmethod
-    def from_file(cls, flux, format):
-        cls.recu.append((flux.read(), format))
-        return cls()
-
-    def set_channels(self, n):
-        return FauxAudioSegment(n)
-
-    def export(self, sortie, format, bitrate):
-        sortie.write(b"MP3 compresse mono=%d" % (self.channels == 1))
-
-
-@override_settings(STORAGES=STOCKAGE_MEMOIRE)
-class CompressionDesactiveeTests(TestCase):
-    """Par défaut, aucun audio n'est décodé pendant la requête (risque de plantage
-    de l'instance Render de 512 Mo) : le fichier envoyé est enregistré tel quel."""
-
-    def test_audios_enregistres_tels_quels(self):
-        from sermons.models import Sermons
-        with mock.patch("pydub.AudioSegment.from_file", side_effect=AssertionError("pydub appelé")):
-            gros_mp3 = Sermons.objects.create(titre="Long", audio=ContentFile(b"ID3" + b"x" * (6 * 1024 * 1024), name="long.mp3"))
-            wav = Sermons.objects.create(titre="Wav", audio=ContentFile(b"RIFF wav", name="culte.wav"))
-        self.assertEqual(gros_mp3.audio.name, "audio/long.mp3")
-        self.assertEqual(gros_mp3.audio.size, 3 + 6 * 1024 * 1024)
-        self.assertEqual(wav.audio.name, "audio/culte.wav")
-
-
-@override_settings(STORAGES=STOCKAGE_MEMOIRE, AUDIO_COMPRESSION_ACTIVE=True)
-class MixinAudioStockageDistantTests(TestCase):
-    """Le mixin ne doit utiliser que l'API de stockage (open/save), jamais un chemin
-    local : sur R2, FieldFile.path lève NotImplementedError. On l'interdit ici aussi
-    (InMemoryStorage, lui, utilise des chemins fictifs en interne)."""
-
-    def setUp(self):
-        FauxAudioSegment.recu = []
-        for patcher in (
-            mock.patch("pydub.AudioSegment", FauxAudioSegment),
-            mock.patch.object(FieldFile, "path", new_callable=mock.PropertyMock,
-                              side_effect=NotImplementedError("pas de chemin local sur R2")),
-        ):
-            patcher.start()
-            self.addCleanup(patcher.stop)
-        self.stockage = storages["default"]
-        self.assertIsInstance(self.stockage, InMemoryStorage)
-
-    def test_upload_compresse_et_enregistre_dans_le_stockage(self):
-        from sermons.models import Sermons
-        sermon = Sermons.objects.create(titre="Culte", audio=ContentFile(b"RIFF wav", name="culte.wav"))
-        self.assertEqual(FauxAudioSegment.recu, [(b"RIFF wav", "wav")])
-        self.assertEqual(sermon.audio.name, "audio/culte.mp3")
-        with self.stockage.open(sermon.audio.name) as f:
-            self.assertEqual(f.read(), b"MP3 compresse mono=1")
-
-    def test_fichier_deja_stocke_lu_par_le_stockage(self):
-        from sermons.models import Sermons
-        self.stockage.save("audio/ancien.wav", ContentFile(b"RIFF ancien"))
-        sermon = Sermons(titre="Ancien")
-        sermon.audio.name = "audio/ancien.wav"
-        with self.assertRaises(NotImplementedError):
-            sermon.audio.path
-        sermon.save()
-        self.assertEqual(FauxAudioSegment.recu, [(b"RIFF ancien", "wav")])
-        self.assertTrue(sermon.audio.name.endswith(".mp3"))
-
-    def test_petit_mp3_enregistre_tel_quel(self):
-        from sermons.models import Sermons
-        sermon = Sermons.objects.create(titre="Court", audio=ContentFile(b"ID3 court", name="court.mp3"))
-        self.assertEqual(FauxAudioSegment.recu, [])
-        with self.stockage.open(sermon.audio.name) as f:
-            self.assertEqual(f.read(), b"ID3 court")
-
-    def test_temoignage_champ_audio_majuscule(self):
-        from OurData.models import Temoignages
-        temoignage = Temoignages.objects.create(Description="d", Audio=ContentFile(b"RIFF t", name="t.wav"))
-        self.assertEqual(temoignage.Audio.name, "audio/t.mp3")
 
 
 class MigrerMediasTests(SimpleTestCase):

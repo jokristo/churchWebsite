@@ -1,4 +1,5 @@
 from django.contrib import admin
+from medias.admin_audio import CompressionAudioAdminMixin
 from sermons.models import Sermons
 from sermons.models import Orateur
 from sermons.models import Theme
@@ -9,13 +10,14 @@ from OurData.models import Officiel
 
 # Register your models here.
 @admin.register(Sermons)
-class SermonAdmin(admin.ModelAdmin):
+class SermonAdmin(CompressionAudioAdminMixin, admin.ModelAdmin):
     list_display = [
         "titre",
         "orateur",
         "date",
         "lien",
         "audio",
+        "audio_etat",
         "Theme"
     ]
     list_filter = ('Theme',)

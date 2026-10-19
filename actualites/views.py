@@ -1,11 +1,21 @@
 from django.contrib import messages
+from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
+from church.seo import article_schema
+
 from .forms import CommentaireForm
 from .models import Article, Categorie, Commentaire
-from .services import annotate_articles_likes, toggle_article_like
+from .services import annotate_articles_likes, get_ip_hash, toggle_article_like
+
+# Délai minimum (en secondes) entre deux commentaires depuis la même adresse IP.
+DELAI_ENTRE_COMMENTAIRES = 60
+MESSAGE_EN_ATTENTE = (
+    "Merci ! Votre commentaire a bien été reçu. "
+    "Il sera visible après validation par l'équipe."
+)
 
 
 def blog_liste(request):
@@ -53,12 +63,33 @@ def blog_detail(request, slug):
     if request.method == 'POST' and 'commentaire' in request.POST:
         comment_form = CommentaireForm(request.POST, user=request.user)
         if comment_form.is_valid():
+            # Robot détecté : on fait semblant d'accepter, sans rien enregistrer.
+            if comment_form.est_spam():
+                messages.success(request, MESSAGE_EN_ATTENTE)
+                return redirect('blog_detail', slug=slug)
+
+            cle_limite = f"commentaire-ip-{get_ip_hash(request)}"
+            if cache.get(cle_limite) and not request.user.is_staff:
+                messages.error(
+                    request,
+                    "Vous venez déjà de commenter. Merci de patienter une minute avant de réessayer.",
+                )
+                return redirect('blog_detail', slug=slug)
+
             commentaire = comment_form.save(commit=False)
             commentaire.article = article
             if request.user.is_authenticated:
                 commentaire.utilisateur = request.user
+            # Les commentaires de l'équipe (staff) sont publiés directement,
+            # ceux des visiteurs attendent une validation dans l'admin.
+            commentaire.est_approuve = request.user.is_staff
             commentaire.save()
-            messages.success(request, "Votre commentaire a été publié. Merci !")
+            cache.set(cle_limite, True, DELAI_ENTRE_COMMENTAIRES)
+
+            if commentaire.est_approuve:
+                messages.success(request, "Votre commentaire a été publié. Merci !")
+            else:
+                messages.success(request, MESSAGE_EN_ATTENTE)
             return redirect('blog_detail', slug=slug)
 
     return render(request, 'blog/blog_detail.html', {
@@ -66,6 +97,7 @@ def blog_detail(request, slug):
         'articles_recents': articles_recents,
         'commentaires': commentaires,
         'comment_form': comment_form,
+        'article_jsonld': article_schema(article),
     })
 
 

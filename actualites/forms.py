@@ -4,6 +4,13 @@ from .models import Commentaire
 
 
 class CommentaireForm(forms.ModelForm):
+    # Champ piège (honeypot) : invisible pour les humains, les robots le remplissent.
+    site_web = forms.CharField(
+        required=False,
+        label="Ne pas remplir ce champ",
+        widget=forms.TextInput(attrs={'autocomplete': 'off', 'tabindex': '-1'}),
+    )
+
     class Meta:
         model = Commentaire
         fields = ['nom', 'email', 'contenu']
@@ -37,3 +44,7 @@ class CommentaireForm(forms.ModelForm):
         if not nom:
             raise forms.ValidationError("Veuillez indiquer votre nom.")
         return nom
+
+    def est_spam(self):
+        """True si le champ piège a été rempli (soumission automatisée)."""
+        return bool(self.cleaned_data.get('site_web'))

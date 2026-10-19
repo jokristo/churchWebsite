@@ -150,7 +150,7 @@ class Commentaire(models.Model):
     nom = models.CharField("Nom", max_length=100)
     email = models.EmailField("E-mail", blank=True)
     contenu = models.TextField("Commentaire", max_length=2000)
-    est_approuve = models.BooleanField("Approuvé", default=True)
+    est_approuve = models.BooleanField("Approuvé", default=False)
     date_creation = models.DateTimeField(auto_now_add=True)
 
     class Meta:

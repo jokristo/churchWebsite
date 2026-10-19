@@ -1,8 +1,10 @@
 {% extends "_base.html" %}
 {% load static %}
 
-{% block title %}Profil — Connaissons-nous{% endblock title %}
+{% block title %}{{ fidele.nom }} – Connaissons-nous – WMB Tabernacle Kinshasa{% endblock title %}
 {% block meta_description %}Profil d'un membre du WMB Tabernacle de Mont-Ngafula. Découvrez le parcours et le témoignage de nos frères et sœurs.{% endblock meta_description %}
+{# Profil personnel d'un fidèle : visible sur le site mais pas indexé dans Google #}
+{% block robots %}noindex, follow{% endblock robots %}
 
 {% block content %}
 <section class="bg-white py-12 px-4 sm:px-6 lg:px-8">

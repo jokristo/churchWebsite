@@ -1,5 +1,1 @@
-from django.contrib import admin
-
-# Register your models here.
-
-#Room
+from django.contrib import admin  # noqa: F401

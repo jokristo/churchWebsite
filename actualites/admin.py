@@ -41,8 +41,27 @@ class ArticleLikeAdmin(admin.ModelAdmin):
 
 @admin.register(Commentaire)
 class CommentaireAdmin(admin.ModelAdmin):
-    list_display = ['article', 'nom', 'est_approuve', 'date_creation']
-    list_filter = ('est_approuve', 'date_creation')
+    list_display = ['apercu', 'nom', 'article', 'est_approuve', 'date_creation']
+    list_display_links = ['apercu']
+    list_filter = ('est_approuve', 'date_creation', 'article')
     list_editable = ['est_approuve']
-    search_fields = ('nom', 'contenu', 'article__titre')
+    search_fields = ('nom', 'email', 'contenu', 'article__titre')
     readonly_fields = ('date_creation',)
+    # Les commentaires en attente apparaissent en premier.
+    ordering = ('est_approuve', '-date_creation')
+    actions = ['approuver', 'desapprouver']
+
+    @admin.display(description="Commentaire")
+    def apercu(self, obj):
+        texte = obj.contenu or ''
+        return texte[:80] + ('…' if len(texte) > 80 else '')
+
+    @admin.action(description="Approuver les commentaires sélectionnés")
+    def approuver(self, request, queryset):
+        n = queryset.update(est_approuve=True)
+        self.message_user(request, f"{n} commentaire(s) approuvé(s).")
+
+    @admin.action(description="Masquer les commentaires sélectionnés")
+    def desapprouver(self, request, queryset):
+        n = queryset.update(est_approuve=False)
+        self.message_user(request, f"{n} commentaire(s) masqué(s).")

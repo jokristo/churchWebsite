@@ -1,7 +1,6 @@
 from django.db.models import Count, Prefetch
-from django.shortcuts import render, get_object_or_404, redirect, Http404
+from django.shortcuts import render, get_object_or_404, redirect
 # Create your views here.
-# from OurData.forms import TemoignageForm
 from OurData.forms import TemoignageForm
 from OurData.models import Ministre, Temoignages, Chantre, CategorieOfficiel, Officiel, Croyant, ClasseEcodim, Moniteur, MembreMedia
 from sermons.models import Orateur
@@ -78,7 +77,7 @@ def temoignages(request):
     return render(request, "temoignage.html", {"form": formtemoin})
 
 def temoin(request):
-    temoignage2 = Temoignages.objects.filter(is_Approuve = "True")
+    temoignage2 = Temoignages.objects.filter(is_Approuve=True)
     return render(request, "temoignage2.html", {"datatemoignages": temoignage2})
 
 
@@ -86,11 +85,6 @@ def temoin(request):
 def chantre(request):
     chantres = Chantre.objects.all()
     return render(request, "chantre.html", {"chantres": chantres})
-
-# Dans views.py
-
-from django.shortcuts import render
-
 
 def media_presse(request):
     """

@@ -1,25 +1,3 @@
-from datetime import datetime
-
-from django.db import models
-# from datetime import datetime
-
-# Create your models here.
-
-from compte.models import Utilisateur
-
-Utilisateur
-
-
-class Message(models.Model):
-    user = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, default=1)
-    content = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.user.username} - {self.timestamp}'
-
-
-class Messa(models.Model):
-    value = models.CharField(max_length=1000000)
-    date = models.DateTimeField(default=datetime.now, blank=True)
-    user = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+# Application « chat » désactivée : les modèles Message et Messa ont été supprimés
+# (voir la migration 0012). Cette app ne reste installée que le temps que la
+# migration s'applique en production ; elle pourra ensuite être retirée entièrement.

@@ -76,16 +76,16 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 - Tests : modération, pages publiques, compilation des templates, admin, SEO, chargement (lazy, preload), stockage des médias.
 - `DEBUG=False` par défaut dans le code ; médias servis indépendamment de `DEBUG` ; `media/` retiré de git.
 - Chargement : `loading` déclaré sur chaque image, `preload="none"` sur les audios, barre de progression, placeholder, spinner du like.
-- Stockage R2 : `church/stockage.py`, app `medias`, commande `migrer_medias`.
+- Stockage R2 : `church/stockage.py`, app `medias`, commande `migrer_medias`. **Bascule faite le 19/10/2026** : 19 fichiers (114 Mo) vérifiés en MD5, lecture partielle (206) et cache Cloudflare constatés en production.
+- Sécurité : `church/securite.py` (HTTPS, cookies Secure, HSTS) activé par `SECURITE_PRODUCTION=1` ; `CSRF_TRUSTED_ORIGINS` ; `TIME_ZONE = 'Africa/Kinshasa'` ; secret retiré de `.env.example`.
 
 ## Backlog priorisé
 
 ### P0 — Production et sécurité
-- **Médias sur R2 : code prêt, bascule à faire** (`DEPLOY_RENDER.md`, étape 7). Avant la bascule, la production sert les audios sans lecture partielle (Range) et via Django : un sermon de 100 Mo occupe le worker gunicorn pendant tout le téléchargement. Supprimer le disque persistant deux semaines après la bascule.
-- **`DEBUG=True` est défini explicitement sur Render** (constaté le 19/10/2026 : la 404 de production est la page technique de Django). Le défaut du code est déjà `False` et les médias ne dépendent plus de `DEBUG` : retirer la variable sur Render.
-- **Réglages de production :** `CSRF_TRUSTED_ORIGINS`, `SECURE_SSL_REDIRECT`, `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`, `SECURE_PROXY_SSL_HEADER`, HSTS. Fais-le progressivement et explique chaque réglage.
-- Vérifier que `.env.example` ne contient aucun vrai identifiant.
-- `TIME_ZONE` : passer de `UTC` à `Africa/Kinshasa`.
+- **Disque persistant Render** : à garder intact jusqu'au **2 novembre 2026** (retour arrière R2), puis supprimer le disque et la variable `MEDIA_ROOT`.
+- **`DEBUG=True` est défini explicitement sur Render** (constaté le 19/10/2026 : la 404 de production est la page technique de Django). Le défaut du code est déjà `False` et les médias ne dépendent plus de `DEBUG` : retirer la variable sur Render (`DEPLOY_RENDER.md`, étape 8).
+- **HTTPS de production : code prêt, à activer** avec `SECURITE_PRODUCTION=1` (`DEPLOY_RENDER.md`, étape 8), puis allonger HSTS par étapes : 1 h, 1 mois (`HSTS_SECONDES=2592000`), 1 an avec `HSTS_SOUS_DOMAINES=1`. Jamais de preload.
+- Mot de passe PostgreSQL exposé dans l'historique git de `.env.example` : à régénérer sur Render.
 
 ### P1 — Dette technique
 - Supprimer définitivement l'app `chat` une fois la migration `0012` appliquée en production.

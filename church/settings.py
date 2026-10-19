@@ -36,6 +36,11 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = ["djojnk.pythonanywhere.com", "127.0.0.1", 'localhost', '.onrender.com', 'www.wmbranhamtabernacle.org', 'wmbranhamtabernacle.org']
 
+# HTTPS de production (redirection, cookies sécurisés, HSTS) : actif seulement si
+# SECURITE_PRODUCTION=1, désactivable depuis Render. Voir church/securite.py.
+from church.securite import reglages_securite  # noqa: E402
+globals().update(reglages_securite(os.environ))
+
 # Adresse officielle du site (utilisée pour les liens canoniques, le sitemap et les données Google)
 SITE_URL = os.environ.get('SITE_URL', 'https://www.wmbranhamtabernacle.org')
 
@@ -139,7 +144,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fr-fr'
 
-TIME_ZONE = 'UTC'
+# Heure de Kinshasa (UTC+1, sans heure d'été) pour l'affichage et la saisie dans l'admin.
+# Les dates restent stockées en UTC en base (USE_TZ = True).
+TIME_ZONE = 'Africa/Kinshasa'
 
 USE_I18N = True
 

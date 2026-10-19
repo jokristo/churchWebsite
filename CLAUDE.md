@@ -56,6 +56,20 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 4. **`psycopg2` ne s'installe pas sur Mac** sans PostgreSQL. En local : `grep -v '^psycopg2' requirements.txt > ../requirements-local.txt && pip install -r ../requirements-local.txt`. Ne modifie pas `requirements.txt` pour ça.
 5. **Ne jamais commiter** `db.sqlite3`, `venv/`, `node_modules/`, `media/`, des fichiers `.bundle` ou des secrets. `.env.example` ne doit contenir que des valeurs factices.
 
+## Application mobile et API
+
+**Contexte :** une application React Native (Expo) pour iOS et Android consomme l'API du site. Ses utilisateurs sont à Kinshasa, surtout sur des Android d'entrée de gamme, avec des données mobiles chères : les réponses doivent être légères, paginées et cachables. Fonctionnalité clé : écouter et télécharger les prédications pour l'écoute hors ligne.
+
+**Conventions :**
+- Django REST Framework, toutes les routes sous `/api/v1/`. Un changement incompatible (champ retiré, renommé ou changé de type) passe par une nouvelle version, jamais par une modification de `/api/v1/`.
+- Schéma OpenAPI généré par drf-spectacular (`/api/v1/schema/` et une page de documentation) : l'application en tire ses types TypeScript. Le schéma fait foi.
+- Filtres avec django-filter. Pagination par curseur sur toutes les listes.
+- Noms de champs en snake_case dans l'API, même si les modèles ont des noms incohérents (`Noms`, `NomTheme`, `Theme`, `is_Approuve`) : les serializers font la traduction, on ne renomme pas les modèles pour l'API.
+- URLs absolues pour tous les médias.
+- Limitation de débit (throttling) pour les anonymes, en-têtes de cache et ETag.
+- Lecture seule et accès anonyme : aucun endpoint d'écriture tant que l'authentification n'est pas conçue. Jamais de contenu non publié (articles) ni non approuvé (témoignages).
+- Les informations de l'église (adresse, horaires, contacts, lien Maps) sont lues depuis `church/seo.py`, comme pour le site : aucune duplication.
+
 ## Règles de travail
 
 1. **Un chantier à la fois.** Pour chaque chantier : analyse, puis plan court (fichiers touchés, risques, comment tester), puis **attente de ma validation**, puis implémentation, puis tests, puis résumé.

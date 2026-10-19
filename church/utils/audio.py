@@ -2,6 +2,7 @@ import logging
 import os
 from io import BytesIO
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 
 logger = logging.getLogger(__name__)
@@ -83,6 +84,12 @@ def compress_audio_file(audio_file, *, bitrate=DEFAULT_BITRATE, mono=True):
 
 
 def maybe_compress_audio_field(instance, field_name='audio', **kwargs):
+    # Désactivée par défaut : pydub décode tout l'audio en mémoire (environ 32 Mo par
+    # minute), ce qui fait planter l'instance Render de 512 Mo dès qu'un sermon dépasse
+    # une dizaine de minutes. Les audios sont enregistrés tels quels en attendant la
+    # compression en flux, hors de la requête.
+    if not getattr(settings, 'AUDIO_COMPRESSION_ACTIVE', False):
+        return
     field = getattr(instance, field_name, None)
     if not field or not audio_field_changed(instance, field_name):
         return

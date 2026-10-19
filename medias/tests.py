@@ -164,6 +164,21 @@ class FauxAudioSegment:
 
 
 @override_settings(STORAGES=STOCKAGE_MEMOIRE)
+class CompressionDesactiveeTests(TestCase):
+    """Par défaut, aucun audio n'est décodé pendant la requête (risque de plantage
+    de l'instance Render de 512 Mo) : le fichier envoyé est enregistré tel quel."""
+
+    def test_audios_enregistres_tels_quels(self):
+        from sermons.models import Sermons
+        with mock.patch("pydub.AudioSegment.from_file", side_effect=AssertionError("pydub appelé")):
+            gros_mp3 = Sermons.objects.create(titre="Long", audio=ContentFile(b"ID3" + b"x" * (6 * 1024 * 1024), name="long.mp3"))
+            wav = Sermons.objects.create(titre="Wav", audio=ContentFile(b"RIFF wav", name="culte.wav"))
+        self.assertEqual(gros_mp3.audio.name, "audio/long.mp3")
+        self.assertEqual(gros_mp3.audio.size, 3 + 6 * 1024 * 1024)
+        self.assertEqual(wav.audio.name, "audio/culte.wav")
+
+
+@override_settings(STORAGES=STOCKAGE_MEMOIRE, AUDIO_COMPRESSION_ACTIVE=True)
 class MixinAudioStockageDistantTests(TestCase):
     """Le mixin ne doit utiliser que l'API de stockage (open/save), jamais un chemin
     local : sur R2, FieldFile.path lève NotImplementedError. On l'interdit ici aussi

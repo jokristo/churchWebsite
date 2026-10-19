@@ -77,14 +77,13 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 - `DEBUG=False` par défaut dans le code ; médias servis indépendamment de `DEBUG` ; `media/` retiré de git.
 - Chargement : `loading` déclaré sur chaque image, `preload="none"` sur les audios, barre de progression, placeholder, spinner du like.
 - Stockage R2 : `church/stockage.py`, app `medias`, commande `migrer_medias`. **Bascule faite le 19/10/2026** : 19 fichiers (114 Mo) vérifiés en MD5, lecture partielle (206) et cache Cloudflare constatés en production.
-- Sécurité : `church/securite.py` (HTTPS, cookies Secure, HSTS) activé par `SECURITE_PRODUCTION=1` ; `CSRF_TRUSTED_ORIGINS` ; `TIME_ZONE = 'Africa/Kinshasa'` ; secret retiré de `.env.example`.
+- Sécurité : `church/securite.py` (HTTPS, cookies Secure, HSTS) activé par `SECURITE_PRODUCTION=1` ; `CSRF_TRUSTED_ORIGINS` ; `TIME_ZONE = 'Africa/Kinshasa'` ; secret retiré de `.env.example`. **En production depuis le 19/10/2026** : `DEBUG` retiré de Render, HSTS 1 h, cookies `Secure`, redirection HTTPS sans boucle, enregistrement dans l'admin vérifié.
 
 ## Backlog priorisé
 
 ### P0 — Production et sécurité
 - **Disque persistant Render** : à garder intact jusqu'au **2 novembre 2026** (retour arrière R2), puis supprimer le disque et la variable `MEDIA_ROOT`.
-- **`DEBUG=True` est défini explicitement sur Render** (constaté le 19/10/2026 : la 404 de production est la page technique de Django). Le défaut du code est déjà `False` et les médias ne dépendent plus de `DEBUG` : retirer la variable sur Render (`DEPLOY_RENDER.md`, étape 8).
-- **HTTPS de production : code prêt, à activer** avec `SECURITE_PRODUCTION=1` (`DEPLOY_RENDER.md`, étape 8), puis allonger HSTS par étapes : 1 h, 1 mois (`HSTS_SECONDES=2592000`), 1 an avec `HSTS_SOUS_DOMAINES=1`. Jamais de preload.
+- **HSTS, à allonger par étapes** (`DEPLOY_RENDER.md`, étape 8) : à partir du **26/10/2026**, `HSTS_SECONDES=2592000` (1 mois) ; un mois plus tard, `HSTS_SECONDES=31536000` et `HSTS_SOUS_DOMAINES=1` (1 an). Jamais de preload.
 - Mot de passe PostgreSQL exposé dans l'historique git de `.env.example` : à régénérer sur Render.
 
 ### P1 — Dette technique

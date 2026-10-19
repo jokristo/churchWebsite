@@ -7,6 +7,7 @@ if command -v apt-get &> /dev/null; then
     apt-get update && apt-get install -y ffmpeg
 fi
 
+pip install --upgrade pip setuptools
 pip install -r requirements.txt
 
 # Compiler le CSS Tailwind (theme/static_src -> theme/static/css/dist/styles.css,

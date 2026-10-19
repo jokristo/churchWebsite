@@ -44,7 +44,7 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
   - `chat` : coquille vide, à supprimer (voir backlog).
   - `theme` : Tailwind via django-tailwind.
   - `medias` : service de `/media/<fichier>` (disque ou redirection vers R2) et commande `migrer_medias` (copie disque ↔ R2, vérification, diagnostic).
-- **Admin :** Jazzmin. **Images :** django-imagekit, conversion en WEBP. **Audio :** pydub/FFmpeg via `church/utils/audio.py`.
+- **Admin :** Jazzmin. **Images :** django-imagekit, conversion en WEBP. **Audio :** compression FFmpeg en flux et en arrière-plan via `church/utils/audio.py` (MP3 mono, `AUDIO_DEBIT` = 64 kbps), état visible dans l'admin, rattrapage par `python manage.py compresser_audios`. Les originaux restent dans le stockage.
 - **Production :** Render, PostgreSQL via `DATABASE_URL`, fichiers statiques servis par WhiteNoise. Médias sur **Cloudflare R2** (bucket `wmbtab-media`, domaine `media.wmbranhamtabernacle.org`) quand `MEDIA_STORAGE=r2`, sinon disque persistant (`MEDIA_ROOT=/data/media`). Le build passe par `build.sh`, à condition que la Build Command du tableau de bord Render soit bien `./build.sh`. Procédure de bascule et de retour arrière : `DEPLOY_RENDER.md`, étape 7.
 - **SEO :** tout est centralisé dans `church/seo.py`, c'est-à-dire les infos de l'église, les horaires, le JSON-LD et le context processor `seo`. S'y ajoutent `church/sitemaps.py`, `/robots.txt` et `church/middleware.py`, qui redirige le domaine sans www vers www et passe `*.onrender.com` en noindex.
 
@@ -73,23 +73,23 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 - Code mort supprimé : pages connexion et inscription publiques, vue `enregistrer_don`, templates inutilisés, dépendances inutiles. L'admin `Utilisateur` utilise désormais `UserAdmin`.
 - Hygiène du dépôt : `venv`, `node_modules`, `db.sqlite3` et les caches ne sont plus suivis.
 - SEO technique : titres, H1 de l'accueil, section « Nous rendre visite », JSON-LD Church, WebSite et BlogPosting, canonical, Open Graph, sitemap, robots.txt, redirection vers www, noindex sur les profils de fidèles et les pages d'erreur.
-- Tests : modération, pages publiques, compilation des templates, admin, SEO, chargement (lazy, preload), stockage des médias.
+- Tests : modération, pages publiques, compilation des templates, admin, SEO, chargement (lazy, preload), stockage des médias, compression audio avec le vrai FFmpeg (dont un garde-fou mémoire).
 - `DEBUG=False` par défaut dans le code ; médias servis indépendamment de `DEBUG` ; `media/` retiré de git.
 - Chargement : `loading` déclaré sur chaque image, `preload="none"` sur les audios, barre de progression, placeholder, spinner du like.
 - Stockage R2 : `church/stockage.py`, app `medias`, commande `migrer_medias`. **Bascule faite le 19/10/2026** : 19 fichiers (114 Mo) vérifiés en MD5, lecture partielle (206) et cache Cloudflare constatés en production.
-- Sécurité : `church/securite.py` (HTTPS, cookies Secure, HSTS) activé par `SECURITE_PRODUCTION=1` ; `CSRF_TRUSTED_ORIGINS` ; `TIME_ZONE = 'Africa/Kinshasa'` ; secret retiré de `.env.example`.
+- Sécurité : `church/securite.py` (HTTPS, cookies Secure, HSTS) activé par `SECURITE_PRODUCTION=1` ; `CSRF_TRUSTED_ORIGINS` ; `TIME_ZONE = 'Africa/Kinshasa'` ; secret retiré de `.env.example`. **En production depuis le 19/10/2026** : `DEBUG` retiré de Render, HSTS 1 h, cookies `Secure`, redirection HTTPS sans boucle, enregistrement dans l'admin vérifié.
 
 ## Backlog priorisé
 
 ### P0 — Production et sécurité
+- **Compression audio** : refaite le 19/10/2026 (l'ancienne version pydub montait à 3,3 Go pour 105 min et aurait fait planter l'instance de 512 Mo au premier sermon envoyé). Après déploiement : `python manage.py compresser_audios --existants` pour `Record.mp3`.
 - **Disque persistant Render** : à garder intact jusqu'au **2 novembre 2026** (retour arrière R2), puis supprimer le disque et la variable `MEDIA_ROOT`.
-- **`DEBUG=True` est défini explicitement sur Render** (constaté le 19/10/2026 : la 404 de production est la page technique de Django). Le défaut du code est déjà `False` et les médias ne dépendent plus de `DEBUG` : retirer la variable sur Render (`DEPLOY_RENDER.md`, étape 8).
-- **HTTPS de production : code prêt, à activer** avec `SECURITE_PRODUCTION=1` (`DEPLOY_RENDER.md`, étape 8), puis allonger HSTS par étapes : 1 h, 1 mois (`HSTS_SECONDES=2592000`), 1 an avec `HSTS_SOUS_DOMAINES=1`. Jamais de preload.
+- **HSTS, à allonger par étapes** (`DEPLOY_RENDER.md`, étape 8) : à partir du **26/10/2026**, `HSTS_SECONDES=2592000` (1 mois) ; un mois plus tard, `HSTS_SECONDES=31536000` et `HSTS_SOUS_DOMAINES=1` (1 an). Jamais de preload.
 - Mot de passe PostgreSQL exposé dans l'historique git de `.env.example` : à régénérer sur Render.
 
 ### P1 — Dette technique
 - Supprimer définitivement l'app `chat` une fois la migration `0012` appliquée en production.
-- Compression audio (`church/utils/audio.py`) : pydub décode tout le fichier en mémoire (environ 1 Go pour un sermon de 1 h 45), ce qui peut faire tomber une petite instance Render pendant l'upload. La faire hors de la requête ou en flux avec FFmpeg.
+- **Envois de plus de 100 Mo refusés par Cloudflare** (offre gratuite) avant d'atteindre Render. En attendant un envoi direct vers R2, l'équipe média exporte les sermons en MP3 mono 64 à 128 kbps.
 - `church/media/` : 4 images (20 Mo) suivies par git et référencées nulle part.
 - Les likes créent une session pour chaque visiteur anonyme dès l'accueil (`annotate_articles_likes` puis `ensure_session_key`). Ne créer la session qu'au moment du like.
 - Paginer la liste des sermons.

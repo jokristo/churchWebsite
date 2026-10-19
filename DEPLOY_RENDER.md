@@ -194,6 +194,32 @@ l'en-tête HSTS continuent d'exiger le HTTPS jusqu'à son expiration (1 heure au
 
 ---
 
+## Étape 9 : Compression des audios
+
+Chaque audio envoyé dans l'admin (sermons, témoignages) est enregistré tel quel, puis
+compressé **en arrière-plan** en MP3 mono 64 kbps : la page de l'admin répond tout de
+suite, et le fichier compressé remplace l'original au bout de une à trois minutes.
+L'original reste dans le stockage. La colonne « Compression audio » de l'admin indique
+l'état ; l'action « Compresser à nouveau l'audio » relance un traitement.
+
+| Variable | Valeur par défaut | Rôle |
+|----------|-------------------|------|
+| `AUDIO_COMPRESSION` | `1` | `0` coupe la compression sans redéployer (les audios sont gardés tels quels) |
+| `AUDIO_DEBIT` | `64k` | débit du MP3 mono produit (`96k` pour une meilleure qualité musicale) |
+
+Dans le Shell :
+```bash
+python manage.py compresser_audios --dry-run      # ce qui serait traité
+python manage.py compresser_audios                # en attente + traitements interrompus (redéploiement)
+python manage.py compresser_audios --existants    # + audios envoyés avant cette fonctionnalité
+python manage.py compresser_audios --echecs       # + nouvel essai des échecs
+```
+
+**Limite :** Cloudflare refuse les envois de plus de 100 Mo. Exporter les sermons en MP3
+mono 64 à 128 kbps avant de les envoyer (un sermon de 2 h en 96 kbps fait environ 85 Mo).
+
+---
+
 ## Créer un superutilisateur
 
 1. Dans le Web Service → **Shell** (ou utilise Render Shell)
@@ -224,4 +250,6 @@ l'en-tête HSTS continuent d'exiger le HTTPS jusqu'à son expiration (1 heure au
 - **Médias non affichés (disque)** : vérifie que `MEDIA_ROOT=/data/media` et que le disque est bien monté
 - **Médias non affichés (R2)** : lance `python manage.py migrer_medias --diagnostic` dans le Shell ; il indique l'étape qui échoue
 - **`ImproperlyConfigured` au démarrage** : une variable R2 manque ou est mal formée (endpoint avec le nom du bucket, domaine avec `https://`) ; le message indique laquelle
-- **Le CSS ne se met pas à jour** : vérifie que la Build Command est bien `./build.sh`
+- **Le CSS ne se met pas à jour** : vérifie que la Build Command est bien `./build.sh` (et seulement elle : `build.sh` fait déjà pip, Tailwind, collectstatic et migrate)
+- **Audio resté « En attente » ou « En cours »** : le serveur a redémarré pendant la compression ; lancer `python manage.py compresser_audios`
+- **Audio en « Échec »** : le détail est dans l'admin (fichier illisible, délai dépassé) ; l'original reste écoutable

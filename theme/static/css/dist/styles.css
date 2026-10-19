@@ -3816,6 +3816,40 @@ select {
   user: passwd@;
 }
 
+/* Barre de progression de navigation (voir le script en bas de templates/_base.html).
+   Elle avance vite puis ralentit, sans jamais atteindre 100 % : la nouvelle page la remplace. */
+
+.wmb-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  height: 3px;
+  width: 0;
+  background-color: #4f46e5;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 10s cubic-bezier(0.08, 0.8, 0.2, 1), opacity 0.2s ease;
+}
+
+.wmb-progress.is-active {
+  width: 90%;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wmb-progress {
+    transition: opacity 0.2s ease;
+  }
+}
+
+/* Placeholder gris des images différées, retiré au chargement (classe is-loaded).
+   :where() ramène la spécificité à zéro : une classe bg-* posée sur l'image reste prioritaire. */
+
+:where(img[loading="lazy"]:not(.is-loaded)) {
+  background-color: #e2e8f0;
+}
+
 .file\:mr-4::file-selector-button {
   margin-right: 1rem;
 }

@@ -43,12 +43,14 @@
 
 <body class="bg-gray-50 text-gray-800 font-poppins flex flex-col min-h-screen antialiased">
 
+    <div id="wmb-progress" class="wmb-progress" aria-hidden="true"></div>
+
     <nav
         class="fixed w-full z-50 top-0 start-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-lg transition-all duration-300">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
             <a href="{% url 'home' %}" class="flex items-center space-x-3 rtl:space-x-reverse group">
-                <img src="{% static 'logo24.png' %}"
+                <img src="{% static 'logo24.png' %}" loading="eager"
                     class="h-10 w-auto transform transition-transform group-hover:scale-105" alt="WMB Logo" />
                 <span class="self-center text-xl font-bold whitespace-nowrap text-indigo-600 tracking-tight">WMB
                     Tab</span>
@@ -257,7 +259,7 @@
 
                 <div class="mb-6 md:mb-0 col-span-2 md:col-span-1">
                     <a href="{% url 'home' %}" class="flex items-center space-x-3 mb-4">
-                        <img src="{% static 'logo24.png' %}" class="h-12 bg-white rounded-full p-1" alt="WMB Logo" />
+                        <img src="{% static 'logo24.png' %}" class="h-12 bg-white rounded-full p-1" alt="WMB Logo" loading="lazy" decoding="async" />
                         <span class="self-center text-2xl font-bold whitespace-nowrap text-white">WMB Tab</span>
                     </a>
                     <p class="text-sm text-slate-400 mb-4 max-w-xs">
@@ -460,6 +462,38 @@
                 });
             }
         });
+    </script>
+    <script>
+        // Retour visuel pendant le chargement, sans jamais masquer la page :
+        // 1. barre fine en haut de l'écran dès qu'on quitte la page (lien interne ou formulaire) ;
+        // 2. retrait du fond gris des images différées une fois qu'elles sont arrivées.
+        (function () {
+            var bar = document.getElementById('wmb-progress');
+            if (bar) {
+                var start = function () { bar.classList.add('is-active'); };
+                document.addEventListener('click', function (e) {
+                    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                    var a = e.target.closest('a[href]');
+                    if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+                    var url = new URL(a.href, window.location.href);
+                    if (url.origin !== window.location.origin) return; // externe, tel:, mailto:, WhatsApp
+                    if (url.pathname === window.location.pathname && url.search === window.location.search) return; // ancre
+                    if (url.pathname.indexOf('/media/') === 0 && url.pathname !== '/media/') return; // fichier audio ou image
+                    start();
+                });
+                document.addEventListener('submit', function (e) {
+                    if (!e.defaultPrevented && !e.target.target) start();
+                });
+                // Retour arrière depuis le cache du navigateur : la page revient sans recharger
+                window.addEventListener('pageshow', function () { bar.classList.remove('is-active'); });
+            }
+
+            document.querySelectorAll('img[loading="lazy"]').forEach(function (img) {
+                var done = function () { img.classList.add('is-loaded'); };
+                if (img.complete && img.naturalWidth) done();
+                else img.addEventListener('load', done, { once: true });
+            });
+        })();
     </script>
 </body>
 

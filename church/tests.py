@@ -3,9 +3,15 @@ import re
 from pathlib import Path
 
 from django.conf import settings
+from django.core import checks
+from django.core.management.utils import get_random_secret_key
 from django.template.loader import get_template
-from django.test import TestCase
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
+
+from church.securite import CSRF_TRUSTED_ORIGINS, reglages_securite
+
+PRODUCTION = reglages_securite({"SECURITE_PRODUCTION": "1"})
 
 PAGES_PUBLIQUES = [
     'home', 'sermons', 'ministres', 'temoignages', 'temoignagecontent', 'blog',
@@ -66,6 +72,91 @@ class ChargementTests(TestCase):
         for url in ['/blog/', '/blog/culte-de-paques/']:
             with self.subTest(url=url):
                 self.assertContains(self.client.get(url), 'like-spinner')
+
+
+class PagesErreurTests(TestCase):
+    """Avec DEBUG=False (production), les visiteurs voient nos pages, pas celles de Django."""
+
+    def test_404_personnalisee(self):
+        response = self.client.get('/cette-page-n-existe-pas/')
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, 'errors/404.html')
+
+    def test_500_personnalisee(self):
+        from church import urls
+        response = urls.handler500(RequestFactory().get('/'))
+        self.assertEqual(response.status_code, 500)
+        self.assertContains(response, '<title>', status_code=500)
+
+
+class FuseauHoraireTests(TestCase):
+    def test_dates_affichees_a_l_heure_de_kinshasa(self):
+        from datetime import datetime, timezone
+        from actualites.models import Article
+        article = Article.objects.create(titre="Veillée", slug="veillee", resume="r", contenu="c", est_publie=True)
+        # 23 h 30 UTC le 18 octobre = 0 h 30 le 19 octobre à Kinshasa
+        Article.objects.filter(pk=article.pk).update(date_publication=datetime(2026, 10, 18, 23, 30, tzinfo=timezone.utc))
+        response = self.client.get('/blog/veillee/')
+        self.assertContains(response, '19 octobre 2026')
+        self.assertNotContains(response, '18 octobre 2026')
+
+
+class SecuriteProductionTests(TestCase):
+    def test_inactif_par_defaut(self):
+        # Développement et tests en HTTP : aucune redirection ni cookie Secure
+        self.assertEqual(reglages_securite({}), {"CSRF_TRUSTED_ORIGINS": CSRF_TRUSTED_ORIGINS})
+        self.assertEqual(self.client.get('/').status_code, 200)
+
+    def test_reglages_actifs(self):
+        self.assertEqual(PRODUCTION["SECURE_PROXY_SSL_HEADER"], ("HTTP_X_FORWARDED_PROTO", "https"))
+        self.assertTrue(PRODUCTION["SECURE_SSL_REDIRECT"])
+        self.assertTrue(PRODUCTION["SESSION_COOKIE_SECURE"])
+        self.assertTrue(PRODUCTION["CSRF_COOKIE_SECURE"])
+        self.assertEqual(PRODUCTION["SECURE_HSTS_SECONDS"], 3600)
+        self.assertFalse(PRODUCTION["SECURE_HSTS_INCLUDE_SUBDOMAINS"])
+        self.assertFalse(PRODUCTION["SECURE_HSTS_PRELOAD"])
+
+    def test_hsts_reglable_par_etapes(self):
+        reglages = reglages_securite({"SECURITE_PRODUCTION": "1", "HSTS_SECONDES": "2592000", "HSTS_SOUS_DOMAINES": "1"})
+        self.assertEqual(reglages["SECURE_HSTS_SECONDS"], 2592000)
+        self.assertTrue(reglages["SECURE_HSTS_INCLUDE_SUBDOMAINS"])
+        self.assertFalse(reglages["SECURE_HSTS_PRELOAD"])
+
+    def test_check_deploy(self):
+        # Seuls restent les deux choix volontaires du démarrage progressif :
+        # pas encore de HSTS sur les sous-domaines, et jamais de preload.
+        with override_settings(DEBUG=False, SECRET_KEY=get_random_secret_key(), **PRODUCTION):
+            ids = {msg.id for msg in checks.run_checks(include_deployment_checks=True)}
+        self.assertEqual(ids - {"security.W005", "security.W021"}, set())
+
+    @override_settings(**PRODUCTION)
+    def test_http_redirige_vers_https(self):
+        response = self.client.get('/sermons/?theme=2')
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response['Location'], 'https://testserver/sermons/?theme=2')
+
+    @override_settings(**PRODUCTION)
+    def test_https_derriere_render(self):
+        # Render transmet la requête avec X-Forwarded-Proto: https
+        response = self.client.get('/admin/login/', HTTP_X_FORWARDED_PROTO='https')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Strict-Transport-Security'], 'max-age=3600')
+        self.assertTrue(response.cookies['csrftoken']['secure'])
+
+    @override_settings(**PRODUCTION)
+    def test_connexion_admin_en_https(self):
+        # Le contrôle CSRF compare l'origine du formulaire à https://<domaine>
+        from django.contrib.auth import get_user_model
+        get_user_model().objects.create_superuser("admin", "a@a.org", "motdepasse")
+        client = self.client_class(enforce_csrf_checks=True)
+        entetes = {'HTTP_X_FORWARDED_PROTO': 'https', 'HTTP_HOST': 'www.wmbranhamtabernacle.org'}
+        client.get('/admin/login/', **entetes)
+        response = client.post('/admin/login/', {
+            'username': 'admin', 'password': 'motdepasse', 'next': '/admin/',
+            'csrfmiddlewaretoken': client.cookies['csrftoken'].value,
+        }, HTTP_ORIGIN='https://www.wmbranhamtabernacle.org', **entetes)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['Location'], '/admin/')
 
 
 class AdminTests(TestCase):

@@ -12,3 +12,5 @@ django-tailwind==3.6.0
 django-jazzmin==3.0.3
 django-imagekit==6.1.0
 pydub==0.25.1
+django-storages[s3]==1.14.6
+boto3==1.43.114

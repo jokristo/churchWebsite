@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'contribution',
-    'actualites'
+    'actualites',
+    'medias',
 
 ]
 
@@ -167,6 +168,10 @@ MEDIA_URL = '/media/'
 # En production (Render) : utilise le Persistent Disk monté (ex: /data)
 # En local : utilise le dossier media/ du projet
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT') or str(BASE_DIR / 'media')
+# Stockage des médias : disque (MEDIA_ROOT) par défaut, Cloudflare R2 si MEDIA_STORAGE=r2.
+# Voir church/stockage.py et la procédure de bascule dans DEPLOY_RENDER.md.
+from church.stockage import config_stockage  # noqa: E402
+STORAGES = config_stockage(os.environ)
 AUTH_USER_MODEL = "compte.Utilisateur"
 
 COMPRESS_ROOT = BASE_DIR / 'church/static'

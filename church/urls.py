@@ -17,13 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path, re_path
-from django.views.static import serve
+from medias.views import servir_media
 from OurData.views import ministres, temoignages, temoin, chantre, categorieOfficiel, officiels, biographie_pasteur, media_presse, connaissons_nous_liste, connaissons_nous_detail, ecodim_view
 from actualites.views import blog_liste, blog_detail, toggle_like
 from .views import index, sermons
 from sermons.views import ViewTheme, SermonByTheme, ThemeByMinister
 from contribution.views import page_contribution
-from django.conf import settings
 from church.views import custom_404, custom_500, custom_403, custom_400, robots_txt
 from church.sitemaps import SITEMAPS
 
@@ -63,10 +62,9 @@ urlpatterns = [
                   path('ecodim/', ecodim_view, name='ecodim'),
                   path('contribution/', page_contribution, name='contribution'),
               ] + [
-                  # Sert les médias (audio, images) sur le disque persistant Render,
-                  # qu'on soit en DEBUG=True ou non : django.conf.urls.static.static()
-                  # ne génère aucune route quand DEBUG=False, ce qui cassait les médias
-                  # en production dès que DEBUG passait à False.
-                  re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+                  # Fichiers médias : servis depuis le disque, ou redirigés vers R2 quand
+                  # MEDIA_STORAGE=r2 (anciens liens conservés). Déclaré après la page
+                  # /media/ de l'équipe média, qui reste prioritaire.
+                  re_path(r'^media/(?P<path>.+)$', servir_media, name='servir_media'),
               ]
 

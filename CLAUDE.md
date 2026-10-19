@@ -43,14 +43,15 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
   - `compte` : utilisateur custom `Utilisateur`, connexion via `/admin/` uniquement.
   - `chat` : coquille vide, à supprimer (voir backlog).
   - `theme` : Tailwind via django-tailwind.
+  - `medias` : service de `/media/<fichier>` (disque ou redirection vers R2) et commande `migrer_medias` (copie disque ↔ R2, vérification, diagnostic).
 - **Admin :** Jazzmin. **Images :** django-imagekit, conversion en WEBP. **Audio :** pydub/FFmpeg via `church/utils/audio.py`.
-- **Production :** Render, PostgreSQL via `DATABASE_URL`, fichiers statiques servis par WhiteNoise, disque persistant pour les médias. Le build passe par `build.sh`.
+- **Production :** Render, PostgreSQL via `DATABASE_URL`, fichiers statiques servis par WhiteNoise. Médias sur **Cloudflare R2** (bucket `wmbtab-media`, domaine `media.wmbranhamtabernacle.org`) quand `MEDIA_STORAGE=r2`, sinon disque persistant (`MEDIA_ROOT=/data/media`). Le build passe par `build.sh`, à condition que la Build Command du tableau de bord Render soit bien `./build.sh`. Procédure de bascule et de retour arrière : `DEPLOY_RENDER.md`, étape 7.
 - **SEO :** tout est centralisé dans `church/seo.py`, c'est-à-dire les infos de l'église, les horaires, le JSON-LD et le context processor `seo`. S'y ajoutent `church/sitemaps.py`, `/robots.txt` et `church/middleware.py`, qui redirige le domaine sans www vers www et passe `*.onrender.com` en noindex.
 
 ### Pièges connus, à lire avant de toucher au CSS ou au déploiement
 
-1. **Le CSS de production est le fichier compilé et commité `theme/static/css/dist/styles.css`**, chargé par `{% tailwind_css %}`. Render ne le recompile pas : `build.sh` compile un autre fichier, et avec `|| true`. Une classe Tailwind absente de ce fichier n'aura **aucun effet en production**. Après tout changement de template, recompile avec `python manage.py tailwind build` et commite le CSS. Sinon, vérifie que les classes utilisées existent déjà dans le fichier.
-2. **Les médias** sont servis par `static(settings.MEDIA_URL, ...)` dans `church/urls.py`, ce qui ne fonctionne qu'avec `DEBUG=True`. Vérifie l'état réel avant de changer DEBUG en production (voir backlog P0).
+1. **Le CSS de production est `theme/static/css/dist/styles.css`**, chargé par `{% tailwind_css %}`. `build.sh` le recompile au déploiement (`tailwind install` puis `tailwind build`), mais le fichier commité sert de référence en local et de secours : après tout changement de template, lance `python manage.py tailwind build` (version minifiée) et commite le CSS. **Ne commite jamais la sortie de `tailwind start`** (mode watch, non minifiée) : arrête le watcher avant de recompiler, ou recompile et commite dans la même commande.
+2. **Les médias** passent par l'API de stockage de Django, jamais par un chemin local : pas de `.path`, pas de `open(MEDIA_ROOT/...)`, sinon le code casse sur R2 (les tests de `medias/tests.py` l'interdisent pour le mixin audio). Le stockage est choisi dans `church/stockage.py` : disque par défaut, R2 seulement si `MEDIA_STORAGE=r2`, même si les clés sont dans le `.env`. Les fichiers ne sont jamais écrasés (`file_overwrite=False`) car ils sont mis en cache un an (`immutable`).
 3. Certains fichiers sont en **fins de ligne CRLF**, notamment `church/settings.py`, `OurData/views.py` et `templates/_base.html`. Préserve-les.
 4. **`psycopg2` ne s'installe pas sur Mac** sans PostgreSQL. En local : `grep -v '^psycopg2' requirements.txt > ../requirements-local.txt && pip install -r ../requirements-local.txt`. Ne modifie pas `requirements.txt` pour ça.
 5. **Ne jamais commiter** `db.sqlite3`, `venv/`, `node_modules/`, `media/`, des fichiers `.bundle` ou des secrets. `.env.example` ne doit contenir que des valeurs factices.
@@ -72,19 +73,24 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 - Code mort supprimé : pages connexion et inscription publiques, vue `enregistrer_don`, templates inutilisés, dépendances inutiles. L'admin `Utilisateur` utilise désormais `UserAdmin`.
 - Hygiène du dépôt : `venv`, `node_modules`, `db.sqlite3` et les caches ne sont plus suivis.
 - SEO technique : titres, H1 de l'accueil, section « Nous rendre visite », JSON-LD Church, WebSite et BlogPosting, canonical, Open Graph, sitemap, robots.txt, redirection vers www, noindex sur les profils de fidèles et les pages d'erreur.
-- Tests : modération, pages publiques, compilation des templates, admin, SEO.
+- Tests : modération, pages publiques, compilation des templates, admin, SEO, chargement (lazy, preload), stockage des médias.
+- `DEBUG=False` par défaut dans le code ; médias servis indépendamment de `DEBUG` ; `media/` retiré de git.
+- Chargement : `loading` déclaré sur chaque image, `preload="none"` sur les audios, barre de progression, placeholder, spinner du like.
+- Stockage R2 : `church/stockage.py`, app `medias`, commande `migrer_medias`.
 
 ## Backlog priorisé
 
 ### P0 — Production et sécurité
-- **DEBUG et médias.** `DEBUG` vaut `True` par défaut dans `settings.py`. Les médias ne sont servis qu'en mode DEBUG. Il faut passer les médias sur un stockage objet (Cloudflare R2 ou S3 via `django-storages`), prévoir un plan de migration des fichiers existants, puis mettre `DEBUG=False` par défaut.
+- **Médias sur R2 : code prêt, bascule à faire** (`DEPLOY_RENDER.md`, étape 7). Avant la bascule, la production sert les audios sans lecture partielle (Range) et via Django : un sermon de 100 Mo occupe le worker gunicorn pendant tout le téléchargement. Supprimer le disque persistant deux semaines après la bascule.
+- **`DEBUG=True` est défini explicitement sur Render** (constaté le 19/10/2026 : la 404 de production est la page technique de Django). Le défaut du code est déjà `False` et les médias ne dépendent plus de `DEBUG` : retirer la variable sur Render.
 - **Réglages de production :** `CSRF_TRUSTED_ORIGINS`, `SECURE_SSL_REDIRECT`, `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`, `SECURE_PROXY_SSL_HEADER`, HSTS. Fais-le progressivement et explique chaque réglage.
 - Vérifier que `.env.example` ne contient aucun vrai identifiant.
 - `TIME_ZONE` : passer de `UTC` à `Africa/Kinshasa`.
 
 ### P1 — Dette technique
 - Supprimer définitivement l'app `chat` une fois la migration `0012` appliquée en production.
-- `build.sh` : retirer le `|| true` qui masque les échecs du build CSS, et compiler le bon fichier Tailwind.
+- Compression audio (`church/utils/audio.py`) : pydub décode tout le fichier en mémoire (environ 1 Go pour un sermon de 1 h 45), ce qui peut faire tomber une petite instance Render pendant l'upload. La faire hors de la requête ou en flux avec FFmpeg.
+- `church/media/` : 4 images (20 Mo) suivies par git et référencées nulle part.
 - Les likes créent une session pour chaque visiteur anonyme dès l'accueil (`annotate_articles_likes` puis `ensure_session_key`). Ne créer la session qu'au moment du like.
 - Paginer la liste des sermons.
 - Les numéros de téléphone et WhatsApp sont codés en dur dans `_base.html` et `home.html`. Il faut les lire depuis `church/seo.py`, ou depuis un modèle « Paramètres du site » éditable dans l'admin, à discuter.

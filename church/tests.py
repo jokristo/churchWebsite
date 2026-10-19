@@ -1,4 +1,5 @@
 """Tests « smoke » : chaque page publique répond et chaque template se compile."""
+import re
 from pathlib import Path
 
 from django.conf import settings
@@ -32,6 +33,39 @@ class TemplatesTests(TestCase):
             nom = chemin.relative_to(racine).as_posix()
             with self.subTest(template=nom):
                 get_template(nom)
+
+
+class ChargementTests(TestCase):
+    """Poids et retour visuel pendant le chargement (public mobile, données chères)."""
+
+    def balises(self, nom):
+        racine = Path(settings.BASE_DIR) / 'templates'
+        for chemin in racine.rglob('*.html'):
+            for balise in re.findall(rf'<{nom}\b[^>]*>', chemin.read_text(encoding='utf-8'), re.S):
+                yield chemin.relative_to(racine).as_posix(), balise
+
+    def test_chaque_image_declare_son_chargement(self):
+        # loading="lazy" hors de l'écran initial, loading="eager" pour le haut de page
+        for template, balise in self.balises('img'):
+            with self.subTest(template=template, balise=balise[:80]):
+                self.assertRegex(balise, r'loading="(lazy|eager)"')
+
+    def test_audio_non_precharge(self):
+        # Un sermon pèse jusqu'à 40 Mo : rien n'est téléchargé avant que l'on appuie sur lecture
+        for template, balise in self.balises('audio'):
+            with self.subTest(template=template):
+                self.assertIn('preload="none"', balise)
+
+    def test_barre_de_progression(self):
+        response = self.client.get('/')
+        self.assertContains(response, '<div id="wmb-progress" class="wmb-progress" aria-hidden="true"></div>')
+
+    def test_spinner_sur_les_boutons_like(self):
+        from actualites.models import Article
+        Article.objects.create(titre="Culte de Pâques", slug="culte-de-paques", resume="r", contenu="c", est_publie=True)
+        for url in ['/blog/', '/blog/culte-de-paques/']:
+            with self.subTest(url=url):
+                self.assertContains(self.client.get(url), 'like-spinner')
 
 
 class MediaTests(TestCase):

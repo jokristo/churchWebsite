@@ -87,7 +87,7 @@
                 class="group flex flex-col flex-1 items-center p-6 sm:p-7">
                 <div class="w-28 h-28 sm:w-32 sm:h-32 mb-4 overflow-hidden rounded-full ring-4 ring-brand-soft bg-brand-soft">
                     {% if ministre.photo %}
-                    <img src="{{ ministre.photo.url }}" alt="Photo de {{ ministre.Nom }}" class="w-full h-full object-cover">
+                    <img src="{{ ministre.photo.url }}" alt="Photo de {{ ministre.Nom }}" class="w-full h-full object-cover" loading="lazy" decoding="async">
                     {% else %}
                     <div class="w-full h-full flex items-center justify-center text-brand text-3xl font-bold">{{ ministre.Nom|slice:":1" }}</div>
                     {% endif %}

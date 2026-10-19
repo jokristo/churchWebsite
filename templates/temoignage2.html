@@ -31,7 +31,7 @@
             {# Image du Croyant #}
             <div class="h-56 overflow-hidden">
                 {% if datatemoignage.photo %}
-                    <img class="w-full h-full object-cover" src="{{ datatemoignage.photo.url }}" alt="Photo de {{ datatemoignage.NomDuCroyant }}">
+                    <img class="w-full h-full object-cover" src="{{ datatemoignage.photo.url }}" alt="Photo de {{ datatemoignage.NomDuCroyant }}" loading="lazy" decoding="async">
                 {% else %}
                     {# Image par défaut si aucune photo n'est fournie #}
                     <div class="w-full h-full bg-indigo-50 flex items-center justify-center">
@@ -52,7 +52,7 @@
                 {% if datatemoignage.Audio %}
                 <div class="mt-2">
                     <p class="text-xs font-semibold text-indigo-600 mb-1">Témoignage Audio :</p>
-                    <audio src="{{ datatemoignage.Audio.url }}" controls class="w-full" style="height: 40px;"></audio>
+                    <audio src="{{ datatemoignage.Audio.url }}" controls preload="none" class="w-full" style="height: 40px;"></audio>
                 </div>
                 {% endif %}
                 

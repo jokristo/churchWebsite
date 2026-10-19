@@ -90,7 +90,7 @@
 
             <div class="aspect-[16/9] bg-brand-soft overflow-hidden">
                 {% if sermon.image %}
-                <img class="w-full h-full object-cover" src="{{ sermon.image.url }}" alt="{{ sermon.titre }}">
+                <img class="w-full h-full object-cover" src="{{ sermon.image.url }}" alt="{{ sermon.titre }}" loading="lazy" decoding="async">
                 {% else %}
                 <div class="w-full h-full flex items-center justify-center text-brand/40">
                     <svg class="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +119,7 @@
                 <div class="mt-auto space-y-3">
                     {% if sermon.audio %}
                     <div class="rounded-xl bg-canvas p-2">
-                        <audio src="{{ sermon.audio.url }}" controls class="w-full h-10"></audio>
+                        <audio src="{{ sermon.audio.url }}" controls preload="none" class="w-full h-10"></audio>
                     </div>
                     <a href="{{ sermon.audio.url }}" download
                        class="download-btn inline-flex justify-center items-center w-full py-2 px-4 text-sm font-medium rounded-full border border-brand text-brand hover:bg-brand-soft transition-colors">

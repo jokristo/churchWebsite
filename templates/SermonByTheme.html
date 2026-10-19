@@ -28,7 +28,7 @@
             {# Image #}
             <div class="h-48 overflow-hidden bg-indigo-100">
                 {% if sermon.image %}
-                <img class="w-full h-full object-cover" src="{{ sermon.image.url }}" alt="Image du sermon">
+                <img class="w-full h-full object-cover" src="{{ sermon.image.url }}" alt="Image du sermon" loading="lazy" decoding="async">
                 {% else %}
                 <div class="w-full h-full flex items-center justify-center text-indigo-400">
                     <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +49,7 @@
                 {# Lecteur Audio #}
                 {% if sermon.audio %}
                 <p class="mb-4">
-                    <audio src="{{ sermon.audio.url }}" controls class="w-full" style="height: 40px;"></audio>
+                    <audio src="{{ sermon.audio.url }}" controls preload="none" class="w-full" style="height: 40px;"></audio>
                 </p>
                 <a href="{{ sermon.audio.url }}" download 
                    class="download-btn inline-flex justify-center items-center py-2 px-4 text-sm font-medium text-center text-white rounded-full bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-all duration-300">

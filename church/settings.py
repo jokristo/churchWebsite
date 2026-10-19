@@ -144,7 +144,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fr-fr'
 
-TIME_ZONE = 'UTC'
+# Heure de Kinshasa (UTC+1, sans heure d'été) pour l'affichage et la saisie dans l'admin.
+# Les dates restent stockées en UTC en base (USE_TZ = True).
+TIME_ZONE = 'Africa/Kinshasa'
 
 USE_I18N = True
 

@@ -89,6 +89,18 @@ class PagesErreurTests(TestCase):
         self.assertContains(response, '<title>', status_code=500)
 
 
+class FuseauHoraireTests(TestCase):
+    def test_dates_affichees_a_l_heure_de_kinshasa(self):
+        from datetime import datetime, timezone
+        from actualites.models import Article
+        article = Article.objects.create(titre="Veillée", slug="veillee", resume="r", contenu="c", est_publie=True)
+        # 23 h 30 UTC le 18 octobre = 0 h 30 le 19 octobre à Kinshasa
+        Article.objects.filter(pk=article.pk).update(date_publication=datetime(2026, 10, 18, 23, 30, tzinfo=timezone.utc))
+        response = self.client.get('/blog/veillee/')
+        self.assertContains(response, '19 octobre 2026')
+        self.assertNotContains(response, '18 octobre 2026')
+
+
 class SecuriteProductionTests(TestCase):
     def test_inactif_par_defaut(self):
         # Développement et tests en HTTP : aucune redirection ni cookie Secure

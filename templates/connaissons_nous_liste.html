@@ -26,7 +26,7 @@
 
                     {% if croyant.photo_profil %}
                     <img src="{{ croyant.photo_profil.url }}" class="w-full h-full rounded-full object-cover"
-                        alt="{{ croyant.nom }}">
+                        alt="{{ croyant.nom }}" loading="lazy" decoding="async">
                     {% else %}
                     <div class="w-full h-full rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-3xl font-bold">{{ croyant.nom|slice:":1" }}</div>
                     {% endif %}

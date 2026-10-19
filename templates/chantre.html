@@ -28,7 +28,7 @@
             {# Photo du Chantre - Design Circulaire #}
             <div class="w-40 h-40 mx-auto mb-4 overflow-hidden rounded-full ring-4 ring-indigo-200 hover:ring-indigo-600 transition-colors duration-300 bg-indigo-100">
                 {% if chantre.photo %}
-                <img src="{{ chantre.photo.url }}" alt="Photo de {{ chantre.Nom }}" class="w-full h-full object-cover">
+                <img src="{{ chantre.photo.url }}" alt="Photo de {{ chantre.Nom }}" class="w-full h-full object-cover" loading="lazy" decoding="async">
                 {% else %}
                 <div class="w-full h-full flex items-center justify-center text-indigo-600 text-4xl font-bold">{{ chantre.Nom|slice:":1" }}</div>
                 {% endif %}

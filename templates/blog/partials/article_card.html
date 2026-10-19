@@ -7,7 +7,7 @@
             {% if article.image_couverture %}
             <img src="{{ article.image_couverture.url }}" alt="{{ article.titre }}"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                loading="lazy">
+                loading="lazy" decoding="async">
             {% else %}
             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-soft to-indigo-100">
                 <svg class="w-12 h-12 text-brand/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">

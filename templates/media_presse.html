@@ -16,7 +16,7 @@
             {% for membre in membres %}
             <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
                 {% if membre.photo %}
-                <img class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" src="{{ membre.photo.url }}" alt="{{ membre.nom }}">
+                <img class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" src="{{ membre.photo.url }}" alt="{{ membre.nom }}" loading="lazy" decoding="async">
                 {% else %}
                 <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-indigo-100 flex items-center justify-center text-indigo-400 text-2xl font-bold">
                     {{ membre.nom|slice:":1" }}

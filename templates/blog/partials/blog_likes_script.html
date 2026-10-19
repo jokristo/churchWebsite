@@ -17,6 +17,25 @@
         }
     }
 
+    // Pendant la requête : bouton verrouillé (pas de double like) et spinner à la place du cœur.
+    // Le spinner n'apparaît qu'après 200 ms pour éviter un clignotement quand le réseau est rapide.
+    function setBusy(btn, busy) {
+        var heart = btn.querySelector('.like-heart');
+        var spinner = btn.querySelector('.like-spinner');
+        btn.dataset.busy = busy ? 'true' : 'false';
+        btn.setAttribute('aria-busy', busy ? 'true' : 'false');
+        clearTimeout(btn._spinnerTimer);
+        if (busy) {
+            btn._spinnerTimer = setTimeout(function () {
+                if (heart) heart.classList.add('hidden');
+                if (spinner) spinner.classList.remove('hidden');
+            }, 200);
+        } else {
+            if (heart) heart.classList.remove('hidden');
+            if (spinner) spinner.classList.add('hidden');
+        }
+    }
+
     function updateCount(slug, count) {
         document.querySelectorAll('.article-like-count[data-slug="' + slug + '"] .like-count-num').forEach(function (el) {
             el.textContent = count;
@@ -31,9 +50,11 @@
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
+            if (btn.dataset.busy === 'true') return;
 
             var slug = btn.dataset.slug;
             var csrftoken = getCookie('csrftoken');
+            setBusy(btn, true);
 
             fetch('/blog/' + slug + '/like/', {
                 method: 'POST',
@@ -42,8 +63,12 @@
                     'X-Requested-With': 'XMLHttpRequest',
                 },
             })
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
             .then(function (data) {
+                setBusy(btn, false);
                 updateHeart(btn, data.liked);
                 updateCount(slug, data.count);
                 var detailBtn = document.getElementById('detail-like-btn');
@@ -52,6 +77,7 @@
                 }
             })
             .catch(function () {
+                setBusy(btn, false);
                 alert('Impossible d\'enregistrer votre like. Réessayez.');
             });
         });

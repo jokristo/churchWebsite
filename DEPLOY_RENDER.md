@@ -56,9 +56,10 @@ Dans le Web Service → **Environment** → **Add Environment Variable** :
 | Variable | Valeur | Description |
 |----------|--------|-------------|
 | `SECRET_KEY` | *(génère une clé)* | `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"` |
-| `DEBUG` | `False` | |
+| `DEBUG` | *(ne pas définir)* | `False` par défaut ; ne jamais mettre `True` en production |
 | `DATABASE_URL` | *(copie depuis PostgreSQL)* | Internal Database URL de l’étape 1 |
 | `MEDIA_ROOT` | `/data/media` | Chemin sur le disque persistant (ancienne configuration, gardé pour le retour arrière) |
+| `SECURITE_PRODUCTION` | `1` | HTTPS strict, cookies sécurisés, HSTS (voir l'étape 8) |
 
 Les variables du stockage R2 sont décrites à l'étape 7.
 
@@ -152,6 +153,44 @@ Toutes les commandes se lancent dans **Render → Shell**.
 
 Le disque persistant reste **intact au moins deux semaines** après la bascule. Ensuite seulement :
 supprimer le disque (Settings → Disks) et la variable `MEDIA_ROOT`.
+
+**État : bascule faite le 19/10/2026.** Disque à garder jusqu'au 2 novembre 2026.
+
+---
+
+## Étape 8 : Sécurité de production
+
+À faire dans l'ordre, en vérifiant le site entre chaque étape. Chaque étape se défait
+en retirant la variable correspondante.
+
+1. **Désactiver le mode debug** : supprimer `DEBUG=True` (ou mettre `DEBUG=False`).
+   Contrôle : une page inexistante affiche la page 404 du site, et non une page
+   technique jaune de Django.
+2. **Activer le HTTPS strict** : ajouter `SECURITE_PRODUCTION=1`. Cela active :
+
+   | Réglage | Effet |
+   |---------|-------|
+   | `SECURE_PROXY_SSL_HEADER` | Django reconnaît le HTTPS terminé par Render (en-tête `X-Forwarded-Proto`) |
+   | `SECURE_SSL_REDIRECT` | toute adresse `http://` est redirigée vers `https://` |
+   | `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE` | les cookies de l'admin ne circulent jamais en clair |
+   | HSTS 1 heure | le navigateur refuse le HTTP pendant 1 heure après une visite |
+
+   Contrôles :
+   ```bash
+   curl -sI http://www.wmbranhamtabernacle.org/ | grep -iE "^(HTTP|location)"
+   # attendu : 301 vers https://www.wmbranhamtabernacle.org/ (une seule redirection)
+   curl -sI https://www.wmbranhamtabernacle.org/ | grep -i strict-transport-security
+   # attendu : max-age=3600
+   ```
+   Puis se connecter à l'admin et enregistrer une modification.
+3. **Allonger HSTS par étapes**, après une semaine sans problème : `HSTS_SECONDES=2592000`
+   (1 mois), puis `HSTS_SECONDES=31536000` et `HSTS_SOUS_DOMAINES=1` (1 an, sous-domaines
+   compris). Ne jamais demander l'inscription « preload » : elle est quasi irréversible.
+
+Retour arrière : supprimer `SECURITE_PRODUCTION`. Les navigateurs qui ont déjà reçu
+l'en-tête HSTS continuent d'exiger le HTTPS jusqu'à son expiration (1 heure au départ).
+
+`CSRF_TRUSTED_ORIGINS` (les deux domaines du site et `*.onrender.com`) est toujours actif.
 
 ---
 

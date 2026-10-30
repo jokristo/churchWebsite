@@ -34,7 +34,7 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 
 ## Stack technique
 
-- **Django 4.2**, Python 3.11 en local.
+- **Django 5.2 LTS** (support jusqu'en avril 2028), Python 3.11 en local.
 - **Apps :**
   - `sermons` : prédications, thèmes, orateurs.
   - `OurData` : ministres, officiels, chantres, témoignages, fidèles « Connaissons-nous », ECODIM, équipe média.

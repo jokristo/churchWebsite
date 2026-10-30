@@ -220,6 +220,31 @@ mono 64 à 128 kbps avant de les envoyer (un sermon de 2 h en 96 kbps fait envir
 
 ---
 
+## Étape 10 : API de l'application mobile
+
+L'API est en lecture seule et sans compte : `https://www.wmbranhamtabernacle.org/api/v1/`.
+Sa documentation interactive est sur `/api/v1/docs/`, son schéma OpenAPI sur `/api/v1/schema/`
+(l'application en génère ses types TypeScript).
+
+| Variable | Valeur par défaut | Rôle |
+|----------|-------------------|------|
+| `API_LIMITE_ANONYMES` | `120/min` | plafond de requêtes par adresse IP (large : les opérateurs mobiles partagent une même IP entre de nombreux abonnés) |
+
+Après le premier déploiement de l'API, dans le Shell :
+```bash
+python manage.py compresser_audios --existants   # audios jamais traités (compresse et mesure)
+python manage.py compresser_audios --mesurer     # taille et durée des audios déjà traités
+```
+Tant qu'un audio n'est pas mesuré, l'API renvoie `taille_octets` et `duree_secondes` à `null`.
+
+Contrôles :
+```bash
+curl -s https://www.wmbranhamtabernacle.org/api/v1/sermons/ | head -c 600
+curl -sI https://www.wmbranhamtabernacle.org/api/v1/eglise/ | grep -iE "cache-control|etag"
+```
+
+---
+
 ## Créer un superutilisateur
 
 1. Dans le Web Service → **Shell** (ou utilise Render Shell)

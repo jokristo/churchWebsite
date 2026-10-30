@@ -12,6 +12,7 @@ class Orateur(models.Model):
     ministre = models.ForeignKey(
         Ministre, on_delete=models.SET_NULL, null=True, blank=True, related_name='orateurs'
     )
+    date_modification = models.DateTimeField("Dernière modification", auto_now=True, db_index=True)
 
     def __str__(self):
         return self.Noms
@@ -26,6 +27,7 @@ class Theme(models.Model):
         options={'quality': 80}
     )
     ministre = models.ForeignKey(Ministre, on_delete=models.SET_NULL, null=True)
+    date_modification = models.DateTimeField("Dernière modification", auto_now=True, db_index=True)
 
     def __str__(self):
         return self.NomTheme
@@ -43,6 +45,7 @@ class Sermons(AudioCompressionMixin, models.Model):
     lien = models.URLField(max_length=200, blank=True, null=True)
     audio = models.FileField(blank=True, upload_to='audio')
     Theme = models.ForeignKey(Theme, on_delete=models.SET_NULL, null=True)
+    date_modification = models.DateTimeField("Dernière modification", auto_now=True, db_index=True)
 
 
 

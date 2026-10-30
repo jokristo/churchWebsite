@@ -89,6 +89,9 @@ class CompressionAudioTests(TestCase):
         self.assertAlmostEqual(info["debit"], 64000, delta=6400)
         self.assertLess(self.stockage.size(sermon.audio.name), self.stockage.size("audio/sermon.mp3") * 0.6)
         self.assertIn("→", sermon.audio_detail)
+        # Mesures exposées par l'API : celles du fichier compressé
+        self.assertEqual(sermon.audio_taille, self.stockage.size(sermon.audio.name))
+        self.assertAlmostEqual(sermon.audio_duree, 30, delta=1)
 
     def test_fichier_deja_leger_laisse_tel_quel(self):
         sermon = self.envoyer(self.mono_leger, "court.mp3")
@@ -112,11 +115,27 @@ class CompressionAudioTests(TestCase):
         self.assertEqual(temoignage.audio_etat, COMPRESSE)
         self.assertEqual(temoignage.Audio.name, "audio/temoignage-64k.mp3")
 
-    def test_compression_desactivee(self):
+    def test_compression_desactivee_mesure_quand_meme(self):
+        # L'API a besoin de la taille et de la durée, même sans compression
         with self.settings(AUDIO_COMPRESSION_ACTIVE=False):
             sermon = self.envoyer(self.stereo, "brut.mp3")
-        self.assertEqual(sermon.audio_etat, "")
+        self.assertEqual(sermon.audio_etat, IGNORE)
+        self.assertEqual(sermon.audio_detail, "compression désactivée")
         self.assertEqual(sermon.audio.name, "audio/brut.mp3")
+        self.assertEqual(sermon.audio_taille, self.stockage.size("audio/brut.mp3"))
+        self.assertAlmostEqual(sermon.audio_duree, 30, delta=1)
+
+    def test_commande_mesurer_sans_recompresser(self):
+        from sermons.models import Sermons
+        sermon = self.envoyer(self.stereo, "deja.mp3")
+        Sermons.objects.filter(pk=sermon.pk).update(audio_taille=None, audio_duree=None)
+        sortie = StringIO()
+        call_command("compresser_audios", "--mesurer", stdout=sortie)
+        sermon.refresh_from_db()
+        self.assertEqual(sermon.audio.name, "audio/deja-64k.mp3")  # pas recompressé
+        self.assertEqual(sermon.audio_taille, self.stockage.size(sermon.audio.name))
+        self.assertAlmostEqual(sermon.audio_duree, 30, delta=1)
+        self.assertIn("1 audio(s) traité(s)", sortie.getvalue())
 
     def test_jamais_traite_deux_fois(self):
         from sermons.models import Sermons
@@ -189,6 +208,8 @@ class CompressionAudioTests(TestCase):
         with self.settings(AUDIO_COMPRESSION_ACTIVE=False):
             ancien = self.envoyer(self.stereo, "ancien.mp3")
             interrompu = self.envoyer(self.stereo, "interrompu.mp3")
+        # « ancien » : envoyé avant l'arrivée de la compression (jamais traité)
+        Sermons.objects.filter(pk=ancien.pk).update(audio_etat="")
         Sermons.objects.filter(pk=interrompu.pk).update(audio_etat=EN_COURS, audio_maj=timezone.now() - timedelta(hours=2))
 
         sortie = StringIO()

@@ -72,10 +72,10 @@ def audio_field_changed(instance, field_name="audio"):
 
 
 def analyser(chemin):
-    """Codec, nombre de canaux et débit (bit/s, ou None) du premier flux audio."""
+    """Codec, canaux, débit (bit/s) et durée (secondes) du premier flux audio, ou None."""
     resultat = subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "a:0",
-         "-show_entries", "stream=codec_name,channels,bit_rate:format=bit_rate",
+         "-show_entries", "stream=codec_name,channels,bit_rate:format=bit_rate,duration",
          "-of", "json", chemin],
         capture_output=True, text=True, timeout=120,
     )
@@ -85,10 +85,15 @@ def analyser(chemin):
     except (ValueError, KeyError, IndexError):
         raise ErreurAudio("fichier audio illisible") from None
     debit = flux.get("bit_rate") or donnees.get("format", {}).get("bit_rate")
+    try:
+        duree = round(float(donnees.get("format", {}).get("duration")))
+    except (TypeError, ValueError):
+        duree = None
     return {
         "codec": flux.get("codec_name"),
         "canaux": int(flux.get("channels") or 0),
         "debit": int(debit) if debit and str(debit).isdigit() else None,
+        "duree": duree,
     }
 
 
@@ -119,9 +124,18 @@ def encoder(entree, sortie, debit):
         raise ErreurAudio(f"FFmpeg a échoué : {resultat.stderr.strip()[-200:]}")
 
 
-def _terminer(modele, pk, nom_source, etat, detail):
+def _date_modification(modele):
+    """queryset.update() ne déclenche pas auto_now : l'API (synchronisation incrémentale
+    de l'application) ne verrait pas le changement sans cette date explicite."""
+    if any(f.name == "date_modification" for f in modele._meta.get_fields()):
+        return {"date_modification": timezone.now()}
+    return {}
+
+
+def _terminer(modele, pk, nom_source, etat, detail, **metadonnees):
     modele.objects.filter(pk=pk, **{modele.audio_field_name: nom_source}).update(
-        audio_etat=etat, audio_detail=detail[:255], audio_maj=timezone.now()
+        audio_etat=etat, audio_detail=detail[:255], audio_maj=timezone.now(),
+        **metadonnees, **_date_modification(modele),
     )
     return etat
 
@@ -149,9 +163,12 @@ def compresser(modele, pk):
                 shutil.copyfileobj(source, copie, BLOC)
 
             info = analyser(entree)
+            mesures_source = {"audio_taille": os.path.getsize(entree), "audio_duree": info["duree"]}
+            if not compression_active():
+                return _terminer(modele, pk, nom_source, IGNORE, "compression désactivée", **mesures_source)
             if deja_leger(info, debit):
                 return _terminer(modele, pk, nom_source, IGNORE,
-                                 f"déjà léger : {info['debit'] // 1000} kbps mono")
+                                 f"déjà léger : {info['debit'] // 1000} kbps mono", **mesures_source)
 
             sortie = os.path.join(dossier, "compresse.mp3")
             encoder(entree, sortie, debit)
@@ -160,7 +177,7 @@ def compresser(modele, pk):
                 raise ErreurAudio("FFmpeg a produit un fichier vide")
             if apres >= avant * 0.95:
                 return _terminer(modele, pk, nom_source, IGNORE,
-                                 f"aucun gain : {_mo(avant)} → {_mo(apres)}")
+                                 f"aucun gain : {_mo(avant)} → {_mo(apres)}", **mesures_source)
 
             base = os.path.splitext(os.path.basename(nom_source))[0]
             champ_fichier = getattr(modele, champ).field
@@ -177,6 +194,9 @@ def compresser(modele, pk):
                 "audio_etat": COMPRESSE,
                 "audio_detail": f"{_mo(avant)} → {_mo(apres)} ({debit} mono)",
                 "audio_maj": timezone.now(),
+                "audio_taille": apres,
+                "audio_duree": analyser(sortie)["duree"],
+                **_date_modification(modele),
             })
             if not remplace:
                 fichier.storage.delete(nom_ecrit)
@@ -186,6 +206,23 @@ def compresser(modele, pk):
         except Exception as exc:
             logger.exception("Compression de %s impossible", nom_source)
             return _terminer(modele, pk, nom_source, ECHEC, str(exc) or exc.__class__.__name__)
+
+
+def mesurer(modele, pk):
+    """Taille et durée de l'audio actuel, sans le recompresser (remplissage de l'existant)."""
+    instance = modele.objects.get(pk=pk)
+    fichier = getattr(instance, modele.audio_field_name)
+    if not fichier:
+        return None
+    with tempfile.TemporaryDirectory(prefix="mesure-audio-") as dossier:
+        chemin = os.path.join(dossier, "audio" + os.path.splitext(fichier.name)[1].lower())
+        with fichier.storage.open(fichier.name, "rb") as source, open(chemin, "wb") as copie:
+            shutil.copyfileobj(source, copie, BLOC)
+        mesures = {"audio_taille": os.path.getsize(chemin), "audio_duree": analyser(chemin)["duree"]}
+    modele.objects.filter(pk=pk, **{modele.audio_field_name: fichier.name}).update(
+        **mesures, **_date_modification(modele)
+    )
+    return mesures
 
 
 def lancer(modele, pk):
@@ -222,19 +259,27 @@ class AudioCompressionMixin(models.Model):
     audio_detail = models.CharField("Détail de la compression", max_length=255,
                                     blank=True, default="", editable=False)
     audio_maj = models.DateTimeField("Compression mise à jour le", null=True, blank=True, editable=False)
+    # Exposés par l'API : indispensables au lecteur et aux téléchargements hors ligne.
+    audio_taille = models.PositiveBigIntegerField("Taille du fichier audio (octets)", null=True, blank=True,
+                                                  editable=False)
+    audio_duree = models.PositiveIntegerField("Durée de l'audio (secondes)", null=True, blank=True,
+                                              editable=False)
 
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs):
-        change = audio_field_changed(self, self.audio_field_name)
-        nouveau = change and compression_active()
+        # Chaque nouvel audio est traité en arrière-plan : mesure de la taille et de la
+        # durée, et compression si elle est active (AUDIO_COMPRESSION).
+        nouveau = audio_field_changed(self, self.audio_field_name)
         if nouveau:
             self.audio_etat, self.audio_original, self.audio_detail = EN_ATTENTE, "", ""
             self.audio_maj = timezone.now()
-        elif change or not getattr(self, self.audio_field_name):
-            # Nouvel audio sans compression, ou audio retiré : l'ancien état ne vaut plus.
+            self.audio_taille = self.audio_duree = None
+        elif not getattr(self, self.audio_field_name):
+            # Audio retiré : l'ancien état ne vaut plus.
             self.audio_etat, self.audio_original, self.audio_detail = "", "", ""
+            self.audio_taille = self.audio_duree = None
         super().save(*args, **kwargs)
         if nouveau:
             modele, pk = type(self), self.pk

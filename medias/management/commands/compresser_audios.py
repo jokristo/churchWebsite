@@ -4,6 +4,7 @@
     python manage.py compresser_audios               # en attente + traitements interrompus
     python manage.py compresser_audios --existants   # + audios jamais traités (envoyés avant)
     python manage.py compresser_audios --echecs      # + nouvel essai des échecs
+    python manage.py compresser_audios --mesurer     # taille et durée manquantes, sans recompresser
 
 Le traitement se fait ici, sans fil d'exécution : la commande attend la fin de chaque
 compression. Les originaux sont conservés dans le stockage.
@@ -14,7 +15,7 @@ from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.utils import timezone
 
-from church.utils.audio import COMPRESSE, ECHEC, EN_ATTENTE, EN_COURS, IGNORE, compresser
+from church.utils.audio import COMPRESSE, ECHEC, EN_ATTENTE, EN_COURS, IGNORE, compresser, mesurer
 
 # Un traitement « en cours » depuis plus longtemps a été interrompu (redéploiement…).
 DELAI_INTERROMPU = timedelta(hours=1)
@@ -33,8 +34,12 @@ class Command(BaseCommand):
         parser.add_argument("--existants", action="store_true", help="Inclut les audios jamais traités.")
         parser.add_argument("--echecs", action="store_true", help="Réessaie les audios en échec.")
         parser.add_argument("--dry-run", action="store_true", help="N'encode rien, liste seulement.")
+        parser.add_argument("--mesurer", action="store_true",
+                            help="Remplit la taille et la durée des audios déjà traités, sans recompresser.")
 
-    def handle(self, *args, existants, echecs, dry_run, **options):
+    def handle(self, *args, existants, echecs, dry_run, mesurer, **options):
+        if mesurer:
+            return self.mesurer(dry_run)
         etats = Q(audio_etat=EN_ATTENTE) | Q(audio_etat=EN_COURS, audio_maj__lt=timezone.now() - DELAI_INTERROMPU)
         if existants:
             etats |= Q(audio_etat="")
@@ -63,3 +68,25 @@ class Command(BaseCommand):
                 f"\nBilan : {bilan[COMPRESSE]} compressé(s), {bilan[IGNORE]} laissé(s) tel(s) quel(s), "
                 f"{bilan[ECHEC]} échec(s)."
             )
+
+    def mesurer(self, dry_run):
+        total = 0
+        for modele in modeles_audio():
+            champ = modele.audio_field_name
+            manquants = (
+                modele.objects.filter(audio_etat__in=[COMPRESSE, IGNORE])
+                .filter(Q(audio_taille__isnull=True) | Q(audio_duree__isnull=True))
+                .exclude(**{champ: ""}).exclude(**{f"{champ}__isnull": True}).order_by("pk")
+            )
+            for objet in manquants:
+                total += 1
+                nom = getattr(objet, champ).name
+                if dry_run:
+                    self.stdout.write(f"à mesurer : {modele.__name__} #{objet.pk} {nom}")
+                    continue
+                try:
+                    m = mesurer(modele, objet.pk)
+                    self.stdout.write(f"mesuré : {modele.__name__} #{objet.pk} {nom} — {m['audio_taille']} octets, {m['audio_duree']} s")
+                except Exception as exc:
+                    self.stderr.write(f"ERREUR {modele.__name__} #{objet.pk} {nom} : {exc}")
+        self.stdout.write(f"\nBilan : {total} audio(s) {'à mesurer' if dry_run else 'traité(s)'}.")

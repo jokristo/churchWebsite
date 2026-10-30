@@ -67,7 +67,7 @@ class Article(models.Model):
     est_publie = models.BooleanField("Publié", default=False)
     en_vedette = models.BooleanField("En vedette", default=False)
     date_publication = models.DateTimeField("Date de publication", auto_now_add=True)
-    date_modification = models.DateTimeField("Dernière modification", auto_now=True)
+    date_modification = models.DateTimeField("Dernière modification", auto_now=True, db_index=True)
 
     class Meta:
         verbose_name = "Article"

@@ -23,6 +23,7 @@ class Ministre(models.Model):
     contact = models.CharField(max_length=25, blank=True)
     fonction = models.CharField(max_length=20, choices=FONCTION_CHOICES, blank=True)
     ordre = models.PositiveIntegerField(default=0)
+    date_modification = models.DateTimeField("Dernière modification", auto_now=True, db_index=True)
 
     class Meta:
         verbose_name = 'Ministre'
@@ -68,6 +69,7 @@ class Temoignages(AudioCompressionMixin, models.Model):
         format='WEBP', options={'quality': 82}
     )
     is_Approuve = models.BooleanField(default=False)
+    date_modification = models.DateTimeField("Dernière modification", auto_now=True, db_index=True)
 
     class Meta:
         verbose_name = 'Temoignage'

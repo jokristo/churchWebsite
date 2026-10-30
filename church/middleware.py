@@ -1,4 +1,5 @@
 from django.http import HttpResponsePermanentRedirect
+from django.middleware.http import ConditionalGetMiddleware
 
 DOMAINE_OFFICIEL = "www.wmbranhamtabernacle.org"
 DOMAINE_SANS_WWW = "wmbranhamtabernacle.org"
@@ -25,3 +26,17 @@ class DomaineCanoniqueMiddleware:
         if hote.endswith(".onrender.com"):
             response["X-Robots-Tag"] = "noindex, nofollow"
         return response
+
+
+class ConditionalGetApiMiddleware(ConditionalGetMiddleware):
+    """ETag et réponses 304 pour l'API uniquement.
+
+    L'application renvoie l'ETag reçu (If-None-Match) : si rien n'a changé, le serveur
+    répond 304 sans contenu, ce qui économise les données mobiles. Limité à /api/ pour
+    ne pas modifier le comportement des pages du site.
+    """
+
+    def process_response(self, request, response):
+        if not request.path.startswith("/api/"):
+            return response
+        return super().process_response(request, response)

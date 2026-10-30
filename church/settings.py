@@ -66,11 +66,16 @@ INSTALLED_APPS = [
     'contribution',
     'actualites',
     'medias',
+    'rest_framework',
+    'django_filters',
+    'drf_spectacular',
+    'api',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'church.middleware.ConditionalGetApiMiddleware',
     'church.middleware.DomaineCanoniqueMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -185,6 +190,33 @@ AUTH_USER_MODEL = "compte.Utilisateur"
 # AUDIO_COMPRESSION=0 sur Render la coupe sans redéployer.
 AUDIO_COMPRESSION_ACTIVE = os.environ.get('AUDIO_COMPRESSION', '1').lower() in ('1', 'true', 'yes', 'oui')
 AUDIO_DEBIT = os.environ.get('AUDIO_DEBIT', '64k')
+
+# ─── API REST v1 pour l'application mobile (voir CLAUDE.md, « Application mobile et API ») ───
+# Lecture seule et anonyme : aucune authentification tant qu'elle n'est pas conçue
+# (la session et le CSRF ne conviennent pas à une application mobile).
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    # JSON seulement : l'interface navigable de DRF alourdirait les réponses.
+    'DEFAULT_RENDERER_CLASSES': ['rest_framework.renderers.JSONRenderer'],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.PaginationCurseur',
+    'DEFAULT_THROTTLE_CLASSES': ['api.throttling.LimiteAnonymes'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+# Plafond par adresse IP, volontairement large : à Kinshasa, les opérateurs mobiles font
+# partager une même IP publique à de nombreux abonnés.
+API_LIMITE_ANONYMES = os.environ.get('API_LIMITE_ANONYMES', '120/min')
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API WMB Tabernacle',
+    'DESCRIPTION': (
+        "API en lecture seule de l'église William Marrion Branham Tabernacle de Mont-Ngafula, "
+        "pour l'application mobile. Listes paginées par curseur ; synchronisation incrémentale "
+        "avec updated_since et /suppressions/."
+    ),
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 COMPRESS_ROOT = BASE_DIR / 'church/static'
 

@@ -44,6 +44,7 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
   - `chat` : coquille vide, à supprimer (voir backlog).
   - `theme` : Tailwind via django-tailwind.
   - `medias` : service de `/media/<fichier>` (disque ou redirection vers R2) et commande `migrer_medias` (copie disque ↔ R2, vérification, diagnostic).
+  - `api` : API REST v1 de l'application mobile (lecture seule), table `Suppression` et signaux de synchronisation.
 - **Admin :** Jazzmin. **Images :** django-imagekit, conversion en WEBP. **Audio :** compression FFmpeg en flux et en arrière-plan via `church/utils/audio.py` (MP3 mono, `AUDIO_DEBIT` = 64 kbps), état visible dans l'admin, rattrapage par `python manage.py compresser_audios`. Les originaux restent dans le stockage.
 - **Production :** Render, PostgreSQL via `DATABASE_URL`, fichiers statiques servis par WhiteNoise. Médias sur **Cloudflare R2** (bucket `wmbtab-media`, domaine `media.wmbranhamtabernacle.org`) quand `MEDIA_STORAGE=r2`, sinon disque persistant (`MEDIA_ROOT=/data/media`). Le build passe par `build.sh`, à condition que la Build Command du tableau de bord Render soit bien `./build.sh`. Procédure de bascule et de retour arrière : `DEPLOY_RENDER.md`, étape 7.
 - **SEO :** tout est centralisé dans `church/seo.py`, c'est-à-dire les infos de l'église, les horaires, le JSON-LD et le context processor `seo`. S'y ajoutent `church/sitemaps.py`, `/robots.txt` et `church/middleware.py`, qui redirige le domaine sans www vers www et passe `*.onrender.com` en noindex.
@@ -69,6 +70,14 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 - Limitation de débit (throttling) pour les anonymes, en-têtes de cache et ETag.
 - Lecture seule et accès anonyme : aucun endpoint d'écriture tant que l'authentification n'est pas conçue. Jamais de contenu non publié (articles) ni non approuvé (témoignages).
 - Les informations de l'église (adresse, horaires, contacts, lien Maps) sont lues depuis `church/seo.py`, comme pour le site : aucune duplication.
+- Noms de champs en **français** (`titre`, `duree_secondes`, `nom_croyant`…). Le téléphone des ministres n'est pas exposé (l'ajouter est compatible, le retirer ne le serait pas).
+
+**Endpoints (`/api/v1/`) :** `eglise/`, `sermons/` (filtres `orateur`, `theme`, `date_min`, `date_max`, `q`), `themes/`, `orateurs/`, `ministres/` (`fonction`), `categories/`, `articles/` (par `slug` ; `categorie`, `en_vedette`, `q`), `temoignages/`, `suppressions/`, `schema/`, `docs/`. Pagination : `?taille=` (20 par défaut, 100 au plus), liens `next`/`previous` absolus. Cache 5 min (1 h pour `eglise/`, `schema/`, `docs/`), ETag et 304 par `church.middleware.ConditionalGetApiMiddleware`. Plafond : `API_LIMITE_ANONYMES` (120/min par IP, identifiée par `CF-Connecting-IP`).
+
+**Synchronisation incrémentale :** chaque liste accepte `?updated_since=` (ISO 8601, comparaison inclusive, tri par date de modification croissante). Les disparitions (suppression, article dépublié, témoignage désapprouvé) sont dans `/suppressions/`, alimenté par `api/signals.py`. Règles à respecter dans tout nouveau code :
+- `queryset.update()` ne met pas à jour `date_modification` (`auto_now`) : la passer explicitement si le changement concerne l'API (voir `church/utils/audio.py`).
+- Un nom intégré dans une autre ressource (orateur et thème dans un sermon, catégorie dans un article) redate les ressources qui l'affichent (`api/signals.py`).
+- Une réponse personnalisée (future authentification) ne doit jamais hériter de `api.views.CacheMixin` (cache `public`) : elle serait servie à d'autres utilisateurs.
 
 ## Règles de travail
 
@@ -90,6 +99,7 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 - Tests : modération, pages publiques, compilation des templates, admin, SEO, chargement (lazy, preload), stockage des médias, compression audio avec le vrai FFmpeg (dont un garde-fou mémoire).
 - `DEBUG=False` par défaut dans le code ; médias servis indépendamment de `DEBUG` ; `media/` retiré de git.
 - Chargement : `loading` déclaré sur chaque image, `preload="none"` sur les audios, barre de progression, placeholder, spinner du like.
+- **API v1 de l'application mobile** (app `api`) : 10 ressources en lecture seule, schéma OpenAPI sans avertissement, synchronisation incrémentale, taille et durée des audios mesurées en arrière-plan (`compresser_audios --mesurer` pour l'existant). Django passé en 5.2 LTS au préalable.
 - Stockage R2 : `church/stockage.py`, app `medias`, commande `migrer_medias`. **Bascule faite le 19/10/2026** : 19 fichiers (114 Mo) vérifiés en MD5, lecture partielle (206) et cache Cloudflare constatés en production.
 - Sécurité : `church/securite.py` (HTTPS, cookies Secure, HSTS) activé par `SECURITE_PRODUCTION=1` ; `CSRF_TRUSTED_ORIGINS` ; `TIME_ZONE = 'Africa/Kinshasa'` ; secret retiré de `.env.example`. **En production depuis le 19/10/2026** : `DEBUG` retiré de Render, HSTS 1 h, cookies `Secure`, redirection HTTPS sans boucle, enregistrement dans l'admin vérifié.
 
@@ -103,6 +113,10 @@ Site officiel du **William Marrion Branham Tabernacle de Mont-Ngafula**, une ég
 
 ### P1 — Dette technique
 - Supprimer définitivement l'app `chat` une fois la migration `0012` appliquée en production.
+- **Avant la sortie de l'application mobile :**
+  - vignettes d'images légères (ajout d'un champ `vignette_url`, compatible) : certaines images de l'API pèsent 3 Mo ;
+  - vérifier dans les journaux Render que `CF-Connecting-IP` arrive bien (sinon tous les visiteurs partagent un compteur du plafond de requêtes) ;
+  - recherche insensible aux accents (« grace » ne trouve pas « grâce », sur l'API comme sur le site) : lookup `unaccent` de PostgreSQL.
 - **Envois de plus de 100 Mo refusés par Cloudflare** (offre gratuite) avant d'atteindre Render. En attendant un envoi direct vers R2, l'équipe média exporte les sermons en MP3 mono 64 à 128 kbps.
 - `church/media/` : 4 images (20 Mo) suivies par git et référencées nulle part.
 - Les likes créent une session pour chaque visiteur anonyme dès l'accueil (`annotate_articles_likes` puis `ensure_session_key`). Ne créer la session qu'au moment du like.
